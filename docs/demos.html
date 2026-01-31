@@ -378,6 +378,25 @@
       border-radius: 10px;
     }
 
+    /* Clickable references in SVG */
+    .svg-ref {
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+
+    .svg-ref:hover {
+      opacity: 0.7;
+    }
+
+    .svg-ref-highlight {
+      animation: refHighlight 1.5s ease-out;
+    }
+
+    @keyframes refHighlight {
+      0% { filter: drop-shadow(0 0 8px #2563eb) drop-shadow(0 0 16px #2563eb); }
+      100% { filter: none; }
+    }
+
     .preview-error {
       background: #fef2f2;
       border: 1px solid #fecaca;
@@ -1241,6 +1260,103 @@ de mes salutations distinguees.
       }
     }
 
+    // Make references clickable in SVG
+    function makeReferencesClickable(container) {
+      const svgs = container.querySelectorAll('svg');
+
+      svgs.forEach((svg, pageIndex) => {
+        const textElements = svg.querySelectorAll('text');
+
+        // Build a map of targets (equations, figures, tables, sections)
+        const targets = new Map();
+
+        textElements.forEach(el => {
+          const text = el.textContent || '';
+
+          // Match equation numbers like "(1)", "(2)", etc.
+          const eqMatch = text.match(/^\((\d+)\)$/);
+          if (eqMatch) {
+            targets.set(`eq-${eqMatch[1]}`, el);
+          }
+
+          // Match figure captions like "Figure 1:", "Fig. 1"
+          const figMatch = text.match(/^(?:Figure|Fig\.?)\s*(\d+)/i);
+          if (figMatch) {
+            targets.set(`fig-${figMatch[1]}`, el);
+          }
+
+          // Match table captions like "Table 1:", "Tab. 1"
+          const tabMatch = text.match(/^(?:Table|Tab\.?)\s*(\d+)/i);
+          if (tabMatch) {
+            targets.set(`tab-${tabMatch[1]}`, el);
+          }
+
+          // Match section headings like "1.", "1.1", "2.3.1"
+          const secMatch = text.match(/^(\d+(?:\.\d+)*)\s+\S/);
+          if (secMatch) {
+            targets.set(`sec-${secMatch[1]}`, el);
+          }
+        });
+
+        // Now find references and make them clickable
+        textElements.forEach(el => {
+          const text = el.textContent || '';
+
+          // References patterns
+          const refPatterns = [
+            // Equation references: "Eq. (1)", "Equation (1)", "Eq. 1", "(1)" in context
+            { pattern: /(?:Eq(?:uation)?\.?\s*)?\((\d+)\)/gi, type: 'eq' },
+            // Figure references: "Fig. 1", "Figure 1"
+            { pattern: /(?:Fig(?:ure)?\.?\s*)(\d+)/gi, type: 'fig' },
+            // Table references: "Tab. 1", "Table 1"
+            { pattern: /(?:Tab(?:le)?\.?\s*)(\d+)/gi, type: 'tab' },
+            // Section references: "Section 1.2", "Sec. 1"
+            { pattern: /(?:Sec(?:tion)?\.?\s*)(\d+(?:\.\d+)*)/gi, type: 'sec' },
+          ];
+
+          let isReference = false;
+          let targetKey = null;
+
+          for (const { pattern, type } of refPatterns) {
+            const match = pattern.exec(text);
+            if (match) {
+              targetKey = `${type}-${match[1]}`;
+              if (targets.has(targetKey)) {
+                isReference = true;
+                break;
+              }
+            }
+            pattern.lastIndex = 0; // Reset regex
+          }
+
+          if (isReference && targetKey) {
+            el.classList.add('svg-ref');
+            el.style.cursor = 'pointer';
+
+            el.addEventListener('click', () => {
+              const target = targets.get(targetKey);
+              if (target) {
+                // Find which page contains the target
+                const targetSvg = target.closest('svg');
+                const targetPage = targetSvg?.closest('.preview-page');
+
+                if (targetPage) {
+                  // Scroll to the page
+                  targetPage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+                  // Highlight the target
+                  target.classList.add('svg-ref-highlight');
+                  setTimeout(() => {
+                    target.classList.remove('svg-ref-highlight');
+                  }, 1500);
+                }
+              }
+            });
+          }
+        });
+      });
+    }
+
     // Compile function
     async function doCompile(source) {
       if (source === lastSource) return;
@@ -1264,6 +1380,9 @@ de mes salutations distinguees.
           previewResult.innerHTML = `<div class="preview-document">${pagesHtml}</div>`;
           previewResult.style.display = 'block';
           previewError.classList.remove('visible');
+
+          // Make references clickable
+          makeReferencesClickable(previewResult);
 
           statusDot.className = 'status-dot ready';
           statusText.textContent = result.svg_pages.length > 1
