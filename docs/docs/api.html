@@ -109,13 +109,13 @@ Bonjour depuis le navigateur!
 `</span>;
 
 <span class="token-comment">// Compiler en SVG</span>
-<span class="token-keyword">const</span> result = <span class="token-keyword">await</span> compiler.compile(source);
+<span class="token-keyword">const</span> result = compiler.compile(source);
 
 <span class="token-keyword">if</span> (result.success) {
-  <span class="token-comment">// result.svg contient le SVG genere</span>
-  document.getElementById(<span class="token-string">'preview'</span>).innerHTML = result.svg;
+  <span class="token-comment">// result.svg_pages contient un tableau de SVG (un par page)</span>
+  document.getElementById(<span class="token-string">'preview'</span>).innerHTML = result.svg_pages[<span class="token-number">0</span>];
 } <span class="token-keyword">else</span> {
-  console.error(<span class="token-string">'Erreur:'</span>, result.errors);
+  console.error(<span class="token-string">'Erreurs:'</span>, result.errors);
 }</code></pre>
 
       <h2>API Reference</h2>
@@ -167,11 +167,10 @@ Bonjour depuis le navigateur!
 
       <pre><code><span class="token-keyword">interface</span> CompileResult {
   success: <span class="token-keyword">boolean</span>;
-  svg?: <span class="token-keyword">string</span>;        <span class="token-comment">// SVG genere (si format='svg')</span>
-  pdf?: Uint8Array;    <span class="token-comment">// PDF en bytes (si format='pdf')</span>
-  pages: <span class="token-keyword">number</span>;       <span class="token-comment">// Nombre de pages</span>
-  errors?: Error[];    <span class="token-comment">// Erreurs de compilation</span>
-  warnings?: Warning[]; <span class="token-comment">// Avertissements</span>
+  content: <span class="token-keyword">string</span>;     <span class="token-comment">// Contenu sans frontmatter</span>
+  metadata?: <span class="token-keyword">object</span>;   <span class="token-comment">// Metadonnees extraites</span>
+  svg_pages: <span class="token-keyword">string</span>[]; <span class="token-comment">// Tableau de SVG (un par page)</span>
+  errors: <span class="token-keyword">string</span>[];    <span class="token-comment">// Erreurs de compilation</span>
 }</code></pre>
 
       <h4>compiler.validate(source)</h4>
@@ -236,10 +235,10 @@ $ e^(i pi) + 1 = 0 $<span class="token-operator">&lt;/</span>textarea<span class
 
     <span class="token-keyword">let</span> timeout;
 
-    <span class="token-keyword">async function</span> compile() {
-      <span class="token-keyword">const</span> result = <span class="token-keyword">await</span> compiler.compile(sourceEl.value);
+    <span class="token-keyword">function</span> compile() {
+      <span class="token-keyword">const</span> result = compiler.compile(sourceEl.value);
       <span class="token-keyword">if</span> (result.success) {
-        previewEl.innerHTML = result.svg;
+        previewEl.innerHTML = result.svg_pages.join(<span class="token-string">''</span>);
       } <span class="token-keyword">else</span> {
         previewEl.innerHTML = <span class="token-string">`&lt;pre style="color:red"&gt;${result.errors.join('\n')}&lt;/pre&gt;`</span>;
       }
@@ -355,7 +354,7 @@ $ e^(i pi) + 1 = 0 $<span class="token-operator">&lt;/</span>textarea<span class
           </svg>
           Performance
         </div>
-        <p style="margin: 0;">Le module WASM fait environ 5 Mo. Utilisez un debounce de 200-300ms pour eviter les recompilations excessives lors de la frappe.</p>
+        <p style="margin: 0;">Le module WASM fait environ 37 Mo (polices embarquees incluses). Utilisez un debounce de 200-300ms pour eviter les recompilations excessives lors de la frappe.</p>
       </div>
 
     </main>

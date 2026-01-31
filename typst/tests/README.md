@@ -1,0 +1,169 @@
+# Tests
+
+## Directory structure
+Top level directory structure:
+- `src`: Testing code.
+- `suite`: Input files. Mostly organized in parallel to the code. Each file can
+           contain multiple tests, each of which is a section of Typst code
+           following `--- {name} {attr}+ ---`.
+- `ref`: References which the output is compared with to determine whether a
+         test passed or failed.
+- `store`: Store for PNG, PDF, and SVG output files produced by the tests.
+
+## Running the tests
+Running all tests (including unit tests):
+```bash
+cargo test --workspace
+```
+
+Running just the integration tests (the tests in this directory):
+```bash
+cargo test --workspace --test tests
+```
+
+The repository includes the alias `cargo testit` to make this less verbose. In
+the examples below, we will use this alias.
+
+Running all tests with the given name pattern. You can use
+[regular expression](https://docs.rs/regex/latest/regex/)s.
+```bash
+cargo testit math            # The name has "math" anywhere
+cargo testit math page       # The name has "math" or "page" anywhere
+cargo testit "^math" "^page" # The name begins with "math" or "page"
+cargo testit "^(math|page)"  # Same as above.
+```
+
+Running all tests discovered under given paths:
+```bash
+cargo testit -p tests/suite/math/attach.typ
+cargo testit -p tests/suite/model -p tests/suite/text
+```
+
+Running tests that begin with `issue` under a given path:
+```bash
+cargo testit "^issue" -p tests/suite/model
+```
+
+Running a test with the exact test name `math-attach-mixed`.
+```bash
+cargo testit --exact math-attach-mixed
+```
+
+You may find more options in the help message:
+```bash
+cargo testit --help
+```
+
+### Test stages
+By default, the integration tests run all _stages,_ which also generates PDFs
+and SVGs. To make them go faster while developing, you can pass the `--stages`
+flag to only run certain targets/outputs. The available stages are the following
+ones:
+
+- `eval`: Evaluate the source code. This is (document-) target agnostic.
+- `paged`: Compile the paged target and produce `render`, `pdf`, and `svg`
+  outputs.
+  - `render`: Produce `render` (`png`) output.
+  - `pdf`: Produce `pdf` output.
+  - `pdftags`: Produce `pdftags` output.
+  - `svg` Produce `svg` output.
+- `html`: Compile the `html` target and produce `html` output.
+
+Here's a visual representation of the stage tree:
+
+```txt
+                 ╭─> render
+      ╭─> paged ─┼─> pdf ───> pdftags
+eval ─┤          ╰─> svg
+      ╰─> html  ───> html
+```
+
+You can specify multiple stages, separated by commas:
+```bash
+cargo testit --stages html,pdftags
+```
+
+## Writing tests
+The syntax for an individual test is `--- {name} {attr}+ ---` followed by some
+Typst code that should be tested. The name must be globally unique in the test
+suite, so that tests can be easily migrated across files. A test name is
+followed by space-separated attributes. At least one test target must be
+specified. For instance, `--- my-test html ---` adds the `html` target to
+`my-test`, instructing the test runner to test HTML output. The following
+attributes are currently defined:
+
+- `eval`: Runs scripting tests that don't generate any output.
+- `paged`: Tests paged output: `render`, `pdf`, `svg`
+- `html`: Tests HTML output against a reference HTML file.
+- `pdf`: Tests the PDF output specifically. The `pdf` stage is currently the
+  only fallible output, due to tagged PDF.
+- `pdftags`: Tests the output of the PDF tag tree.
+- `pdfstandard({standard})`: Sets the PDF standard used for testing PDFs and the
+  PDF tag tree.
+- `large`: Permits a reference image size exceeding 20 KiB. Should be used
+  sparingly.
+- `empty`: Indicates that a test shouldn't produce any non-trivial output. If it
+  does anyway, it will fail.
+
+There are, broadly speaking, three kinds of tests:
+
+- Tests that just ensure that the code runs successfully: Those typically make
+  use of `test` or `assert.eq` (both are very similar, `test` is just shorter)
+  to ensure certain properties hold when executing the Typst code. Generic
+  scripting tests that don't depend on the target should use the `eval`
+  attribute, if possible. If they rely on the evaluated content being compiled,
+  for example due to test code in show-rules, they should use `paged empty` or
+  `html empty`.
+
+- Tests that ensure the code emits particular diagnostic messages: Those have
+  inline annotations like `// Error: 2-7 thing was wrong`. An annotation can
+  start with either "Error", "Warning", or "Hint". The range designates the
+  code span the diagnostic message refers to in the first non-comment line
+  below. If the code span is in a line further below, you can write ranges
+  like `3:2-3:7` to indicate the 2-7 column in the 3rd non-comment line.
+
+- Tests that ensure certain output is produced:
+
+  - Visual output: When a test has the `paged` attribute, the compiler produces
+    paged output, renders it with the `typst-render` crate, and compares it
+    against a reference image stored in the repository. The test runner
+    automatically detects whether a test has visual output and requires a
+    reference image in this case.
+
+    To prevent bloat, it is important that the test images are kept as small as
+    possible. To that effect, the test runner enforces a maximum size of 20 KiB.
+    If you're updating a test and hit `reference output size exceeds`, see the
+    section on "Updating reference images" below. If truly necessary, the size
+    limit can be lifted by adding a `large` attribute after the test name, but
+    this should be the case very rarely.
+
+  - HTML output: When a test has the `html` attribute, the compiler produces
+    HTML output and compares it against a reference file stored in the
+    repository.
+
+  - PDF tags output: When a test has the `pdftags` attribute, the compiler
+    produces a human readable tag tree formatted as a YAML document and compares
+    it against a reference file stored in the repository.
+
+If you have the choice between writing a test using assertions or using
+reference images, prefer assertions. This makes the test easier to understand
+in isolation and prevents bloat due to images.
+
+## Updating reference images
+If you created a new test or fixed a bug in an existing test, you may need to
+update the reference output used for comparison. For this, you can use the
+`--update` flag:
+```bash
+cargo testit --exact my-test-name --update
+```
+You can also pass the `--stages` flag to only update specific reference output.
+See [Test stages](#test-stages) for more details.
+```bash
+cargo testit --exact my-test-name --update --stages=render
+```
+
+For visual tests, this will generally generate compressed reference images (to
+remain within the size limit).
+
+If you use the VS Code test helper extension (see the `tools` folder), you can
+alternatively use the save button to update the reference output.

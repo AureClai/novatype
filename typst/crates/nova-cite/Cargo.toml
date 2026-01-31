@@ -1,0 +1,29 @@
+[package]
+name = "nova-cite"
+version = "0.1.0"
+description = "Smart citation management with CrossRef/Zotero integration"
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+rust-version.workspace = true
+homepage.workspace = true
+repository.workspace = true
+
+[dependencies]
+serde.workspace = true
+serde_json.workspace = true
+reqwest.workspace = true
+tokio.workspace = true
+thiserror.workspace = true
+anyhow.workspace = true
+tracing.workspace = true
+
+[dev-dependencies]
+mockall.workspace = true
+tempfile.workspace = true
+pretty_assertions.workspace = true
+wiremock.workspace = true
+tokio = { workspace = true, features = ["test-util"] }
+
+[lints.clippy]
+all = "warn"

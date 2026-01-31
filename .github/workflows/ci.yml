@@ -148,7 +148,8 @@ jobs:
         run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
 
       - name: Build WASM
-        run: wasm-pack build nova-wasm --target web
+        working-directory: typst
+        run: wasm-pack build crates/nova-wasm --target web --release
 
   # Security audit
   audit:

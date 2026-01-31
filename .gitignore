@@ -33,6 +33,8 @@ test-*.typ
 
 # WASM build
 /nova-wasm/pkg/
+/typst/crates/nova-wasm/pkg/
+/docs/assets/wasm/
 *.wasm
 
 # Generated PDFs

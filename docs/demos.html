@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Demos interactives NovaType - Testez la syntaxe et visualisez le rendu en temps reel.">
+  <meta name="description" content="Demos interactives NovaType - Testez la syntaxe et visualisez le rendu en temps reel avec le compilateur WASM.">
   <title>Demos - NovaType</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -45,6 +45,7 @@
     }
     .demo-input, .demo-output {
       padding: var(--space-lg);
+      position: relative;
     }
     .demo-input {
       background: var(--nova-darker);
@@ -67,6 +68,7 @@
     .demo-output {
       background: var(--nova-white);
       min-height: 300px;
+      overflow: auto;
     }
     .demo-output-label {
       font-size: 0.75rem;
@@ -74,67 +76,106 @@
       letter-spacing: 0.05em;
       color: var(--nova-secondary);
       margin-bottom: var(--space-md);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .demo-status {
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+      font-size: 0.7rem;
+    }
+    .demo-status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--nova-secondary);
+    }
+    .demo-status-dot.ready {
+      background: var(--nova-accent);
+    }
+    .demo-status-dot.compiling {
+      background: var(--nova-primary);
+      animation: pulse 1s infinite;
+    }
+    .demo-status-dot.error {
+      background: #ef4444;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
     }
     .demo-result {
-      font-family: 'Times New Roman', serif;
-      line-height: 1.8;
-    }
-    .demo-result h1 {
-      font-size: 1.5rem;
-      margin-bottom: var(--space-md);
-      color: var(--nova-primary);
-    }
-    .demo-result h2 {
-      font-size: 1.25rem;
-      margin-top: var(--space-lg);
-      margin-bottom: var(--space-sm);
-    }
-    .demo-result .equation {
-      text-align: center;
-      padding: var(--space-md);
-      background: var(--nova-lighter);
-      border-radius: var(--radius-sm);
-      margin: var(--space-md) 0;
-      font-style: italic;
-    }
-    .demo-result table {
       width: 100%;
-      border-collapse: collapse;
-      margin: var(--space-md) 0;
     }
-    .demo-result th, .demo-result td {
-      padding: var(--space-sm);
-      border: 1px solid var(--nova-light);
-      text-align: left;
+    .demo-result svg {
+      width: 100%;
+      height: auto;
+      max-height: 500px;
+      display: block;
     }
-    .demo-result th {
-      background: var(--nova-lighter);
-      font-weight: 600;
+    .demo-error {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: var(--radius-sm);
+      padding: var(--space-md);
+      color: #b91c1c;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      white-space: pre-wrap;
+      display: none;
     }
-    .demo-result figure {
-      margin: var(--space-lg) 0;
-      text-align: center;
-    }
-    .demo-result figcaption {
-      font-size: 0.875rem;
-      color: var(--nova-secondary);
-      margin-top: var(--space-sm);
-    }
-    .demo-chart {
-      background: var(--nova-lighter);
-      border-radius: var(--radius-md);
-      padding: var(--space-lg);
-      height: 200px;
+    .demo-loading {
       display: flex;
-      align-items: flex-end;
-      justify-content: space-around;
-      gap: var(--space-sm);
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 200px;
+      color: var(--nova-secondary);
     }
-    .demo-bar {
+    .demo-loading-spinner {
       width: 40px;
-      background: linear-gradient(to top, var(--nova-primary), var(--nova-primary-light));
-      border-radius: var(--radius-sm) var(--radius-sm) 0 0;
-      transition: height 0.3s ease;
+      height: 40px;
+      border: 3px solid var(--nova-light);
+      border-top-color: var(--nova-primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: var(--space-md);
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    .wasm-banner {
+      background: linear-gradient(135deg, var(--nova-primary), #7c3aed);
+      color: white;
+      padding: var(--space-md) var(--space-lg);
+      border-radius: var(--radius-md);
+      margin-bottom: var(--space-xl);
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+    }
+    .wasm-banner svg {
+      flex-shrink: 0;
+    }
+    .wasm-banner-content {
+      flex: 1;
+    }
+    .wasm-banner-title {
+      font-weight: 600;
+      margin-bottom: var(--space-xs);
+    }
+    .wasm-banner-text {
+      font-size: 0.875rem;
+      opacity: 0.9;
+    }
+    .wasm-size {
+      font-size: 0.75rem;
+      background: rgba(255,255,255,0.2);
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--radius-sm);
+      white-space: nowrap;
     }
     @media (max-width: 968px) {
       .demo-card-body {
@@ -143,6 +184,10 @@
       .demo-input {
         border-right: none;
         border-bottom: 1px solid var(--nova-light);
+      }
+      .wasm-banner {
+        flex-direction: column;
+        text-align: center;
       }
     }
   </style>
@@ -178,7 +223,7 @@
     <div class="container">
       <div class="features-header" style="margin-bottom: 0;">
         <h1>Demos Interactives</h1>
-        <p>Explorez la syntaxe NovaType et visualisez le rendu en temps reel. Modifiez le code a gauche pour voir le resultat a droite.</p>
+        <p>Explorez la syntaxe NovaType et visualisez le rendu en temps reel. Le compilateur WASM s'execute directement dans votre navigateur.</p>
       </div>
     </div>
   </section>
@@ -186,6 +231,20 @@
   <!-- Demos -->
   <section class="section">
     <div class="container">
+      <!-- WASM Info Banner -->
+      <div class="wasm-banner" id="wasmBanner">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+          <path d="M2 17l10 5 10-5"/>
+          <path d="M2 12l10 5 10-5"/>
+        </svg>
+        <div class="wasm-banner-content">
+          <div class="wasm-banner-title">Compilation en temps reel avec WebAssembly</div>
+          <div class="wasm-banner-text" id="wasmStatus">Chargement du compilateur NovaType...</div>
+        </div>
+        <div class="wasm-size">~30 MB</div>
+      </div>
+
       <div class="demo-examples">
 
         <!-- Demo 1: Document de base -->
@@ -203,7 +262,6 @@
           <div class="demo-card-body">
             <div class="demo-input">
               <textarea id="demo1-input" spellcheck="false">// Configuration
-#set document(title: "Mon Article")
 #set text(font: "Arial", size: 11pt)
 
 // Titre
@@ -232,26 +290,19 @@ redaction simple et intuitive.
 + Troisieme point</textarea>
             </div>
             <div class="demo-output">
-              <div class="demo-output-label">Apercu du rendu</div>
-              <div class="demo-result" id="demo1-output">
-                <div style="text-align: center; margin-bottom: 1.5em;">
-                  <h1 style="margin-bottom: 0.5em;">Introduction a NovaType</h1>
-                  <p style="color: var(--nova-secondary); margin: 0;">Par Dr. Martin | Janvier 2024</p>
+              <div class="demo-output-label">
+                Apercu du rendu
+                <div class="demo-status">
+                  <span class="demo-status-dot" id="demo1-status"></span>
+                  <span id="demo1-status-text">Pret</span>
                 </div>
-                <h2 style="color: var(--nova-primary); border-bottom: 2px solid var(--nova-primary); padding-bottom: 0.3em;">1. Premiere Section</h2>
-                <p>Ceci est un paragraphe avec du <strong>texte en gras</strong> et de l'<em>italique</em>. NovaType rend la redaction simple et intuitive.</p>
-                <h2 style="color: var(--nova-primary); border-bottom: 2px solid var(--nova-primary); padding-bottom: 0.3em;">2. Deuxieme Section</h2>
-                <ul>
-                  <li>Premier element de liste</li>
-                  <li>Deuxieme element</li>
-                  <li>Troisieme element</li>
-                </ul>
-                <ol>
-                  <li>Liste numerotee</li>
-                  <li>Deuxieme point</li>
-                  <li>Troisieme point</li>
-                </ol>
               </div>
+              <div class="demo-loading" id="demo1-loading">
+                <div class="demo-loading-spinner"></div>
+                <span>Chargement du compilateur...</span>
+              </div>
+              <div class="demo-error" id="demo1-error"></div>
+              <div class="demo-result" id="demo1-output"></div>
             </div>
           </div>
         </div>
@@ -299,39 +350,24 @@ $ cases(
 Solution : $x = 5$ et $y = 5$</textarea>
             </div>
             <div class="demo-output">
-              <div class="demo-output-label">Apercu du rendu</div>
-              <div class="demo-result" id="demo2-output">
-                <h2 style="color: var(--nova-primary); border-bottom: 2px solid var(--nova-primary); padding-bottom: 0.3em;">Equations en NovaType</h2>
-                <h3>Equations en ligne</h3>
-                <p>La celebre formule d'Euler : <em>e<sup>ipi</sup> + 1 = 0</em></p>
-                <h3>Equations centrees</h3>
-                <p>L'integrale de Gauss :</p>
-                <div class="equation">
-                  <math display="block">
-                    <mrow><msubsup><mo>&int;</mo><mrow><mo>-</mo><mo>&infin;</mo></mrow><mrow><mo>+</mo><mo>&infin;</mo></mrow></msubsup><msup><mi>e</mi><mrow><mo>-</mo><msup><mi>x</mi><mn>2</mn></msup></mrow></msup><mi>dx</mi><mo>=</mo><msqrt><mi>&pi;</mi></msqrt></mrow>
-                  </math>
-                  <div style="font-family: var(--font-mono); font-size: 1.1em;">integral_{-infty}^{+infty} e^{-x^2} dx = sqrt(pi)</div>
+              <div class="demo-output-label">
+                Apercu du rendu
+                <div class="demo-status">
+                  <span class="demo-status-dot" id="demo2-status"></span>
+                  <span id="demo2-status-text">Pret</span>
                 </div>
-                <h3>Matrices</h3>
-                <div class="equation">
-                  <table style="margin: 0 auto; border: none;">
-                    <tr><td style="border: none; padding: 0.3em; text-align: center;">1</td><td style="border: none; padding: 0.3em; text-align: center;">2</td><td style="border: none; padding: 0.3em; text-align: center;">3</td></tr>
-                    <tr><td style="border: none; padding: 0.3em; text-align: center;">4</td><td style="border: none; padding: 0.3em; text-align: center;">5</td><td style="border: none; padding: 0.3em; text-align: center;">6</td></tr>
-                    <tr><td style="border: none; padding: 0.3em; text-align: center;">7</td><td style="border: none; padding: 0.3em; text-align: center;">8</td><td style="border: none; padding: 0.3em; text-align: center;">9</td></tr>
-                  </table>
-                </div>
-                <h3>Systemes d'equations</h3>
-                <div class="equation">
-                  x + y = 10<br>
-                  2x - y = 5
-                </div>
-                <p>Solution : <em>x = 5</em> et <em>y = 5</em></p>
               </div>
+              <div class="demo-loading" id="demo2-loading">
+                <div class="demo-loading-spinner"></div>
+                <span>Chargement du compilateur...</span>
+              </div>
+              <div class="demo-error" id="demo2-error"></div>
+              <div class="demo-result" id="demo2-output"></div>
             </div>
           </div>
         </div>
 
-        <!-- Demo 3: Tableaux et figures -->
+        <!-- Demo 3: Tableaux -->
         <div class="demo-card">
           <div class="demo-card-header">
             <span class="demo-card-title">
@@ -352,137 +388,108 @@ Solution : $x = 5$ et $y = 5$</textarea>
 #figure(
   table(
     columns: 4,
-    [*Methode*], [*Precision*], [*Rappel*], [*F1*],
+    table.header(
+      [*Methode*], [*Precision*], [*Rappel*], [*F1*],
+    ),
     [Baseline], [0.72], [0.68], [0.70],
     [Model A], [0.85], [0.82], [0.83],
     [Model B], [0.89], [0.87], [0.88],
-    [NovaType], [0.94], [0.91], [0.92],
+    [*NovaType*], [*0.94*], [*0.91*], [*0.92*],
   ),
   caption: [Comparaison des performances]
-) <tab:results>
+)
 
-Les resultats du @tab:results montrent que
-NovaType surpasse les autres methodes.
-
-== Graphique
-
-#nova-plot(
-  data: "results.csv",
-  type: "bar",
-  title: "Performance par methode"
-)</textarea>
+Les resultats montrent que NovaType
+surpasse les autres methodes avec
+un score F1 de *0.92*.</textarea>
             </div>
             <div class="demo-output">
-              <div class="demo-output-label">Apercu du rendu</div>
-              <div class="demo-result" id="demo3-output">
-                <h2 style="color: var(--nova-primary); border-bottom: 2px solid var(--nova-primary); padding-bottom: 0.3em;">Resultats de l'etude</h2>
-                <h3>Tableau comparatif</h3>
-                <figure>
-                  <table>
-                    <thead>
-                      <tr><th>Methode</th><th>Precision</th><th>Rappel</th><th>F1</th></tr>
-                    </thead>
-                    <tbody>
-                      <tr><td>Baseline</td><td>0.72</td><td>0.68</td><td>0.70</td></tr>
-                      <tr><td>Model A</td><td>0.85</td><td>0.82</td><td>0.83</td></tr>
-                      <tr><td>Model B</td><td>0.89</td><td>0.87</td><td>0.88</td></tr>
-                      <tr style="background: rgba(37, 99, 235, 0.1);"><td><strong>NovaType</strong></td><td><strong>0.94</strong></td><td><strong>0.91</strong></td><td><strong>0.92</strong></td></tr>
-                    </tbody>
-                  </table>
-                  <figcaption>Tableau 1 : Comparaison des performances</figcaption>
-                </figure>
-                <p>Les resultats du <em>Tableau 1</em> montrent que NovaType surpasse les autres methodes.</p>
-                <h3>Graphique</h3>
-                <figure>
-                  <div class="demo-chart">
-                    <div style="text-align: center;">
-                      <div class="demo-bar" style="height: 70%;"></div>
-                      <div style="font-size: 0.75rem; margin-top: 0.5em;">Baseline</div>
-                    </div>
-                    <div style="text-align: center;">
-                      <div class="demo-bar" style="height: 83%;"></div>
-                      <div style="font-size: 0.75rem; margin-top: 0.5em;">Model A</div>
-                    </div>
-                    <div style="text-align: center;">
-                      <div class="demo-bar" style="height: 88%;"></div>
-                      <div style="font-size: 0.75rem; margin-top: 0.5em;">Model B</div>
-                    </div>
-                    <div style="text-align: center;">
-                      <div class="demo-bar" style="height: 92%; background: linear-gradient(to top, var(--nova-accent), #34d399);"></div>
-                      <div style="font-size: 0.75rem; margin-top: 0.5em;">NovaType</div>
-                    </div>
-                  </div>
-                  <figcaption>Figure 1 : Performance par methode (F1-Score)</figcaption>
-                </figure>
+              <div class="demo-output-label">
+                Apercu du rendu
+                <div class="demo-status">
+                  <span class="demo-status-dot" id="demo3-status"></span>
+                  <span id="demo3-status-text">Pret</span>
+                </div>
               </div>
+              <div class="demo-loading" id="demo3-loading">
+                <div class="demo-loading-spinner"></div>
+                <span>Chargement du compilateur...</span>
+              </div>
+              <div class="demo-error" id="demo3-error"></div>
+              <div class="demo-result" id="demo3-output"></div>
             </div>
           </div>
         </div>
 
-        <!-- Demo 4: Citations -->
+        <!-- Demo 4: Code et blocs -->
         <div class="demo-card">
           <div class="demo-card-header">
             <span class="demo-card-title">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--nova-primary)" stroke-width="2">
-                <path d="M4 19.5A2.5 2.5 0 016.5 17H20"/>
-                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/>
+                <polyline points="16 18 22 12 16 6"></polyline>
+                <polyline points="8 6 2 12 8 18"></polyline>
               </svg>
-              Citations et Bibliographie
+              Code et Blocs
             </span>
-            <span class="text-muted" style="font-size: 0.875rem;">Gestion des references</span>
+            <span class="text-muted" style="font-size: 0.875rem;">Mise en forme avancee</span>
           </div>
           <div class="demo-card-body">
             <div class="demo-input">
-              <textarea id="demo4-input" spellcheck="false">---
-title: "Mon Article Scientifique"
-bibliography: "references.bib"
-citation_style: "ieee"
----
+              <textarea id="demo4-input" spellcheck="false">= Documentation Technique
 
-= Introduction
+== Exemple de Code
 
-La composition typographique moderne trouve
-ses racines dans les travaux fondateurs de
-Knuth @knuth1984 sur TeX.
+Voici un exemple de fonction Python :
 
-LaTeX, developpe par Lamport @lamport1994,
-a democratise ces outils aupres de la
-communaute scientifique.
+```python
+def fibonacci(n):
+    if n <= 1:
+        return n
+    return fibonacci(n-1) + fibonacci(n-2)
 
-Des etudes recentes @smith2020 @jones2021
-montrent l'interet croissant pour des
-alternatives plus modernes.
+# Calculer les 10 premiers nombres
+for i in range(10):
+    print(fibonacci(i))
+```
 
-= Conclusion
+== Bloc de Note
 
-NovaType represente l'evolution naturelle
-de ces systemes @madje2023.
+#block(
+  fill: luma(240),
+  inset: 12pt,
+  radius: 4pt,
+  width: 100%,
+)[
+  *Note importante :* Cette fonction utilise
+  la recursion et peut etre optimisee avec
+  la memoisation pour de meilleures performances.
+]
 
-#bibliography("references.bib", style: "ieee")</textarea>
+== Formule Mathematique
+
+La complexite temporelle est :
+
+$ O(2^n) $</textarea>
             </div>
             <div class="demo-output">
-              <div class="demo-output-label">Apercu du rendu</div>
-              <div class="demo-result" id="demo4-output">
-                <h2 style="color: var(--nova-primary); border-bottom: 2px solid var(--nova-primary); padding-bottom: 0.3em;">1. Introduction</h2>
-                <p>La composition typographique moderne trouve ses racines dans les travaux fondateurs de Knuth <sup>[1]</sup> sur TeX.</p>
-                <p>LaTeX, developpe par Lamport <sup>[2]</sup>, a democratise ces outils aupres de la communaute scientifique.</p>
-                <p>Des etudes recentes <sup>[3], [4]</sup> montrent l'interet croissant pour des alternatives plus modernes.</p>
-                <h2 style="color: var(--nova-primary); border-bottom: 2px solid var(--nova-primary); padding-bottom: 0.3em;">2. Conclusion</h2>
-                <p>NovaType represente l'evolution naturelle de ces systemes <sup>[5]</sup>.</p>
-                <h2 style="color: var(--nova-primary); border-bottom: 2px solid var(--nova-primary); padding-bottom: 0.3em;">References</h2>
-                <ol style="font-size: 0.9em; line-height: 1.6;">
-                  <li>D. E. Knuth, <em>The TeXbook</em>, Addison-Wesley, 1984.</li>
-                  <li>L. Lamport, <em>LaTeX: A Document Preparation System</em>, Addison-Wesley, 1994.</li>
-                  <li>J. Smith et al., "Modern typesetting systems," <em>J. Doc. Eng.</em>, vol. 12, no. 3, pp. 45-62, 2020.</li>
-                  <li>M. Jones, "Alternatives to LaTeX," <em>TUGboat</em>, vol. 42, no. 1, pp. 12-18, 2021.</li>
-                  <li>L. Madje and M. Haug, "Typst: A new approach," <em>J. Doc. Eng.</em>, vol. 15, no. 2, pp. 112-128, 2023.</li>
-                </ol>
+              <div class="demo-output-label">
+                Apercu du rendu
+                <div class="demo-status">
+                  <span class="demo-status-dot" id="demo4-status"></span>
+                  <span id="demo4-status-text">Pret</span>
+                </div>
               </div>
+              <div class="demo-loading" id="demo4-loading">
+                <div class="demo-loading-spinner"></div>
+                <span>Chargement du compilateur...</span>
+              </div>
+              <div class="demo-error" id="demo4-error"></div>
+              <div class="demo-result" id="demo4-output"></div>
             </div>
           </div>
         </div>
 
-        <!-- Demo 5: Template complet -->
+        <!-- Demo 5: Document complet -->
         <div class="demo-card">
           <div class="demo-card-header">
             <span class="demo-card-title">
@@ -491,91 +498,86 @@ de ces systemes @madje2023.
                 <path d="M2 17l10 5 10-5"/>
                 <path d="M2 12l10 5 10-5"/>
               </svg>
-              Template IEEE Complet
+              Document Complet
             </span>
-            <span class="text-muted" style="font-size: 0.875rem;">Document academique</span>
+            <span class="text-muted" style="font-size: 0.875rem;">Article scientifique</span>
           </div>
           <div class="demo-card-body">
             <div class="demo-input">
-              <textarea id="demo5-input" spellcheck="false">---
-title: "NovaType: A Modern Approach to
-        Scientific Document Composition"
-authors:
-  - name: "Jean Dupont"
-    affiliation: "Universite de Paris"
-    email: "jean.dupont@univ-paris.fr"
-  - name: "Marie Martin"
-    affiliation: "CNRS"
-abstract: |
-  This paper presents NovaType, a modern
-  document composition system that combines
-  the typographic quality of LaTeX with an
-  intuitive syntax and instant compilation.
-keywords:
-  - typesetting
-  - scientific writing
-  - Typst
-template: ieee-article
----
+              <textarea id="demo5-input" spellcheck="false">// Configuration du document
+#set document(title: "NovaType: Une Approche Moderne")
+#set page(margin: 2cm)
+#set text(font: "New Computer Modern", size: 11pt)
+#set par(justify: true)
+
+// En-tete
+#align(center)[
+  #text(17pt, weight: "bold")[
+    NovaType: Une Approche Moderne de la
+    Composition de Documents Scientifiques
+  ]
+
+  #v(1em)
+
+  #text(11pt)[
+    *Jean Dupont*#super[1] et *Marie Martin*#super[2]
+  ]
+
+  #text(9pt, style: "italic")[
+    #super[1]Universite de Paris \
+    #super[2]CNRS
+  ]
+
+  #v(1em)
+]
+
+// Resume
+#block(
+  width: 100%,
+  inset: (x: 2em),
+)[
+  *Resume* --- Cet article presente NovaType,
+  un systeme moderne de composition de documents
+  qui combine la qualite typographique de LaTeX
+  avec une syntaxe intuitive.
+]
+
+#v(1em)
 
 = Introduction
 
-NovaType addresses the limitations of
-existing document preparation systems...
+La redaction de documents scientifiques reste
+un defi majeur. Les outils traditionnels comme
+LaTeX offrent une excellente qualite mais avec
+une courbe d'apprentissage importante.
 
-= Methodology
+= Methodologie
 
-== System Architecture
+Notre approche repose sur trois piliers :
 
-The core architecture consists of:
-+ Incremental compiler
-+ Schema validator
-+ Citation manager
-+ Plot generator
-
-= Results
-
-Our evaluation shows significant
-improvements in productivity (34%
-reduction in writing time).
++ *Simplicite syntaxique* : une syntaxe claire
++ *Compilation rapide* : rendu instantane
++ *Extensibilite* : systeme de templates
 
 = Conclusion
 
-NovaType represents a viable alternative
-for scientific document preparation.</textarea>
+NovaType represente une evolution naturelle
+des systemes de composition typographique.</textarea>
             </div>
             <div class="demo-output">
-              <div class="demo-output-label">Apercu du rendu (IEEE Style)</div>
-              <div class="demo-result" id="demo5-output" style="font-family: 'Times New Roman', serif;">
-                <div style="text-align: center; margin-bottom: 1.5em;">
-                  <h1 style="font-size: 1.4rem; margin-bottom: 1em;">NovaType: A Modern Approach to Scientific Document Composition</h1>
-                  <p style="margin: 0.3em 0;"><strong>Jean Dupont</strong></p>
-                  <p style="font-size: 0.9em; color: var(--nova-secondary); margin: 0;">Universite de Paris<br>jean.dupont@univ-paris.fr</p>
-                  <p style="margin: 0.8em 0 0.3em;"><strong>Marie Martin</strong></p>
-                  <p style="font-size: 0.9em; color: var(--nova-secondary); margin: 0;">CNRS</p>
-                </div>
-                <div style="background: var(--nova-lighter); padding: 1em; border-radius: var(--radius-sm); margin-bottom: 1.5em;">
-                  <p style="margin: 0;"><strong>Abstract</strong> - This paper presents NovaType, a modern document composition system that combines the typographic quality of LaTeX with an intuitive syntax and instant compilation.</p>
-                  <p style="margin: 0.5em 0 0; font-size: 0.9em;"><strong>Keywords:</strong> typesetting, scientific writing, Typst</p>
-                </div>
-                <div style="column-count: 2; column-gap: 2em; font-size: 0.9em;">
-                  <h3 style="font-size: 1em; margin-top: 0;">I. INTRODUCTION</h3>
-                  <p>NovaType addresses the limitations of existing document preparation systems...</p>
-                  <h3 style="font-size: 1em;">II. METHODOLOGY</h3>
-                  <p><em>A. System Architecture</em></p>
-                  <p>The core architecture consists of:</p>
-                  <ol style="padding-left: 1.5em;">
-                    <li>Incremental compiler</li>
-                    <li>Schema validator</li>
-                    <li>Citation manager</li>
-                    <li>Plot generator</li>
-                  </ol>
-                  <h3 style="font-size: 1em;">III. RESULTS</h3>
-                  <p>Our evaluation shows significant improvements in productivity (34% reduction in writing time).</p>
-                  <h3 style="font-size: 1em;">IV. CONCLUSION</h3>
-                  <p>NovaType represents a viable alternative for scientific document preparation.</p>
+              <div class="demo-output-label">
+                Apercu du rendu
+                <div class="demo-status">
+                  <span class="demo-status-dot" id="demo5-status"></span>
+                  <span id="demo5-status-text">Pret</span>
                 </div>
               </div>
+              <div class="demo-loading" id="demo5-loading">
+                <div class="demo-loading-spinner"></div>
+                <span>Chargement du compilateur...</span>
+              </div>
+              <div class="demo-error" id="demo5-error"></div>
+              <div class="demo-result" id="demo5-output"></div>
             </div>
           </div>
         </div>
@@ -666,5 +668,146 @@ for scientific document preparation.</textarea>
   </footer>
 
   <script src="assets/js/main.js"></script>
+  <script type="module">
+    import { initNovaCompiler, compile } from './assets/js/nova-compiler.js';
+
+    // Demo configuration
+    const demos = [
+      { id: 'demo1', debounce: 500 },
+      { id: 'demo2', debounce: 500 },
+      { id: 'demo3', debounce: 500 },
+      { id: 'demo4', debounce: 500 },
+      { id: 'demo5', debounce: 500 }
+    ];
+
+    // State for each demo
+    const demoState = {};
+
+    // Initialize compiler and demos
+    async function init() {
+      const wasmStatus = document.getElementById('wasmStatus');
+      const wasmBanner = document.getElementById('wasmBanner');
+
+      try {
+        wasmStatus.textContent = 'Chargement du compilateur NovaType (~30 MB)...';
+
+        await initNovaCompiler();
+
+        wasmStatus.textContent = 'Compilateur pret ! Modifiez le code pour voir les changements en temps reel.';
+        wasmBanner.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+
+        // Initialize each demo
+        for (const demo of demos) {
+          initDemo(demo.id, demo.debounce);
+        }
+
+      } catch (error) {
+        wasmStatus.textContent = `Erreur de chargement: ${error.message}`;
+        wasmBanner.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
+
+        // Show fallback message in all demos
+        for (const demo of demos) {
+          const loading = document.getElementById(`${demo.id}-loading`);
+          const error = document.getElementById(`${demo.id}-error`);
+          if (loading) loading.style.display = 'none';
+          if (error) {
+            error.textContent = 'Le compilateur WASM n\'a pas pu etre charge. Rechargez la page ou essayez un autre navigateur.';
+            error.style.display = 'block';
+          }
+        }
+      }
+    }
+
+    // Initialize a single demo
+    function initDemo(id, debounceMs) {
+      const input = document.getElementById(`${id}-input`);
+      const output = document.getElementById(`${id}-output`);
+      const error = document.getElementById(`${id}-error`);
+      const loading = document.getElementById(`${id}-loading`);
+      const statusDot = document.getElementById(`${id}-status`);
+      const statusText = document.getElementById(`${id}-status-text`);
+
+      if (!input || !output) return;
+
+      // Initialize state
+      demoState[id] = {
+        timer: null,
+        lastSource: null
+      };
+
+      // Hide loading, show ready
+      loading.style.display = 'none';
+      statusDot.classList.add('ready');
+      statusText.textContent = 'Pret';
+
+      // Compile function
+      async function doCompile(source) {
+        if (source === demoState[id].lastSource) return;
+        demoState[id].lastSource = source;
+
+        // Update status
+        statusDot.className = 'demo-status-dot compiling';
+        statusText.textContent = 'Compilation...';
+
+        try {
+          const result = await compile(source);
+
+          if (result.success && result.svg_pages.length > 0) {
+            // Show SVG
+            output.innerHTML = result.svg_pages[0];
+
+            // Scale SVG to fit
+            const svg = output.querySelector('svg');
+            if (svg) {
+              svg.style.width = '100%';
+              svg.style.height = 'auto';
+              svg.style.maxHeight = '500px';
+            }
+
+            // Hide error
+            error.style.display = 'none';
+
+            // Update status
+            statusDot.className = 'demo-status-dot ready';
+            statusText.textContent = 'Pret';
+          } else {
+            // Show errors
+            error.textContent = result.errors.join('\n');
+            error.style.display = 'block';
+
+            // Update status
+            statusDot.className = 'demo-status-dot error';
+            statusText.textContent = 'Erreur';
+          }
+        } catch (err) {
+          error.textContent = err.message || String(err);
+          error.style.display = 'block';
+
+          statusDot.className = 'demo-status-dot error';
+          statusText.textContent = 'Erreur';
+        }
+      }
+
+      // Debounced input handler
+      function onInput() {
+        if (demoState[id].timer) {
+          clearTimeout(demoState[id].timer);
+        }
+
+        demoState[id].timer = setTimeout(() => {
+          doCompile(input.value);
+        }, debounceMs);
+      }
+
+      // Add event listener
+      input.addEventListener('input', onInput);
+
+      // Initial compile
+      doCompile(input.value);
+    }
+
+    // Start initialization
+    init();
+  </script>
 </body>
 </html>

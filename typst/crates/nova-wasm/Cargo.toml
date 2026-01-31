@@ -1,0 +1,50 @@
+[package]
+name = "nova-wasm"
+version = "0.1.0"
+description = "WebAssembly build of NovaType for browser usage"
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+rust-version.workspace = true
+homepage.workspace = true
+repository.workspace = true
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+nova-schema.workspace = true
+
+# Typst compilation
+typst.workspace = true
+typst-svg.workspace = true
+typst-syntax.workspace = true
+typst-assets = { workspace = true, features = ["fonts"] }
+comemo.workspace = true
+ecow.workspace = true
+fontdb = { workspace = true, default-features = false }
+
+wasm-bindgen.workspace = true
+wasm-bindgen-futures.workspace = true
+js-sys.workspace = true
+web-sys = { workspace = true, features = ["console", "Performance", "Window"] }
+
+serde.workspace = true
+serde_json.workspace = true
+serde-wasm-bindgen.workspace = true
+
+chrono = { workspace = true, features = ["wasmbind"] }
+parking_lot.workspace = true
+once_cell.workspace = true
+getrandom = { version = "0.3", features = ["wasm_js"] }
+
+console_error_panic_hook = { workspace = true, optional = true }
+
+[dev-dependencies]
+wasm-bindgen-test.workspace = true
+
+[features]
+default = ["console_error_panic_hook"]
+
+[lints.clippy]
+all = "warn"
