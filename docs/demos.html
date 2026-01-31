@@ -3,334 +3,712 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Demos interactives NovaType - Testez la syntaxe et visualisez le rendu en temps reel avec le compilateur WASM.">
-  <title>Demos - NovaType</title>
+  <meta name="description" content="Playground NovaType - Editeur interactif avec rendu temps reel via WebAssembly.">
+  <title>Playground - NovaType</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/style.css">
   <style>
-    .demo-page-hero {
-      padding: 8rem 0 3rem;
-      background: var(--nova-lighter);
+    :root {
+      --toolbar-height: 56px;
+      --sidebar-width: 0px;
     }
-    .demo-examples {
-      display: grid;
-      gap: var(--space-xl);
-      margin-top: var(--space-2xl);
-    }
-    .demo-card {
-      background: var(--nova-white);
-      border: 1px solid var(--nova-light);
-      border-radius: var(--radius-lg);
+
+    body {
       overflow: hidden;
     }
-    .demo-card-header {
+
+    /* Toolbar */
+    .playground-toolbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--toolbar-height);
+      background: var(--nova-darker);
+      border-bottom: 1px solid var(--nova-dark);
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      padding: var(--space-md) var(--space-lg);
-      background: var(--nova-lighter);
-      border-bottom: 1px solid var(--nova-light);
+      padding: 0 var(--space-lg);
+      gap: var(--space-lg);
+      z-index: 100;
     }
-    .demo-card-title {
+
+    .toolbar-logo {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      color: white;
+      text-decoration: none;
       font-weight: 600;
+      font-size: 1.1rem;
+    }
+
+    .toolbar-logo svg {
+      width: 28px;
+      height: 28px;
+    }
+
+    .toolbar-divider {
+      width: 1px;
+      height: 24px;
+      background: var(--nova-dark);
+    }
+
+    .toolbar-section {
       display: flex;
       align-items: center;
       gap: var(--space-sm);
     }
-    .demo-card-body {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
+
+    .toolbar-label {
+      font-size: 0.75rem;
+      color: var(--nova-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
     }
-    .demo-input, .demo-output {
-      padding: var(--space-lg);
+
+    /* Dropdown */
+    .dropdown {
       position: relative;
     }
-    .demo-input {
-      background: var(--nova-darker);
-      border-right: 1px solid var(--nova-light);
-    }
-    .demo-input textarea {
-      width: 100%;
-      min-height: 300px;
-      background: transparent;
-      border: none;
-      color: var(--nova-light);
-      font-family: var(--font-mono);
+
+    .dropdown-btn {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      padding: var(--space-sm) var(--space-md);
+      background: var(--nova-dark);
+      border: 1px solid var(--nova-secondary);
+      border-radius: var(--radius-md);
+      color: white;
       font-size: 0.875rem;
-      line-height: 1.7;
-      resize: vertical;
+      cursor: pointer;
+      transition: all 0.2s;
+      min-width: 180px;
     }
-    .demo-input textarea:focus {
-      outline: none;
+
+    .dropdown-btn:hover {
+      background: var(--nova-secondary);
+      border-color: var(--nova-light);
     }
-    .demo-output {
-      background: var(--nova-white);
-      min-height: 300px;
-      overflow: auto;
+
+    .dropdown-btn svg {
+      margin-left: auto;
+      transition: transform 0.2s;
     }
-    .demo-output-label {
+
+    .dropdown.open .dropdown-btn svg {
+      transform: rotate(180deg);
+    }
+
+    .dropdown-menu {
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0;
+      min-width: 280px;
+      background: var(--nova-darker);
+      border: 1px solid var(--nova-dark);
+      border-radius: var(--radius-md);
+      box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-10px);
+      transition: all 0.2s;
+      z-index: 200;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .dropdown.open .dropdown-menu {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .dropdown-item {
+      display: block;
+      padding: var(--space-sm) var(--space-md);
+      color: var(--nova-light);
+      text-decoration: none;
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: background 0.15s;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+    }
+
+    .dropdown-item:hover {
+      background: var(--nova-dark);
+      color: white;
+    }
+
+    .dropdown-item.active {
+      background: var(--nova-primary);
+      color: white;
+    }
+
+    .dropdown-item-title {
+      font-weight: 500;
+    }
+
+    .dropdown-item-desc {
       font-size: 0.75rem;
+      color: var(--nova-secondary);
+      margin-top: 2px;
+    }
+
+    .dropdown-item:hover .dropdown-item-desc {
+      color: var(--nova-light);
+    }
+
+    .dropdown-item.active .dropdown-item-desc {
+      color: rgba(255,255,255,0.8);
+    }
+
+    .dropdown-divider {
+      height: 1px;
+      background: var(--nova-dark);
+      margin: var(--space-xs) 0;
+    }
+
+    .dropdown-header {
+      padding: var(--space-sm) var(--space-md);
+      font-size: 0.7rem;
       text-transform: uppercase;
       letter-spacing: 0.05em;
       color: var(--nova-secondary);
-      margin-bottom: var(--space-md);
+      font-weight: 600;
+    }
+
+    /* Status */
+    .toolbar-status {
+      margin-left: auto;
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      gap: var(--space-sm);
+      font-size: 0.8rem;
+      color: var(--nova-secondary);
     }
-    .demo-status {
-      display: flex;
-      align-items: center;
-      gap: var(--space-xs);
-      font-size: 0.7rem;
-    }
-    .demo-status-dot {
+
+    .status-dot {
       width: 8px;
       height: 8px;
       border-radius: 50%;
       background: var(--nova-secondary);
     }
-    .demo-status-dot.ready {
-      background: var(--nova-accent);
-    }
-    .demo-status-dot.compiling {
+
+    .status-dot.loading {
       background: var(--nova-primary);
       animation: pulse 1s infinite;
     }
-    .demo-status-dot.error {
+
+    .status-dot.ready {
+      background: var(--nova-accent);
+    }
+
+    .status-dot.error {
       background: #ef4444;
     }
+
+    .status-dot.compiling {
+      background: #f59e0b;
+      animation: pulse 0.5s infinite;
+    }
+
     @keyframes pulse {
       0%, 100% { opacity: 1; }
-      50% { opacity: 0.5; }
+      50% { opacity: 0.4; }
     }
-    .demo-result {
-      width: 100%;
+
+    /* Main Layout */
+    .playground-container {
+      display: flex;
+      height: calc(100vh - var(--toolbar-height));
+      margin-top: var(--toolbar-height);
     }
-    .demo-result svg {
-      width: 100%;
-      height: auto;
-      max-height: 500px;
-      display: block;
+
+    .editor-pane {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: var(--nova-darker);
+      border-right: 1px solid var(--nova-dark);
+      min-width: 0;
     }
-    .demo-error {
-      background: #fef2f2;
-      border: 1px solid #fecaca;
-      border-radius: var(--radius-sm);
-      padding: var(--space-md);
-      color: #b91c1c;
-      font-family: var(--font-mono);
-      font-size: 0.8rem;
-      white-space: pre-wrap;
+
+    .preview-pane {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: white;
+      min-width: 0;
+    }
+
+    /* Pane Headers */
+    .pane-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--space-sm) var(--space-md);
+      border-bottom: 1px solid var(--nova-dark);
+      flex-shrink: 0;
+    }
+
+    .editor-pane .pane-header {
+      background: rgba(0,0,0,0.2);
+    }
+
+    .preview-pane .pane-header {
+      background: var(--nova-lighter);
+      border-bottom-color: var(--nova-light);
+    }
+
+    .pane-title {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+    }
+
+    .editor-pane .pane-title {
+      color: var(--nova-secondary);
+    }
+
+    .preview-pane .pane-title {
+      color: var(--nova-dark);
+    }
+
+    /* Example Description */
+    .example-description {
+      padding: var(--space-sm) var(--space-md);
+      background: linear-gradient(135deg, var(--nova-primary), #7c3aed);
+      color: white;
+      font-size: 0.85rem;
       display: none;
     }
-    .demo-loading {
+
+    .example-description.visible {
+      display: block;
+    }
+
+    .example-description-title {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .example-description-text {
+      opacity: 0.9;
+      font-size: 0.8rem;
+    }
+
+    /* Editor */
+    .editor-content {
+      flex: 1;
+      overflow: hidden;
+      position: relative;
+    }
+
+    #editor {
+      width: 100%;
+      height: 100%;
+      background: transparent;
+      border: none;
+      color: var(--nova-light);
+      font-family: var(--font-mono);
+      font-size: 14px;
+      line-height: 1.6;
+      padding: var(--space-md);
+      resize: none;
+      outline: none;
+      tab-size: 2;
+    }
+
+    #editor::placeholder {
+      color: var(--nova-secondary);
+    }
+
+    /* Preview */
+    .preview-content {
+      flex: 1;
+      overflow: auto;
+      padding: var(--space-lg);
+      display: flex;
+      justify-content: center;
+      background: #f8fafc;
+    }
+
+    .preview-loading {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      height: 200px;
+      height: 100%;
       color: var(--nova-secondary);
     }
-    .demo-loading-spinner {
-      width: 40px;
-      height: 40px;
+
+    .preview-loading-spinner {
+      width: 48px;
+      height: 48px;
       border: 3px solid var(--nova-light);
       border-top-color: var(--nova-primary);
       border-radius: 50%;
       animation: spin 1s linear infinite;
       margin-bottom: var(--space-md);
     }
+
     @keyframes spin {
       to { transform: rotate(360deg); }
     }
-    .wasm-banner {
-      background: linear-gradient(135deg, var(--nova-primary), #7c3aed);
-      color: white;
-      padding: var(--space-md) var(--space-lg);
-      border-radius: var(--radius-md);
-      margin-bottom: var(--space-xl);
-      display: flex;
-      align-items: center;
-      gap: var(--space-md);
+
+    .preview-result {
+      background: white;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      max-width: 100%;
     }
-    .wasm-banner svg {
+
+    .preview-result svg {
+      display: block;
+      max-width: 100%;
+      height: auto;
+    }
+
+    .preview-error {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: var(--radius-md);
+      padding: var(--space-lg);
+      color: #b91c1c;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      white-space: pre-wrap;
+      max-width: 600px;
+      display: none;
+    }
+
+    .preview-error.visible {
+      display: block;
+    }
+
+    /* Resizer */
+    .resizer {
+      width: 6px;
+      background: var(--nova-dark);
+      cursor: col-resize;
+      transition: background 0.2s;
       flex-shrink: 0;
     }
-    .wasm-banner-content {
-      flex: 1;
+
+    .resizer:hover,
+    .resizer.dragging {
+      background: var(--nova-primary);
     }
-    .wasm-banner-title {
-      font-weight: 600;
-      margin-bottom: var(--space-xs);
-    }
-    .wasm-banner-text {
-      font-size: 0.875rem;
-      opacity: 0.9;
-    }
-    .wasm-size {
-      font-size: 0.75rem;
-      background: rgba(255,255,255,0.2);
-      padding: var(--space-xs) var(--space-sm);
-      border-radius: var(--radius-sm);
-      white-space: nowrap;
-    }
-    @media (max-width: 968px) {
-      .demo-card-body {
-        grid-template-columns: 1fr;
-      }
-      .demo-input {
-        border-right: none;
-        border-bottom: 1px solid var(--nova-light);
-      }
-      .wasm-banner {
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .playground-container {
         flex-direction: column;
-        text-align: center;
+      }
+
+      .editor-pane {
+        border-right: none;
+        border-bottom: 1px solid var(--nova-dark);
+        height: 45%;
+      }
+
+      .preview-pane {
+        height: 55%;
+      }
+
+      .resizer {
+        display: none;
+      }
+
+      .toolbar-label {
+        display: none;
+      }
+
+      .dropdown-btn {
+        min-width: 140px;
       }
     }
   </style>
 </head>
 <body>
-  <!-- Navigation -->
-  <nav class="navbar" id="navbar">
-    <div class="container">
-      <a href="index.html" class="nav-logo">
-        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect width="32" height="32" rx="8" fill="#2563eb"/>
-          <path d="M8 10h4l4 12h-4L8 10z" fill="white"/>
-          <path d="M14 10h4l6 12h-4l-6-12z" fill="white" fill-opacity="0.7"/>
-          <circle cx="24" cy="10" r="3" fill="#10b981"/>
-        </svg>
-        NovaType
-      </a>
-      <ul class="nav-links" id="navLinks">
-        <li><a href="index.html">Accueil</a></li>
-        <li><a href="demos.html" class="active">Demos</a></li>
-        <li><a href="docs/index.html">Documentation</a></li>
-        <li><a href="docs/templates.html">Templates</a></li>
-        <li><a href="https://github.com/AureClai/novatype" target="_blank">GitHub</a></li>
-      </ul>
-      <div class="nav-actions">
-        <a href="docs/getting-started.html" class="btn btn-primary">Commencer</a>
-      </div>
-    </div>
-  </nav>
+  <!-- Toolbar -->
+  <div class="playground-toolbar">
+    <a href="index.html" class="toolbar-logo">
+      <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="32" height="32" rx="8" fill="#2563eb"/>
+        <path d="M8 10h4l4 12h-4L8 10z" fill="white"/>
+        <path d="M14 10h4l6 12h-4l-6-12z" fill="white" fill-opacity="0.7"/>
+        <circle cx="24" cy="10" r="3" fill="#10b981"/>
+      </svg>
+      NovaType
+    </a>
 
-  <!-- Hero -->
-  <section class="demo-page-hero">
-    <div class="container">
-      <div class="features-header" style="margin-bottom: 0;">
-        <h1>Demos Interactives</h1>
-        <p>Explorez la syntaxe NovaType et visualisez le rendu en temps reel. Le compilateur WASM s'execute directement dans votre navigateur.</p>
-      </div>
-    </div>
-  </section>
+    <div class="toolbar-divider"></div>
 
-  <!-- Demos -->
-  <section class="section">
-    <div class="container">
-      <!-- WASM Info Banner -->
-      <div class="wasm-banner" id="wasmBanner">
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-          <path d="M2 17l10 5 10-5"/>
-          <path d="M2 12l10 5 10-5"/>
-        </svg>
-        <div class="wasm-banner-content">
-          <div class="wasm-banner-title">Compilation en temps reel avec WebAssembly</div>
-          <div class="wasm-banner-text" id="wasmStatus">Chargement du compilateur NovaType...</div>
+    <div class="toolbar-section">
+      <span class="toolbar-label">Exemples</span>
+      <div class="dropdown" id="examplesDropdown">
+        <button class="dropdown-btn" id="examplesBtn">
+          <span id="currentExample">Hello World</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 9l6 6 6-6"/>
+          </svg>
+        </button>
+        <div class="dropdown-menu">
+          <div class="dropdown-header">Commencer</div>
+          <button class="dropdown-item active" data-example="hello">
+            <div class="dropdown-item-title">Hello World</div>
+            <div class="dropdown-item-desc">Le classique premier document</div>
+          </button>
+          <button class="dropdown-item" data-example="scratch">
+            <div class="dropdown-item-title">Page vierge</div>
+            <div class="dropdown-item-desc">Commencer de zero</div>
+          </button>
+
+          <div class="dropdown-divider"></div>
+          <div class="dropdown-header">Syntaxe de base</div>
+          <button class="dropdown-item" data-example="formatting">
+            <div class="dropdown-item-title">Mise en forme</div>
+            <div class="dropdown-item-desc">Gras, italique, titres, listes</div>
+          </button>
+          <button class="dropdown-item" data-example="headings">
+            <div class="dropdown-item-title">Structure</div>
+            <div class="dropdown-item-desc">Titres et sections</div>
+          </button>
+
+          <div class="dropdown-divider"></div>
+          <div class="dropdown-header">Mathematiques</div>
+          <button class="dropdown-item" data-example="math-inline">
+            <div class="dropdown-item-title">Equations simples</div>
+            <div class="dropdown-item-desc">Formules en ligne et centrees</div>
+          </button>
+          <button class="dropdown-item" data-example="math-advanced">
+            <div class="dropdown-item-title">Mathematiques avancees</div>
+            <div class="dropdown-item-desc">Matrices, systemes, integrales</div>
+          </button>
+
+          <div class="dropdown-divider"></div>
+          <div class="dropdown-header">Donnees</div>
+          <button class="dropdown-item" data-example="tables">
+            <div class="dropdown-item-title">Tableaux</div>
+            <div class="dropdown-item-desc">Presentation de donnees</div>
+          </button>
+          <button class="dropdown-item" data-example="figures">
+            <div class="dropdown-item-title">Figures</div>
+            <div class="dropdown-item-desc">Images et legendes</div>
+          </button>
+
+          <div class="dropdown-divider"></div>
+          <div class="dropdown-header">Code</div>
+          <button class="dropdown-item" data-example="code">
+            <div class="dropdown-item-title">Blocs de code</div>
+            <div class="dropdown-item-desc">Syntaxe coloree</div>
+          </button>
+
+          <div class="dropdown-divider"></div>
+          <div class="dropdown-header">Documents complets</div>
+          <button class="dropdown-item" data-example="article">
+            <div class="dropdown-item-title">Article scientifique</div>
+            <div class="dropdown-item-desc">Document academique complet</div>
+          </button>
+          <button class="dropdown-item" data-example="letter">
+            <div class="dropdown-item-title">Lettre</div>
+            <div class="dropdown-item-desc">Correspondance formelle</div>
+          </button>
         </div>
-        <div class="wasm-size">~30 MB</div>
       </div>
+    </div>
 
-      <div class="demo-examples">
+    <div class="toolbar-status">
+      <span class="status-dot loading" id="statusDot"></span>
+      <span id="statusText">Chargement...</span>
+    </div>
+  </div>
 
-        <!-- Demo 1: Document de base -->
-        <div class="demo-card">
-          <div class="demo-card-header">
-            <span class="demo-card-title">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--nova-primary)" stroke-width="2">
-                <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
-                <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/>
-              </svg>
-              Document de base
-            </span>
-            <span class="text-muted" style="font-size: 0.875rem;">Syntaxe fondamentale</span>
-          </div>
-          <div class="demo-card-body">
-            <div class="demo-input">
-              <textarea id="demo1-input" spellcheck="false">// Configuration
-#set text(font: "Arial", size: 11pt)
+  <!-- Main Layout -->
+  <div class="playground-container">
+    <!-- Editor Pane -->
+    <div class="editor-pane" id="editorPane">
+      <div class="pane-header">
+        <span class="pane-title">Editeur</span>
+      </div>
+      <div class="example-description" id="exampleDescription">
+        <div class="example-description-title" id="exampleTitle"></div>
+        <div class="example-description-text" id="exampleText"></div>
+      </div>
+      <div class="editor-content">
+        <textarea id="editor" spellcheck="false" placeholder="Ecrivez votre code NovaType ici..."></textarea>
+      </div>
+    </div>
 
-// Titre
-#align(center)[
-  #text(size: 20pt, weight: "bold")[
-    Introduction a NovaType
-  ]
-  #v(0.5em)
-  Par Dr. Martin | Janvier 2024
-]
+    <!-- Resizer -->
+    <div class="resizer" id="resizer"></div>
 
-= Premiere Section
+    <!-- Preview Pane -->
+    <div class="preview-pane" id="previewPane">
+      <div class="pane-header">
+        <span class="pane-title">Apercu</span>
+      </div>
+      <div class="preview-content">
+        <div class="preview-loading" id="previewLoading">
+          <div class="preview-loading-spinner"></div>
+          <span>Chargement du compilateur...</span>
+        </div>
+        <div class="preview-result" id="previewResult" style="display: none;"></div>
+        <div class="preview-error" id="previewError"></div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initNovaCompiler, compile } from './assets/js/nova-compiler.js';
+
+    // Examples database
+    const examples = {
+      hello: {
+        title: "Hello World",
+        description: "Le premier document NovaType - decouvrez la syntaxe de base avec un exemple simple.",
+        code: `// Mon premier document NovaType
+
+= Bonjour, NovaType !
+
+Bienvenue dans le monde de la composition
+typographique moderne.
 
 Ceci est un paragraphe avec du *texte en gras*
-et de l'_italique_. NovaType rend la
-redaction simple et intuitive.
+et de l'_italique_.
 
-= Deuxieme Section
+== Pourquoi NovaType ?
 
-- Premier element de liste
+- Syntaxe intuitive
+- Rendu de qualite professionnelle
+- Compilation rapide
+
+Essayez de modifier ce texte !`
+      },
+      scratch: {
+        title: "Page vierge",
+        description: "Un canvas vide pour vos experiences. Commencez a ecrire !",
+        code: `// Votre document commence ici
+
+`
+      },
+      formatting: {
+        title: "Mise en forme",
+        description: "Les bases de la mise en forme : gras, italique, et differentes facons de styliser votre texte.",
+        code: `= Guide de mise en forme
+
+== Texte simple
+
+Ceci est un paragraphe normal.
+Les retours a la ligne simples sont ignores.
+
+Une ligne vide cree un nouveau paragraphe.
+
+== Emphase
+
+Utilisez *asterisques* pour le *gras*.
+Utilisez _underscores_ pour l'_italique_.
+Combinez les deux : *_gras et italique_*.
+
+== Listes
+
+Liste a puces :
+- Premier element
 - Deuxieme element
+  - Sous-element
+  - Autre sous-element
 - Troisieme element
 
-+ Liste numerotee
-+ Deuxieme point
-+ Troisieme point</textarea>
-            </div>
-            <div class="demo-output">
-              <div class="demo-output-label">
-                Apercu du rendu
-                <div class="demo-status">
-                  <span class="demo-status-dot" id="demo1-status"></span>
-                  <span id="demo1-status-text">Pret</span>
-                </div>
-              </div>
-              <div class="demo-loading" id="demo1-loading">
-                <div class="demo-loading-spinner"></div>
-                <span>Chargement du compilateur...</span>
-              </div>
-              <div class="demo-error" id="demo1-error"></div>
-              <div class="demo-result" id="demo1-output"></div>
-            </div>
-          </div>
-        </div>
+Liste numerotee :
++ Premier
++ Deuxieme
++ Troisieme
 
-        <!-- Demo 2: Equations mathematiques -->
-        <div class="demo-card">
-          <div class="demo-card-header">
-            <span class="demo-card-title">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--nova-primary)" stroke-width="2">
-                <path d="M4 4h16M4 8h10M4 12h16M4 16h10M4 20h16"/>
-              </svg>
-              Equations Mathematiques
-            </span>
-            <span class="text-muted" style="font-size: 0.875rem;">Formules et notations</span>
-          </div>
-          <div class="demo-card-body">
-            <div class="demo-input">
-              <textarea id="demo2-input" spellcheck="false">= Equations en NovaType
+== Texte special
+
+Texte #text(fill: blue)[en couleur].
+Texte #text(size: 1.5em)[plus grand].
+Texte en #smallcaps[petites capitales].`
+      },
+      headings: {
+        title: "Structure",
+        description: "Organisez votre document avec des titres et des sections hierarchiques.",
+        code: `= Titre principal (niveau 1)
+
+Introduction de votre document.
+
+== Section (niveau 2)
+
+Contenu de la section.
+
+=== Sous-section (niveau 3)
+
+Contenu plus detaille.
+
+==== Sous-sous-section (niveau 4)
+
+Encore plus de details.
+
+== Autre section
+
+Retour au niveau 2.
+
+=== Details
+
+Quelques informations supplementaires.
+
+= Deuxieme partie
+
+Un nouveau chapitre commence ici.`
+      },
+      "math-inline": {
+        title: "Equations simples",
+        description: "Les bases des mathematiques : equations en ligne et equations centrees.",
+        code: `= Equations mathematiques
 
 == Equations en ligne
 
-La celebre formule d'Euler : $ e^(i pi) + 1 = 0 $
+La formule $a^2 + b^2 = c^2$ est le
+theoreme de Pythagore.
+
+L'equation $E = m c^2$ d'Einstein.
+
+Les racines : $x = (-b plus.minus sqrt(b^2 - 4 a c)) / (2 a)$
 
 == Equations centrees
 
-L'integrale de Gauss :
+L'integrale definie :
 
-$ integral_(-infinity)^(+infinity) e^(-x^2) dif x = sqrt(pi) $
+$ integral_a^b f(x) dif x $
+
+La somme :
+
+$ sum_(i=1)^n i = (n(n+1))/2 $
+
+La limite :
+
+$ lim_(x -> infinity) (1 + 1/x)^x = e $
+
+== Fractions et exposants
+
+$ (a+b)^2 = a^2 + 2 a b + b^2 $
+
+$ sqrt(x^2 + y^2) $`
+      },
+      "math-advanced": {
+        title: "Mathematiques avancees",
+        description: "Matrices, systemes d'equations, et notations mathematiques complexes.",
+        code: `= Mathematiques avancees
 
 == Matrices
 
@@ -340,172 +718,177 @@ $ bold(A) = mat(
   7, 8, 9
 ) $
 
+Matrice identite :
+
+$ bold(I) = mat(
+  1, 0, 0;
+  0, 1, 0;
+  0, 0, 1
+) $
+
 == Systemes d'equations
 
 $ cases(
-  x + y = 10,
-  2x - y = 5
+  x + y + z = 6,
+  2x - y + z = 3,
+  x + 2y - z = 2
 ) $
 
-Solution : $x = 5$ et $y = 5$</textarea>
-            </div>
-            <div class="demo-output">
-              <div class="demo-output-label">
-                Apercu du rendu
-                <div class="demo-status">
-                  <span class="demo-status-dot" id="demo2-status"></span>
-                  <span id="demo2-status-text">Pret</span>
-                </div>
-              </div>
-              <div class="demo-loading" id="demo2-loading">
-                <div class="demo-loading-spinner"></div>
-                <span>Chargement du compilateur...</span>
-              </div>
-              <div class="demo-error" id="demo2-error"></div>
-              <div class="demo-result" id="demo2-output"></div>
-            </div>
-          </div>
-        </div>
+== Vecteurs et derivees
 
-        <!-- Demo 3: Tableaux -->
-        <div class="demo-card">
-          <div class="demo-card-header">
-            <span class="demo-card-title">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--nova-primary)" stroke-width="2">
-                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-                <path d="M3 9h18M9 21V9"/>
-              </svg>
-              Tableaux et Figures
-            </span>
-            <span class="text-muted" style="font-size: 0.875rem;">Presentation des donnees</span>
-          </div>
-          <div class="demo-card-body">
-            <div class="demo-input">
-              <textarea id="demo3-input" spellcheck="false">= Resultats de l'etude
+Gradient : $ nabla f = (diff f)/(diff x) bold(i) + (diff f)/(diff y) bold(j) $
 
-== Tableau comparatif
+Divergence : $ nabla dot bold(F) $
+
+Rotationnel : $ nabla times bold(F) $
+
+== Integrales multiples
+
+$ integral.double_D f(x,y) dif x dif y $
+
+$ integral.triple_V rho dif V = M $
+
+== Produits et sommes
+
+$ product_(i=1)^n a_i = a_1 dot a_2 dot dots dot a_n $`
+      },
+      tables: {
+        title: "Tableaux",
+        description: "Creez des tableaux pour presenter vos donnees de maniere structuree.",
+        code: `= Tableaux de donnees
+
+== Tableau simple
+
+#table(
+  columns: 3,
+  [*Nom*], [*Age*], [*Ville*],
+  [Alice], [28], [Paris],
+  [Bob], [35], [Lyon],
+  [Charlie], [42], [Marseille],
+)
+
+== Tableau avec figure
 
 #figure(
   table(
     columns: 4,
     table.header(
-      [*Methode*], [*Precision*], [*Rappel*], [*F1*],
+      [*Algorithme*], [*Temps*], [*Memoire*], [*Precision*],
     ),
-    [Baseline], [0.72], [0.68], [0.70],
-    [Model A], [0.85], [0.82], [0.83],
-    [Model B], [0.89], [0.87], [0.88],
-    [*NovaType*], [*0.94*], [*0.91*], [*0.92*],
+    [Methode A], [1.2s], [256 MB], [92%],
+    [Methode B], [0.8s], [512 MB], [95%],
+    [Methode C], [2.1s], [128 MB], [89%],
+    [*NovaType*], [*0.5s*], [*64 MB*], [*98%*],
   ),
   caption: [Comparaison des performances]
 )
 
-Les resultats montrent que NovaType
-surpasse les autres methodes avec
-un score F1 de *0.92*.</textarea>
-            </div>
-            <div class="demo-output">
-              <div class="demo-output-label">
-                Apercu du rendu
-                <div class="demo-status">
-                  <span class="demo-status-dot" id="demo3-status"></span>
-                  <span id="demo3-status-text">Pret</span>
-                </div>
-              </div>
-              <div class="demo-loading" id="demo3-loading">
-                <div class="demo-loading-spinner"></div>
-                <span>Chargement du compilateur...</span>
-              </div>
-              <div class="demo-error" id="demo3-error"></div>
-              <div class="demo-result" id="demo3-output"></div>
-            </div>
-          </div>
-        </div>
+== Colonnes personnalisees
 
-        <!-- Demo 4: Code et blocs -->
-        <div class="demo-card">
-          <div class="demo-card-header">
-            <span class="demo-card-title">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--nova-primary)" stroke-width="2">
-                <polyline points="16 18 22 12 16 6"></polyline>
-                <polyline points="8 6 2 12 8 18"></polyline>
-              </svg>
-              Code et Blocs
-            </span>
-            <span class="text-muted" style="font-size: 0.875rem;">Mise en forme avancee</span>
-          </div>
-          <div class="demo-card-body">
-            <div class="demo-input">
-              <textarea id="demo4-input" spellcheck="false">= Documentation Technique
+#table(
+  columns: (auto, 1fr, 1fr),
+  align: (left, center, right),
+  [Gauche], [Centre], [Droite],
+  [A], [B], [C],
+  [1], [2], [3],
+)`
+      },
+      figures: {
+        title: "Figures",
+        description: "Ajoutez des formes, des graphiques et des illustrations a vos documents.",
+        code: `= Figures et illustrations
 
-== Exemple de Code
+== Formes geometriques
 
-Voici un exemple de fonction Python :
+#align(center)[
+  #box(width: 80pt, height: 80pt, fill: blue.lighten(70%), stroke: blue)[
+    #align(center + horizon)[Rectangle]
+  ]
+]
 
-```python
-def fibonacci(n):
-    if n <= 1:
-        return n
-    return fibonacci(n-1) + fibonacci(n-2)
+#v(1em)
 
-# Calculer les 10 premiers nombres
-for i in range(10):
-    print(fibonacci(i))
-```
+#align(center)[
+  #circle(radius: 40pt, fill: green.lighten(70%), stroke: green)[
+    #align(center + horizon)[Cercle]
+  ]
+]
 
-== Bloc de Note
+== Blocs colores
 
 #block(
-  fill: luma(240),
+  fill: yellow.lighten(80%),
   inset: 12pt,
   radius: 4pt,
   width: 100%,
 )[
-  *Note importante :* Cette fonction utilise
-  la recursion et peut etre optimisee avec
-  la memoisation pour de meilleures performances.
+  *Attention :* Ceci est un bloc d'avertissement.
 ]
 
-== Formule Mathematique
+#block(
+  fill: blue.lighten(85%),
+  inset: 12pt,
+  radius: 4pt,
+  width: 100%,
+)[
+  *Info :* Une note informative pour le lecteur.
+]
 
-La complexite temporelle est :
+== Figure avec legende
 
-$ O(2^n) $</textarea>
-            </div>
-            <div class="demo-output">
-              <div class="demo-output-label">
-                Apercu du rendu
-                <div class="demo-status">
-                  <span class="demo-status-dot" id="demo4-status"></span>
-                  <span id="demo4-status-text">Pret</span>
-                </div>
-              </div>
-              <div class="demo-loading" id="demo4-loading">
-                <div class="demo-loading-spinner"></div>
-                <span>Chargement du compilateur...</span>
-              </div>
-              <div class="demo-error" id="demo4-error"></div>
-              <div class="demo-result" id="demo4-output"></div>
-            </div>
-          </div>
-        </div>
+#figure(
+  rect(width: 200pt, height: 100pt, fill: gray.lighten(70%))[
+    #align(center + horizon)[
+      #text(fill: gray)[Emplacement image]
+    ]
+  ],
+  caption: [Description de la figure]
+)`
+      },
+      code: {
+        title: "Blocs de code",
+        description: "Integrez du code source avec coloration syntaxique dans vos documents.",
+        code: `= Documentation technique
 
-        <!-- Demo 5: Document complet -->
-        <div class="demo-card">
-          <div class="demo-card-header">
-            <span class="demo-card-title">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--nova-primary)" stroke-width="2">
-                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-                <path d="M2 17l10 5 10-5"/>
-                <path d="M2 12l10 5 10-5"/>
-              </svg>
-              Document Complet
-            </span>
-            <span class="text-muted" style="font-size: 0.875rem;">Article scientifique</span>
-          </div>
-          <div class="demo-card-body">
-            <div class="demo-input">
-              <textarea id="demo5-input" spellcheck="false">// Configuration du document
-#set document(title: "NovaType: Une Approche Moderne")
+== Code Python
+
+\`\`\`python
+def fibonacci(n):
+    """Calcule le n-ieme nombre de Fibonacci."""
+    if n <= 1:
+        return n
+    return fibonacci(n-1) + fibonacci(n-2)
+
+# Test
+for i in range(10):
+    print(f"F({i}) = {fibonacci(i)}")
+\`\`\`
+
+== Code JavaScript
+
+\`\`\`javascript
+const fetchData = async (url) => {
+  try {
+    const response = await fetch(url);
+    return await response.json();
+  } catch (error) {
+    console.error('Erreur:', error);
+  }
+};
+\`\`\`
+
+== Code en ligne
+
+Utilisez \`const\` pour les variables constantes
+et \`let\` pour les variables mutables.
+
+La fonction \`map()\` transforme chaque element.`
+      },
+      article: {
+        title: "Article scientifique",
+        description: "Un modele complet d'article academique avec toutes les sections standards.",
+        code: `// Configuration du document
+#set document(title: "NovaType: Approche Moderne")
 #set page(margin: 2cm)
 #set text(font: "New Computer Modern", size: 11pt)
 #set par(justify: true)
@@ -514,7 +897,7 @@ $ O(2^n) $</textarea>
 #align(center)[
   #text(17pt, weight: "bold")[
     NovaType: Une Approche Moderne de la
-    Composition de Documents Scientifiques
+    Composition Typographique
   ]
 
   #v(1em)
@@ -524,7 +907,7 @@ $ O(2^n) $</textarea>
   ]
 
   #text(9pt, style: "italic")[
-    #super[1]Universite de Paris \
+    #super[1]Universite de Paris |
     #super[2]CNRS
   ]
 
@@ -532,281 +915,320 @@ $ O(2^n) $</textarea>
 ]
 
 // Resume
-#block(
-  width: 100%,
-  inset: (x: 2em),
-)[
+#block(width: 100%, inset: (x: 2em))[
   *Resume* --- Cet article presente NovaType,
-  un systeme moderne de composition de documents
-  qui combine la qualite typographique de LaTeX
-  avec une syntaxe intuitive.
+  un systeme de composition qui allie qualite
+  typographique et simplicite d'utilisation.
+
+  *Mots-cles :* typographie, documents, LaTeX
 ]
 
 #v(1em)
 
 = Introduction
 
-La redaction de documents scientifiques reste
-un defi majeur. Les outils traditionnels comme
-LaTeX offrent une excellente qualite mais avec
-une courbe d'apprentissage importante.
+La redaction scientifique necessite des outils
+alliant precision et accessibilite.
 
 = Methodologie
 
 Notre approche repose sur trois piliers :
 
-+ *Simplicite syntaxique* : une syntaxe claire
-+ *Compilation rapide* : rendu instantane
-+ *Extensibilite* : systeme de templates
++ *Simplicite syntaxique*
++ *Compilation rapide*
++ *Extensibilite*
+
+== Resultats
+
+#figure(
+  table(
+    columns: 3,
+    [*Critere*], [*LaTeX*], [*NovaType*],
+    [Apprentissage], [Difficile], [Facile],
+    [Compilation], [Lente], [Rapide],
+    [Qualite], [Excellente], [Excellente],
+  ),
+  caption: [Comparaison des systemes]
+)
 
 = Conclusion
 
-NovaType represente une evolution naturelle
-des systemes de composition typographique.</textarea>
-            </div>
-            <div class="demo-output">
-              <div class="demo-output-label">
-                Apercu du rendu
-                <div class="demo-status">
-                  <span class="demo-status-dot" id="demo5-status"></span>
-                  <span id="demo5-status-text">Pret</span>
-                </div>
-              </div>
-              <div class="demo-loading" id="demo5-loading">
-                <div class="demo-loading-spinner"></div>
-                <span>Chargement du compilateur...</span>
-              </div>
-              <div class="demo-error" id="demo5-error"></div>
-              <div class="demo-result" id="demo5-output"></div>
-            </div>
-          </div>
-        </div>
+NovaType represente une evolution majeure.`
+      },
+      letter: {
+        title: "Lettre",
+        description: "Modele de lettre formelle pour votre correspondance professionnelle.",
+        code: `// Configuration
+#set page(margin: (top: 3cm, bottom: 2cm, x: 2.5cm))
+#set text(font: "New Computer Modern", size: 11pt)
+#set par(justify: true)
 
-      </div>
-    </div>
-  </section>
+// Expediteur
+#align(right)[
+  Jean Dupont \\
+  123 Rue de la Science \\
+  75001 Paris \\
+  jean.dupont\@email.fr
+]
 
-  <!-- Try It Section -->
-  <section class="section section-alt">
-    <div class="container text-center">
-      <h2>Pret a essayer ?</h2>
-      <p class="text-muted" style="max-width: 500px; margin: var(--space-md) auto;">
-        Installez NovaType en quelques secondes et commencez a creer vos documents.
-      </p>
-      <div class="hero-code" style="max-width: 600px; margin: var(--space-xl) auto 0; text-align: left;">
-        <div class="dots">
-          <span class="dot"></span>
-          <span class="dot"></span>
-          <span class="dot"></span>
-        </div>
-        <pre><code><span class="token-comment"># Installation</span>
-<span class="token-function">$</span> cargo install nova-cli
+#v(2em)
 
-<span class="token-comment"># Creer un nouveau projet</span>
-<span class="token-function">$</span> nova init mon-article --template ieee-article
+// Date et lieu
+#align(right)[
+  Paris, le 15 janvier 2024
+]
 
-<span class="token-comment"># Compiler et ouvrir</span>
-<span class="token-function">$</span> nova compile main.typ --open
+#v(2em)
 
-<span class="token-comment"># Mode watch (auto-recompilation)</span>
-<span class="token-function">$</span> nova watch main.typ</code></pre>
-      </div>
-      <div class="flex-center gap-md" style="margin-top: var(--space-xl);">
-        <a href="docs/getting-started.html" class="btn btn-primary btn-lg">Guide d'installation</a>
-        <a href="docs/index.html" class="btn btn-outline btn-lg">Documentation</a>
-      </div>
-    </div>
-  </section>
+// Destinataire
+Madame la Directrice \\
+Departement de Recherche \\
+Universite de Lyon \\
+69000 Lyon
 
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="container">
-      <div class="footer-grid">
-        <div class="footer-brand">
-          <a href="index.html" class="nav-logo" style="color: white;">
-            <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" width="32" height="32">
-              <rect width="32" height="32" rx="8" fill="#2563eb"/>
-              <path d="M8 10h4l4 12h-4L8 10z" fill="white"/>
-              <path d="M14 10h4l6 12h-4l-6-12z" fill="white" fill-opacity="0.7"/>
-              <circle cx="24" cy="10" r="3" fill="#10b981"/>
-            </svg>
-            NovaType
-          </a>
-          <p>Systeme de composition typographique moderne pour la redaction scientifique.</p>
-        </div>
-        <div>
-          <h4 class="footer-title">Ressources</h4>
-          <ul class="footer-links">
-            <li><a href="docs/getting-started.html">Installation</a></li>
-            <li><a href="docs/templates.html">Templates</a></li>
-            <li><a href="demos.html">Demos</a></li>
-            <li><a href="docs/cli.html">CLI Reference</a></li>
-          </ul>
-        </div>
-        <div>
-          <h4 class="footer-title">Documentation</h4>
-          <ul class="footer-links">
-            <li><a href="docs/index.html">Guide</a></li>
-            <li><a href="docs/citations.html">Citations</a></li>
-            <li><a href="docs/plots.html">Graphiques</a></li>
-            <li><a href="docs/api.html">API WebAssembly</a></li>
-          </ul>
-        </div>
-        <div>
-          <h4 class="footer-title">Communaute</h4>
-          <ul class="footer-links">
-            <li><a href="https://github.com/AureClai/novatype" target="_blank">GitHub</a></li>
-            <li><a href="https://github.com/AureClai/novatype/issues" target="_blank">Issues</a></li>
-            <li><a href="https://github.com/AureClai/novatype/discussions" target="_blank">Discussions</a></li>
-          </ul>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <p>NovaType - Projet Open Source sous licence MIT</p>
-      </div>
-    </div>
-  </footer>
+#v(2em)
 
-  <script src="assets/js/main.js"></script>
-  <script type="module">
-    import { initNovaCompiler, compile } from './assets/js/nova-compiler.js';
+// Objet
+*Objet :* Candidature au poste de chercheur
 
-    // Demo configuration
-    const demos = [
-      { id: 'demo1', debounce: 500 },
-      { id: 'demo2', debounce: 500 },
-      { id: 'demo3', debounce: 500 },
-      { id: 'demo4', debounce: 500 },
-      { id: 'demo5', debounce: 500 }
-    ];
+#v(1em)
 
-    // State for each demo
-    const demoState = {};
+// Corps de la lettre
+Madame la Directrice,
 
-    // Initialize compiler and demos
-    async function init() {
-      const wasmStatus = document.getElementById('wasmStatus');
-      const wasmBanner = document.getElementById('wasmBanner');
+Suite a votre annonce parue le 10 janvier,
+j'ai l'honneur de vous presenter ma candidature
+au poste de chercheur au sein de votre departement.
+
+Titulaire d'un doctorat en informatique et fort
+de cinq annees d'experience en recherche, je suis
+particulierement interesse par les thematiques
+developpees dans votre laboratoire.
+
+Je me tiens a votre disposition pour tout
+entretien a votre convenance.
+
+Dans l'attente de votre reponse, je vous prie
+d'agreer, Madame la Directrice, l'expression
+de mes salutations distinguees.
+
+#v(2em)
+
+#align(right)[
+  Jean Dupont
+]`
+      }
+    };
+
+    // State
+    let compilerReady = false;
+    let compileTimer = null;
+    let lastSource = null;
+    let currentExampleKey = 'hello';
+
+    // DOM elements
+    const editor = document.getElementById('editor');
+    const previewLoading = document.getElementById('previewLoading');
+    const previewResult = document.getElementById('previewResult');
+    const previewError = document.getElementById('previewError');
+    const statusDot = document.getElementById('statusDot');
+    const statusText = document.getElementById('statusText');
+    const examplesDropdown = document.getElementById('examplesDropdown');
+    const examplesBtn = document.getElementById('examplesBtn');
+    const currentExampleSpan = document.getElementById('currentExample');
+    const exampleDescription = document.getElementById('exampleDescription');
+    const exampleTitle = document.getElementById('exampleTitle');
+    const exampleText = document.getElementById('exampleText');
+    const editorPane = document.getElementById('editorPane');
+    const previewPane = document.getElementById('previewPane');
+    const resizer = document.getElementById('resizer');
+
+    // Load example
+    function loadExample(key) {
+      const example = examples[key];
+      if (!example) return;
+
+      currentExampleKey = key;
+      editor.value = example.code;
+      currentExampleSpan.textContent = example.title;
+
+      // Update description
+      exampleTitle.textContent = example.title;
+      exampleText.textContent = example.description;
+      exampleDescription.classList.add('visible');
+
+      // Update active state in dropdown
+      document.querySelectorAll('.dropdown-item').forEach(item => {
+        item.classList.toggle('active', item.dataset.example === key);
+      });
+
+      // Close dropdown
+      examplesDropdown.classList.remove('open');
+
+      // Trigger compile
+      if (compilerReady) {
+        doCompile(example.code);
+      }
+    }
+
+    // Compile function
+    async function doCompile(source) {
+      if (source === lastSource) return;
+      lastSource = source;
+
+      statusDot.className = 'status-dot compiling';
+      statusText.textContent = 'Compilation...';
 
       try {
-        wasmStatus.textContent = 'Chargement du compilateur NovaType (~30 MB)...';
+        const result = await compile(source);
+
+        if (result.success && result.svg_pages.length > 0) {
+          previewResult.innerHTML = result.svg_pages[0];
+          previewResult.style.display = 'block';
+          previewError.classList.remove('visible');
+
+          // Scale SVG
+          const svg = previewResult.querySelector('svg');
+          if (svg) {
+            svg.style.maxWidth = '100%';
+            svg.style.height = 'auto';
+          }
+
+          statusDot.className = 'status-dot ready';
+          statusText.textContent = 'Pret';
+        } else {
+          previewError.textContent = result.errors.join('\n');
+          previewError.classList.add('visible');
+          previewResult.style.display = 'none';
+
+          statusDot.className = 'status-dot error';
+          statusText.textContent = 'Erreur';
+        }
+      } catch (err) {
+        previewError.textContent = err.message || String(err);
+        previewError.classList.add('visible');
+        previewResult.style.display = 'none';
+
+        statusDot.className = 'status-dot error';
+        statusText.textContent = 'Erreur';
+      }
+    }
+
+    // Debounced compile
+    function scheduleCompile() {
+      if (compileTimer) clearTimeout(compileTimer);
+      compileTimer = setTimeout(() => {
+        if (compilerReady) {
+          doCompile(editor.value);
+        }
+      }, 400);
+    }
+
+    // Initialize
+    async function init() {
+      // Load initial example
+      loadExample('hello');
+
+      try {
+        statusText.textContent = 'Chargement du compilateur...';
 
         await initNovaCompiler();
 
-        wasmStatus.textContent = 'Compilateur pret ! Modifiez le code pour voir les changements en temps reel.';
-        wasmBanner.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+        compilerReady = true;
+        previewLoading.style.display = 'none';
 
-        // Initialize each demo
-        for (const demo of demos) {
-          initDemo(demo.id, demo.debounce);
-        }
+        statusDot.className = 'status-dot ready';
+        statusText.textContent = 'Pret';
+
+        // Initial compile
+        doCompile(editor.value);
 
       } catch (error) {
-        wasmStatus.textContent = `Erreur de chargement: ${error.message}`;
-        wasmBanner.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
+        statusDot.className = 'status-dot error';
+        statusText.textContent = 'Erreur de chargement';
 
-        // Show fallback message in all demos
-        for (const demo of demos) {
-          const loading = document.getElementById(`${demo.id}-loading`);
-          const error = document.getElementById(`${demo.id}-error`);
-          if (loading) loading.style.display = 'none';
-          if (error) {
-            error.textContent = 'Le compilateur WASM n\'a pas pu etre charge. Rechargez la page ou essayez un autre navigateur.';
-            error.style.display = 'block';
-          }
-        }
+        previewLoading.innerHTML = `
+          <div style="color: #ef4444; text-align: center;">
+            <p style="font-weight: 600;">Impossible de charger le compilateur</p>
+            <p style="font-size: 0.85rem; margin-top: 8px;">${error.message}</p>
+            <p style="font-size: 0.8rem; margin-top: 16px; color: var(--nova-secondary);">
+              Essayez de recharger la page ou utilisez un navigateur moderne.
+            </p>
+          </div>
+        `;
       }
     }
 
-    // Initialize a single demo
-    function initDemo(id, debounceMs) {
-      const input = document.getElementById(`${id}-input`);
-      const output = document.getElementById(`${id}-output`);
-      const error = document.getElementById(`${id}-error`);
-      const loading = document.getElementById(`${id}-loading`);
-      const statusDot = document.getElementById(`${id}-status`);
-      const statusText = document.getElementById(`${id}-status-text`);
+    // Event listeners
 
-      if (!input || !output) return;
+    // Editor input
+    editor.addEventListener('input', scheduleCompile);
 
-      // Initialize state
-      demoState[id] = {
-        timer: null,
-        lastSource: null
-      };
-
-      // Hide loading, show ready
-      loading.style.display = 'none';
-      statusDot.classList.add('ready');
-      statusText.textContent = 'Pret';
-
-      // Compile function
-      async function doCompile(source) {
-        if (source === demoState[id].lastSource) return;
-        demoState[id].lastSource = source;
-
-        // Update status
-        statusDot.className = 'demo-status-dot compiling';
-        statusText.textContent = 'Compilation...';
-
-        try {
-          const result = await compile(source);
-
-          if (result.success && result.svg_pages.length > 0) {
-            // Show SVG
-            output.innerHTML = result.svg_pages[0];
-
-            // Scale SVG to fit
-            const svg = output.querySelector('svg');
-            if (svg) {
-              svg.style.width = '100%';
-              svg.style.height = 'auto';
-              svg.style.maxHeight = '500px';
-            }
-
-            // Hide error
-            error.style.display = 'none';
-
-            // Update status
-            statusDot.className = 'demo-status-dot ready';
-            statusText.textContent = 'Pret';
-          } else {
-            // Show errors
-            error.textContent = result.errors.join('\n');
-            error.style.display = 'block';
-
-            // Update status
-            statusDot.className = 'demo-status-dot error';
-            statusText.textContent = 'Erreur';
-          }
-        } catch (err) {
-          error.textContent = err.message || String(err);
-          error.style.display = 'block';
-
-          statusDot.className = 'demo-status-dot error';
-          statusText.textContent = 'Erreur';
-        }
+    // Tab key support
+    editor.addEventListener('keydown', (e) => {
+      if (e.key === 'Tab') {
+        e.preventDefault();
+        const start = editor.selectionStart;
+        const end = editor.selectionEnd;
+        editor.value = editor.value.substring(0, start) + '  ' + editor.value.substring(end);
+        editor.selectionStart = editor.selectionEnd = start + 2;
+        scheduleCompile();
       }
+    });
 
-      // Debounced input handler
-      function onInput() {
-        if (demoState[id].timer) {
-          clearTimeout(demoState[id].timer);
-        }
+    // Dropdown toggle
+    examplesBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      examplesDropdown.classList.toggle('open');
+    });
 
-        demoState[id].timer = setTimeout(() => {
-          doCompile(input.value);
-        }, debounceMs);
+    // Close dropdown on outside click
+    document.addEventListener('click', () => {
+      examplesDropdown.classList.remove('open');
+    });
+
+    // Example selection
+    document.querySelectorAll('.dropdown-item').forEach(item => {
+      item.addEventListener('click', () => {
+        loadExample(item.dataset.example);
+      });
+    });
+
+    // Resizer
+    let isResizing = false;
+
+    resizer.addEventListener('mousedown', (e) => {
+      isResizing = true;
+      resizer.classList.add('dragging');
+      document.body.style.cursor = 'col-resize';
+      document.body.style.userSelect = 'none';
+    });
+
+    document.addEventListener('mousemove', (e) => {
+      if (!isResizing) return;
+
+      const containerWidth = document.querySelector('.playground-container').offsetWidth;
+      const newEditorWidth = e.clientX;
+      const minWidth = 300;
+      const maxWidth = containerWidth - 300;
+
+      if (newEditorWidth >= minWidth && newEditorWidth <= maxWidth) {
+        const editorPercent = (newEditorWidth / containerWidth) * 100;
+        editorPane.style.flex = `0 0 ${editorPercent}%`;
+        previewPane.style.flex = '1';
       }
+    });
 
-      // Add event listener
-      input.addEventListener('input', onInput);
+    document.addEventListener('mouseup', () => {
+      if (isResizing) {
+        isResizing = false;
+        resizer.classList.remove('dragging');
+        document.body.style.cursor = '';
+        document.body.style.userSelect = '';
+      }
+    });
 
-      // Initial compile
-      doCompile(input.value);
-    }
-
-    // Start initialization
+    // Start
     init();
   </script>
 </body>
