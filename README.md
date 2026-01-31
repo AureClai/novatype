@@ -5,14 +5,14 @@
 <h1 align="center">NovaType</h1>
 
 <p align="center">
-  <strong>La composition typographique, reimaginee.</strong>
+  <strong>Typesetting, reimagined.</strong>
 </p>
 
 <p align="center">
   <a href="https://aureclai.github.io/novatype/">Documentation</a> •
   <a href="https://aureclai.github.io/novatype/demos.html">Demos</a> •
   <a href="#installation">Installation</a> •
-  <a href="#utilisation">Utilisation</a>
+  <a href="#usage">Usage</a>
 </p>
 
 <p align="center">
@@ -23,42 +23,42 @@
 
 ---
 
-NovaType est un systeme moderne de composition typographique construit sur [Typst](https://typst.app). Il combine la qualite de LaTeX avec une syntaxe intuitive et une compilation instantanee.
+NovaType is a modern typesetting system built on [Typst](https://typst.app). It combines the quality of LaTeX with an intuitive syntax and instant compilation.
 
-## Pourquoi NovaType ?
+## Why NovaType?
 
-| Fonctionnalite | NovaType | LaTeX | Word |
-|----------------|:--------:|:-----:|:----:|
-| Compilation instantanee | ✅ | ❌ | ✅ |
-| Equations mathematiques | ✅ | ✅ | ❌ |
-| Syntaxe simple | ✅ | ❌ | ✅ |
-| Qualite typographique | ✅ | ✅ | ❌ |
-| Visualisation de donnees | ✅ | ❌ | ✅ |
-| Execution navigateur | ✅ | ❌ | ❌ |
+| Feature | NovaType | LaTeX | Word |
+|---------|:--------:|:-----:|:----:|
+| Instant compilation | ✅ | ❌ | ✅ |
+| Mathematical equations | ✅ | ✅ | ❌ |
+| Simple syntax | ✅ | ❌ | ✅ |
+| Professional typography | ✅ | ✅ | ❌ |
+| Data visualization | ✅ | ❌ | ✅ |
+| Browser execution | ✅ | ❌ | ❌ |
 
-## Caracteristiques
+## Features
 
-- **Compilation instantanee** — Visualisez vos modifications en temps reel
-- **Syntaxe intuitive** — Proche du Markdown, sans boilerplate LaTeX
-- **Citations intelligentes** — BibTeX, CrossRef API, Zotero integres
-- **Visualisation de donnees** — Graphiques depuis CSV/JSON
-- **Templates professionnels** — IEEE, Nature, rapports, CV...
-- **WebAssembly** — Compilez dans le navigateur
+- **Instant compilation** — See your changes in real-time
+- **Intuitive syntax** — Markdown-like, without LaTeX boilerplate
+- **Smart citations** — BibTeX, CrossRef API, Zotero integration
+- **Data visualization** — Charts from CSV/JSON
+- **Professional templates** — IEEE, Nature, reports, CV...
+- **WebAssembly** — Compile in the browser
 
 ## Installation
 
 ```bash
-# Via Cargo (recommande)
+# Via Cargo (recommended)
 cargo install nova-cli
 
-# Verifier l'installation
+# Verify installation
 nova --version
 ```
 
 <details>
-<summary>Autres methodes d'installation</summary>
+<summary>Other installation methods</summary>
 
-### Depuis les sources
+### From source
 
 ```bash
 git clone https://github.com/AureClai/novatype.git
@@ -66,51 +66,51 @@ cd novatype/typst
 cargo build --package nova-cli --release
 ```
 
-### Windows (binaires)
+### Windows (binaries)
 
-Telechargez depuis [Releases](https://github.com/AureClai/novatype/releases).
+Download from [Releases](https://github.com/AureClai/novatype/releases).
 
 </details>
 
-## Utilisation
+## Usage
 
 ```bash
-# Creer un nouveau projet
-nova init mon-article
+# Create a new project
+nova init my-article
 
-# Avec un template specifique
-nova init mon-article --template ieee-article
+# With a specific template
+nova init my-article --template ieee-article
 
-# Compiler
+# Compile
 nova compile main.typ --open
 
-# Mode watch (recompilation automatique)
+# Watch mode (auto-recompilation)
 nova watch main.typ
 ```
 
-## Exemple
+## Example
 
 ```typ
 ---
-title: "Mon Article"
-author: "Jean Dupont"
+title: "My Article"
+author: "John Doe"
 template: article
 ---
 
 = Introduction
 
-Bienvenue dans *NovaType* ! Une syntaxe _simple_ et puissante.
+Welcome to *NovaType*! A _simple_ yet powerful syntax.
 
 = Equations
 
-La formule d'Euler : $ e^(i pi) + 1 = 0 $
+Euler's formula: $ e^(i pi) + 1 = 0 $
 
-= Visualisation
+= Visualization
 
 #nova-plot(
   data: "results.csv",
   type: "bar",
-  title: "Resultats"
+  title: "Results"
 )
 ```
 
@@ -119,37 +119,37 @@ La formule d'Euler : $ e^(i pi) + 1 = 0 $
 ```
 novatype/
 ├── typst/crates/
-│   ├── nova-core/      # Moteur de compilation
-│   ├── nova-schema/    # Validation des metadonnees
-│   ├── nova-cite/      # Gestion des citations
-│   ├── nova-plot/      # Visualisation de donnees
-│   ├── nova-cli/       # Interface ligne de commande
-│   └── nova-wasm/      # Build WebAssembly
-└── docs/               # Site de documentation
+│   ├── nova-core/      # Compilation engine
+│   ├── nova-schema/    # Metadata validation
+│   ├── nova-cite/      # Citation management
+│   ├── nova-plot/      # Data visualization
+│   ├── nova-cli/       # Command-line interface
+│   └── nova-wasm/      # WebAssembly build
+└── docs/               # Documentation website
 ```
 
-## Contribuer
+## Contributing
 
-Les contributions sont les bienvenues ! Consultez les [Issues](https://github.com/AureClai/novatype/issues) pour commencer.
+Contributions are welcome! Check out the [Issues](https://github.com/AureClai/novatype/issues) to get started.
 
 ```bash
-# Cloner et compiler
+# Clone and build
 git clone https://github.com/AureClai/novatype.git
 cd novatype/typst
 cargo build
 
-# Lancer les tests
+# Run tests
 cargo test --workspace
 ```
 
-## Licence
+## License
 
-MIT License - voir [LICENSE](LICENSE) pour plus de details.
+MIT License - see [LICENSE](LICENSE) for details.
 
 ---
 
 <p align="center">
-  <a href="https://aureclai.github.io/novatype/">Site web</a> •
-  <a href="https://github.com/AureClai/novatype/issues">Signaler un bug</a> •
+  <a href="https://aureclai.github.io/novatype/">Website</a> •
+  <a href="https://github.com/AureClai/novatype/issues">Report a bug</a> •
   <a href="https://github.com/AureClai/novatype/discussions">Discussions</a>
 </p>

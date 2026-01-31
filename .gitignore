@@ -1,6 +1,5 @@
 # Build artifacts
 /target/
-/nova-wasm/pkg/
 
 # Editor files
 .vscode/
@@ -32,8 +31,7 @@ test-*.typ
 *-article/
 
 # WASM build
-/nova-wasm/pkg/
-/typst/crates/nova-wasm/pkg/
+/crates/nova-wasm/pkg/
 /docs/assets/wasm/
 *.wasm
 

@@ -32,7 +32,7 @@ jobs:
           path: |
             ~/.cargo/registry
             ~/.cargo/git
-            typst/target
+            target
           key: ${{ runner.os }}-cargo-wasm-${{ hashFiles('**/Cargo.lock') }}
           restore-keys: |
             ${{ runner.os }}-cargo-wasm-
@@ -41,7 +41,6 @@ jobs:
         run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
 
       - name: Build WASM
-        working-directory: typst
         run: wasm-pack build crates/nova-wasm --target web --release --out-dir ../../docs/assets/wasm
 
       - name: Setup Pages
