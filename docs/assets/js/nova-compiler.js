@@ -76,12 +76,16 @@ export async function initNovaCompiler() {
 function getWasmBasePath() {
   // Determine the base path based on current location
   const path = window.location.pathname;
+
+  // Extract the base path (e.g., /novatype/ on GitHub Pages)
+  const basePath = path.substring(0, path.lastIndexOf('/'));
+
   if (path.includes('/docs/')) {
-    // Inside /docs/ subfolder
-    return '../assets/wasm';
+    // Inside /docs/ subfolder - go up one level
+    return basePath.replace(/\/docs$/, '') + '/assets/wasm';
   }
   // Root level (demos.html, index.html)
-  return '/assets/wasm';
+  return basePath + '/assets/wasm';
 }
 
 /**
