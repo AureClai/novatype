@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Demarrage rapide NovaType - Creez votre premier document en 5 minutes.">
+  <title>Demarrage rapide - NovaType</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+  <nav class="navbar" id="navbar">
+    <div class="container">
+      <a href="../index.html" class="nav-logo">
+        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="32" height="32" rx="8" fill="#2563eb"/>
+          <path d="M8 10h4l4 12h-4L8 10z" fill="white"/>
+          <path d="M14 10h4l6 12h-4l-6-12z" fill="white" fill-opacity="0.7"/>
+          <circle cx="24" cy="10" r="3" fill="#10b981"/>
+        </svg>
+        NovaType
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="../index.html">Accueil</a></li>
+        <li><a href="../demos.html">Demos</a></li>
+        <li><a href="index.html" class="active">Documentation</a></li>
+        <li><a href="templates.html">Templates</a></li>
+        <li><a href="https://github.com/AureClai/novatype" target="_blank">GitHub</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="getting-started.html" class="btn btn-primary">Commencer</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container docs-layout" style="padding-top: 6rem;">
+    <aside class="docs-sidebar">
+      <nav class="docs-nav">
+        <div class="docs-nav-section">
+          <div class="docs-nav-title">Pour commencer</div>
+          <a href="getting-started.html" class="docs-nav-link">Installation</a>
+          <a href="index.html" class="docs-nav-link">Introduction</a>
+          <a href="quick-start.html" class="docs-nav-link active">Demarrage rapide</a>
+        </div>
+        <div class="docs-nav-section">
+          <div class="docs-nav-title">Guide</div>
+          <a href="syntax.html" class="docs-nav-link">Syntaxe de base</a>
+          <a href="formatting.html" class="docs-nav-link">Mise en forme</a>
+          <a href="math.html" class="docs-nav-link">Equations</a>
+          <a href="tables.html" class="docs-nav-link">Tableaux</a>
+          <a href="figures.html" class="docs-nav-link">Figures</a>
+        </div>
+        <div class="docs-nav-section">
+          <div class="docs-nav-title">Fonctionnalites</div>
+          <a href="citations.html" class="docs-nav-link">Citations</a>
+          <a href="plots.html" class="docs-nav-link">Graphiques</a>
+          <a href="templates.html" class="docs-nav-link">Templates</a>
+          <a href="schemas.html" class="docs-nav-link">Validation</a>
+        </div>
+        <div class="docs-nav-section">
+          <div class="docs-nav-title">Reference</div>
+          <a href="cli.html" class="docs-nav-link">CLI</a>
+          <a href="api.html" class="docs-nav-link">API WebAssembly</a>
+          <a href="config.html" class="docs-nav-link">Configuration</a>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="docs-content">
+      <h1>Demarrage rapide</h1>
+
+      <p class="text-secondary" style="font-size: 1.125rem; margin-bottom: var(--space-2xl);">
+        Creez votre premier document NovaType en 5 minutes.
+      </p>
+
+      <h2>Etape 1 : Creer un projet</h2>
+
+      <p>Ouvrez votre terminal et executez :</p>
+
+      <pre><code><span class="token-function">$</span> nova init mon-premier-article
+<span class="token-comment">Creating project 'mon-premier-article'...</span>
+<span class="token-comment">  Created main.typ</span>
+<span class="token-comment">  Created nova.toml</span>
+<span class="token-comment">  Created references.bib</span>
+<span class="token-comment">  Created .gitignore</span>
+<span class="token-keyword">Done!</span> Project created successfully.
+
+<span class="token-function">$</span> cd mon-premier-article</code></pre>
+
+      <h2>Etape 2 : Editer le document</h2>
+
+      <p>Ouvrez <code>main.typ</code> dans votre editeur prefere et remplacez le contenu par :</p>
+
+      <pre><code><span class="token-comment">// Configuration du document</span>
+<span class="token-keyword">#set</span> document(title: <span class="token-string">"Mon Premier Article"</span>, author: <span class="token-string">"Votre Nom"</span>)
+<span class="token-keyword">#set</span> page(paper: <span class="token-string">"a4"</span>, margin: <span class="token-number">2.5cm</span>)
+<span class="token-keyword">#set</span> text(font: <span class="token-string">"Arial"</span>, size: <span class="token-number">11pt</span>, lang: <span class="token-string">"fr"</span>)
+<span class="token-keyword">#set</span> heading(numbering: <span class="token-string">"1.1"</span>)
+
+<span class="token-comment">// Page de titre</span>
+<span class="token-keyword">#align</span>(center)[
+  <span class="token-keyword">#v</span>(<span class="token-number">3cm</span>)
+  <span class="token-keyword">#text</span>(size: <span class="token-number">24pt</span>, weight: <span class="token-string">"bold"</span>)[Mon Premier Article NovaType]
+  <span class="token-keyword">#v</span>(<span class="token-number">1cm</span>)
+  <span class="token-keyword">#text</span>(size: <span class="token-number">14pt</span>)[Votre Nom]
+  <span class="token-keyword">#v</span>(<span class="token-number">0.5cm</span>)
+  <span class="token-keyword">#datetime.today</span>().display(<span class="token-string">"[day] [month repr:long] [year]"</span>)
+]
+
+<span class="token-keyword">#pagebreak</span>()
+
+<span class="token-keyword">=</span> Introduction
+
+Bienvenue dans NovaType ! Ce document presente les fonctionnalites
+de base du systeme de composition typographique.
+
+NovaType permet de creer des documents <span class="token-property">*professionnels*</span> avec une
+syntaxe <span class="token-property">_simple_</span> et <span class="token-property">_intuitive_</span>.
+
+<span class="token-keyword">=</span> Contenu
+
+<span class="token-keyword">==</span> Listes
+
+Voici une liste a puces :
+
+- Premier element
+- Deuxieme element
+- Troisieme element
+
+Et une liste numerotee :
+
++ Premiere etape
++ Deuxieme etape
++ Troisieme etape
+
+<span class="token-keyword">==</span> Mathematiques
+
+La celebre formule d'Euler : <span class="token-keyword">$</span> e^(i pi) + <span class="token-number">1</span> = <span class="token-number">0</span> <span class="token-keyword">$</span>
+
+Une equation centree :
+
+<span class="token-keyword">$</span> integral_(<span class="token-number">0</span>)^(infinity) e^(-x^<span class="token-number">2</span>) dif x = sqrt(pi)/<span class="token-number">2</span> <span class="token-keyword">$</span>
+
+<span class="token-keyword">=</span> Conclusion
+
+Felicitations ! Vous avez cree votre premier document NovaType.</code></pre>
+
+      <h2>Etape 3 : Compiler et visualiser</h2>
+
+      <pre><code><span class="token-function">$</span> nova compile main.typ --open</code></pre>
+
+      <p>Le document PDF s'ouvre automatiquement dans votre lecteur par defaut.</p>
+
+      <div class="callout callout-success">
+        <div class="callout-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+            <path d="M22 4L12 14.01l-3-3"/>
+          </svg>
+          Felicitations !
+        </div>
+        <p style="margin: 0;">Vous avez cree votre premier document NovaType. Le PDF genere contient une page de titre, des sections numerotees, des listes et des equations mathematiques.</p>
+      </div>
+
+      <h2>Etape 4 : Mode watch (optionnel)</h2>
+
+      <p>Pour recompiler automatiquement a chaque modification :</p>
+
+      <pre><code><span class="token-function">$</span> nova watch main.typ
+<span class="token-comment">Watching main.typ for changes...</span>
+<span class="token-comment">Press Ctrl+C to stop.</span></code></pre>
+
+      <p>Chaque fois que vous sauvegardez le fichier, le PDF est regenere instantanement.</p>
+
+      <h2>Structure du projet</h2>
+
+      <pre><code>mon-premier-article/
+├── main.typ          <span class="token-comment"># Document principal</span>
+├── nova.toml         <span class="token-comment"># Configuration du projet</span>
+├── references.bib    <span class="token-comment"># Bibliographie (optionnel)</span>
+└── .gitignore        <span class="token-comment"># Fichiers ignores par Git</span></code></pre>
+
+      <h2>Prochaines etapes</h2>
+
+      <div class="grid grid-2" style="margin-top: var(--space-xl);">
+        <a href="syntax.html" class="card" style="text-decoration: none;">
+          <h4 style="color: var(--nova-primary);">Syntaxe de base</h4>
+          <p class="text-muted" style="margin: 0;">Apprenez tous les elements de syntaxe NovaType.</p>
+        </a>
+        <a href="math.html" class="card" style="text-decoration: none;">
+          <h4 style="color: var(--nova-primary);">Equations</h4>
+          <p class="text-muted" style="margin: 0;">Maitrisez les formules mathematiques.</p>
+        </a>
+        <a href="citations.html" class="card" style="text-decoration: none;">
+          <h4 style="color: var(--nova-primary);">Citations</h4>
+          <p class="text-muted" style="margin: 0;">Gerez vos references bibliographiques.</p>
+        </a>
+        <a href="templates.html" class="card" style="text-decoration: none;">
+          <h4 style="color: var(--nova-primary);">Templates</h4>
+          <p class="text-muted" style="margin: 0;">Utilisez des modeles professionnels.</p>
+        </a>
+      </div>
+
+    </main>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom" style="border-top: none; padding-top: 0;">
+        <p>&copy; 2024 NovaType. Tous droits reserves.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../assets/js/main.js"></script>
+</body>
+</html>

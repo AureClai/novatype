@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Validation de schemas NovaType - Validez les metadonnees de vos documents.">
+  <title>Validation - NovaType</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+  <nav class="navbar" id="navbar">
+    <div class="container">
+      <a href="../index.html" class="nav-logo">
+        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="32" height="32" rx="8" fill="#2563eb"/>
+          <path d="M8 10h4l4 12h-4L8 10z" fill="white"/>
+          <path d="M14 10h4l6 12h-4l-6-12z" fill="white" fill-opacity="0.7"/>
+          <circle cx="24" cy="10" r="3" fill="#10b981"/>
+        </svg>
+        NovaType
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="../index.html">Accueil</a></li>
+        <li><a href="../demos.html">Demos</a></li>
+        <li><a href="index.html" class="active">Documentation</a></li>
+        <li><a href="templates.html">Templates</a></li>
+        <li><a href="https://github.com/AureClai/novatype" target="_blank">GitHub</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="getting-started.html" class="btn btn-primary">Commencer</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container docs-layout" style="padding-top: 6rem;">
+    <aside class="docs-sidebar">
+      <nav class="docs-nav">
+        <div class="docs-nav-section">
+          <div class="docs-nav-title">Pour commencer</div>
+          <a href="getting-started.html" class="docs-nav-link">Installation</a>
+          <a href="index.html" class="docs-nav-link">Introduction</a>
+          <a href="quick-start.html" class="docs-nav-link">Demarrage rapide</a>
+        </div>
+        <div class="docs-nav-section">
+          <div class="docs-nav-title">Guide</div>
+          <a href="syntax.html" class="docs-nav-link">Syntaxe de base</a>
+          <a href="formatting.html" class="docs-nav-link">Mise en forme</a>
+          <a href="math.html" class="docs-nav-link">Equations</a>
+          <a href="tables.html" class="docs-nav-link">Tableaux</a>
+          <a href="figures.html" class="docs-nav-link">Figures</a>
+        </div>
+        <div class="docs-nav-section">
+          <div class="docs-nav-title">Fonctionnalites</div>
+          <a href="citations.html" class="docs-nav-link">Citations</a>
+          <a href="plots.html" class="docs-nav-link">Graphiques</a>
+          <a href="templates.html" class="docs-nav-link">Templates</a>
+          <a href="schemas.html" class="docs-nav-link active">Validation</a>
+        </div>
+        <div class="docs-nav-section">
+          <div class="docs-nav-title">Reference</div>
+          <a href="cli.html" class="docs-nav-link">CLI</a>
+          <a href="api.html" class="docs-nav-link">API WebAssembly</a>
+          <a href="config.html" class="docs-nav-link">Configuration</a>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="docs-content">
+      <h1>Validation de schemas</h1>
+
+      <p class="text-secondary" style="font-size: 1.125rem; margin-bottom: var(--space-2xl);">
+        NovaType utilise JSON Schema pour valider les metadonnees de vos documents, garantissant la coherence et la conformite.
+      </p>
+
+      <h2>Frontmatter YAML</h2>
+
+      <p>Les metadonnees sont definies en YAML au debut du document, entre <code>---</code> :</p>
+
+      <pre><code><span class="token-operator">---</span>
+<span class="token-property">title</span>: <span class="token-string">"Mon Article Scientifique"</span>
+<span class="token-property">authors</span>:
+  - <span class="token-property">name</span>: <span class="token-string">"Jean Dupont"</span>
+    <span class="token-property">affiliation</span>: <span class="token-string">"Universite de Paris"</span>
+    <span class="token-property">email</span>: <span class="token-string">"jean.dupont@univ-paris.fr"</span>
+<span class="token-property">abstract</span>: <span class="token-operator">|</span>
+  Cet article presente une nouvelle approche pour...
+<span class="token-property">keywords</span>:
+  - machine learning
+  - data science
+<span class="token-property">date</span>: <span class="token-number">2024-01-15</span>
+<span class="token-property">template</span>: <span class="token-string">ieee-article</span>
+<span class="token-property">bibliography</span>: <span class="token-string">"references.bib"</span>
+<span class="token-property">citation_style</span>: <span class="token-string">"ieee"</span>
+<span class="token-operator">---</span>
+
+<span class="token-comment">// Contenu du document...</span>
+<span class="token-keyword">=</span> Introduction
+
+...</code></pre>
+
+      <h2>Commande de validation</h2>
+
+      <pre><code><span class="token-comment"># Valider un document</span>
+<span class="token-function">$</span> nova validate main.typ
+<span class="token-keyword">✓</span> Document valid
+
+<span class="token-comment"># Validation stricte (frontmatter requis)</span>
+<span class="token-function">$</span> nova validate main.typ --strict
+
+<span class="token-comment"># Valider plusieurs fichiers</span>
+<span class="token-function">$</span> nova validate *.typ
+
+<span class="token-comment"># Utiliser un schema personnalise</span>
+<span class="token-function">$</span> nova validate main.typ --schema custom-schema.json</code></pre>
+
+      <h2>Schema par defaut</h2>
+
+      <p>Le schema par defaut pour les articles :</p>
+
+      <pre><code>{
+  <span class="token-property">"$schema"</span>: <span class="token-string">"https://json-schema.org/draft/2020-12/schema"</span>,
+  <span class="token-property">"type"</span>: <span class="token-string">"object"</span>,
+  <span class="token-property">"required"</span>: [<span class="token-string">"title"</span>],
+  <span class="token-property">"properties"</span>: {
+    <span class="token-property">"title"</span>: {
+      <span class="token-property">"type"</span>: <span class="token-string">"string"</span>,
+      <span class="token-property">"minLength"</span>: <span class="token-number">1</span>,
+      <span class="token-property">"description"</span>: <span class="token-string">"Titre du document"</span>
+    },
+    <span class="token-property">"authors"</span>: {
+      <span class="token-property">"type"</span>: <span class="token-string">"array"</span>,
+      <span class="token-property">"items"</span>: {
+        <span class="token-property">"type"</span>: <span class="token-string">"object"</span>,
+        <span class="token-property">"required"</span>: [<span class="token-string">"name"</span>],
+        <span class="token-property">"properties"</span>: {
+          <span class="token-property">"name"</span>: { <span class="token-property">"type"</span>: <span class="token-string">"string"</span> },
+          <span class="token-property">"affiliation"</span>: { <span class="token-property">"type"</span>: <span class="token-string">"string"</span> },
+          <span class="token-property">"email"</span>: { <span class="token-property">"type"</span>: <span class="token-string">"string"</span>, <span class="token-property">"format"</span>: <span class="token-string">"email"</span> }
+        }
+      }
+    },
+    <span class="token-property">"date"</span>: {
+      <span class="token-property">"type"</span>: <span class="token-string">"string"</span>,
+      <span class="token-property">"format"</span>: <span class="token-string">"date"</span>
+    },
+    <span class="token-property">"abstract"</span>: { <span class="token-property">"type"</span>: <span class="token-string">"string"</span> },
+    <span class="token-property">"keywords"</span>: {
+      <span class="token-property">"type"</span>: <span class="token-string">"array"</span>,
+      <span class="token-property">"items"</span>: { <span class="token-property">"type"</span>: <span class="token-string">"string"</span> }
+    },
+    <span class="token-property">"template"</span>: { <span class="token-property">"type"</span>: <span class="token-string">"string"</span> },
+    <span class="token-property">"bibliography"</span>: { <span class="token-property">"type"</span>: <span class="token-string">"string"</span> },
+    <span class="token-property">"citation_style"</span>: {
+      <span class="token-property">"type"</span>: <span class="token-string">"string"</span>,
+      <span class="token-property">"enum"</span>: [<span class="token-string">"apa"</span>, <span class="token-string">"ieee"</span>, <span class="token-string">"chicago"</span>, <span class="token-string">"harvard"</span>, <span class="token-string">"nature"</span>, <span class="token-string">"vancouver"</span>]
+    },
+    <span class="token-property">"language"</span>: { <span class="token-property">"type"</span>: <span class="token-string">"string"</span> }
+  }
+}</code></pre>
+
+      <h2>Champs disponibles</h2>
+
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th>Champ</th>
+            <th>Type</th>
+            <th>Requis</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><code>title</code></td><td>string</td><td>Oui</td><td>Titre du document</td></tr>
+          <tr><td><code>authors</code></td><td>array</td><td>Non</td><td>Liste des auteurs</td></tr>
+          <tr><td><code>date</code></td><td>date</td><td>Non</td><td>Date de publication</td></tr>
+          <tr><td><code>abstract</code></td><td>string</td><td>Non</td><td>Resume du document</td></tr>
+          <tr><td><code>keywords</code></td><td>array</td><td>Non</td><td>Mots-cles</td></tr>
+          <tr><td><code>template</code></td><td>string</td><td>Non</td><td>Template a utiliser</td></tr>
+          <tr><td><code>bibliography</code></td><td>string</td><td>Non</td><td>Chemin vers le fichier .bib</td></tr>
+          <tr><td><code>citation_style</code></td><td>string</td><td>Non</td><td>Style de citation</td></tr>
+          <tr><td><code>language</code></td><td>string</td><td>Non</td><td>Langue du document</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Schema personnalise</h2>
+
+      <p>Creez votre propre schema pour des besoins specifiques :</p>
+
+      <pre><code><span class="token-comment">// schemas/rapport.json</span>
+{
+  <span class="token-property">"$schema"</span>: <span class="token-string">"https://json-schema.org/draft/2020-12/schema"</span>,
+  <span class="token-property">"type"</span>: <span class="token-string">"object"</span>,
+  <span class="token-property">"required"</span>: [<span class="token-string">"title"</span>, <span class="token-string">"author"</span>, <span class="token-string">"organization"</span>, <span class="token-string">"version"</span>],
+  <span class="token-property">"properties"</span>: {
+    <span class="token-property">"title"</span>: { <span class="token-property">"type"</span>: <span class="token-string">"string"</span> },
+    <span class="token-property">"author"</span>: { <span class="token-property">"type"</span>: <span class="token-string">"string"</span> },
+    <span class="token-property">"organization"</span>: { <span class="token-property">"type"</span>: <span class="token-string">"string"</span> },
+    <span class="token-property">"version"</span>: {
+      <span class="token-property">"type"</span>: <span class="token-string">"string"</span>,
+      <span class="token-property">"pattern"</span>: <span class="token-string">"^\\d+\\.\\d+(\\.\\d+)?$"</span>
+    },
+    <span class="token-property">"status"</span>: {
+      <span class="token-property">"type"</span>: <span class="token-string">"string"</span>,
+      <span class="token-property">"enum"</span>: [<span class="token-string">"draft"</span>, <span class="token-string">"review"</span>, <span class="token-string">"final"</span>]
+    },
+    <span class="token-property">"confidentiality"</span>: {
+      <span class="token-property">"type"</span>: <span class="token-string">"string"</span>,
+      <span class="token-property">"enum"</span>: [<span class="token-string">"public"</span>, <span class="token-string">"internal"</span>, <span class="token-string">"confidential"</span>]
+    }
+  }
+}</code></pre>
+
+      <h2>Erreurs de validation</h2>
+
+      <pre><code><span class="token-function">$</span> nova validate main.typ
+<span class="token-comment" style="color: #ef4444;">✗ Validation failed:</span>
+  - <span class="token-comment" style="color: #ef4444;">Missing required field: title</span>
+  - <span class="token-comment" style="color: #ef4444;">Invalid email format in authors[0].email</span>
+  - <span class="token-comment" style="color: #ef4444;">Unknown citation_style: "mla" (expected: apa, ieee, chicago...)</span></code></pre>
+
+      <h2>Integration CI/CD</h2>
+
+      <pre><code><span class="token-comment"># .github/workflows/validate.yml</span>
+<span class="token-property">name</span>: Validate Documents
+
+<span class="token-property">on</span>: [push, pull_request]
+
+<span class="token-property">jobs</span>:
+  <span class="token-property">validate</span>:
+    <span class="token-property">runs-on</span>: ubuntu-latest
+    <span class="token-property">steps</span>:
+      - <span class="token-property">uses</span>: actions/checkout@v4
+
+      - <span class="token-property">name</span>: Install NovaType
+        <span class="token-property">run</span>: cargo install nova-cli
+
+      - <span class="token-property">name</span>: Validate documents
+        <span class="token-property">run</span>: nova validate **/*.typ --strict</code></pre>
+
+      <div class="callout callout-success">
+        <div class="callout-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+            <path d="M22 4L12 14.01l-3-3"/>
+          </svg>
+          Bonne pratique
+        </div>
+        <p style="margin: 0;">Integrez la validation dans votre pipeline CI/CD pour garantir que tous les documents respectent le schema avant publication.</p>
+      </div>
+
+    </main>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom" style="border-top: none; padding-top: 0;">
+        <p>&copy; 2024 NovaType. Tous droits reserves.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../assets/js/main.js"></script>
+</body>
+</html>

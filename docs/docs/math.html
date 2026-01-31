@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Equations NovaType - Guide complet pour les formules mathematiques.">
+  <title>Equations - NovaType</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+  <nav class="navbar" id="navbar">
+    <div class="container">
+      <a href="../index.html" class="nav-logo">
+        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="32" height="32" rx="8" fill="#2563eb"/>
+          <path d="M8 10h4l4 12h-4L8 10z" fill="white"/>
+          <path d="M14 10h4l6 12h-4l-6-12z" fill="white" fill-opacity="0.7"/>
+          <circle cx="24" cy="10" r="3" fill="#10b981"/>
+        </svg>
+        NovaType
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="../index.html">Accueil</a></li>
+        <li><a href="../demos.html">Demos</a></li>
+        <li><a href="index.html" class="active">Documentation</a></li>
+        <li><a href="templates.html">Templates</a></li>
+        <li><a href="https://github.com/AureClai/novatype" target="_blank">GitHub</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="getting-started.html" class="btn btn-primary">Commencer</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container docs-layout" style="padding-top: 6rem;">
+    <aside class="docs-sidebar">
+      <nav class="docs-nav">
+        <div class="docs-nav-section">
+          <div class="docs-nav-title">Pour commencer</div>
+          <a href="getting-started.html" class="docs-nav-link">Installation</a>
+          <a href="index.html" class="docs-nav-link">Introduction</a>
+          <a href="quick-start.html" class="docs-nav-link">Demarrage rapide</a>
+        </div>
+        <div class="docs-nav-section">
+          <div class="docs-nav-title">Guide</div>
+          <a href="syntax.html" class="docs-nav-link">Syntaxe de base</a>
+          <a href="formatting.html" class="docs-nav-link">Mise en forme</a>
+          <a href="math.html" class="docs-nav-link active">Equations</a>
+          <a href="tables.html" class="docs-nav-link">Tableaux</a>
+          <a href="figures.html" class="docs-nav-link">Figures</a>
+        </div>
+        <div class="docs-nav-section">
+          <div class="docs-nav-title">Fonctionnalites</div>
+          <a href="citations.html" class="docs-nav-link">Citations</a>
+          <a href="plots.html" class="docs-nav-link">Graphiques</a>
+          <a href="templates.html" class="docs-nav-link">Templates</a>
+          <a href="schemas.html" class="docs-nav-link">Validation</a>
+        </div>
+        <div class="docs-nav-section">
+          <div class="docs-nav-title">Reference</div>
+          <a href="cli.html" class="docs-nav-link">CLI</a>
+          <a href="api.html" class="docs-nav-link">API WebAssembly</a>
+          <a href="config.html" class="docs-nav-link">Configuration</a>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="docs-content">
+      <h1>Equations mathematiques</h1>
+
+      <p class="text-secondary" style="font-size: 1.125rem; margin-bottom: var(--space-2xl);">
+        NovaType offre un rendu mathematique de qualite professionnelle avec une syntaxe intuitive.
+      </p>
+
+      <h2>Syntaxe de base</h2>
+
+      <h3>Equations en ligne</h3>
+
+      <pre><code>La formule <span class="token-keyword">$</span> E = m c^<span class="token-number">2</span> <span class="token-keyword">$</span> est celebre.</code></pre>
+
+      <h3>Equations centrees</h3>
+
+      <pre><code><span class="token-keyword">$</span> E = m c^<span class="token-number">2</span> <span class="token-keyword">$</span></code></pre>
+
+      <p>Une equation sur sa propre ligne est automatiquement centree.</p>
+
+      <h3>Equations numerotees</h3>
+
+      <pre><code><span class="token-keyword">#set</span> math.equation(numbering: <span class="token-string">"(1)"</span>)
+
+<span class="token-keyword">$</span> E = m c^<span class="token-number">2</span> <span class="token-keyword">$</span> <span class="token-operator">&lt;eq:einstein&gt;</span>
+
+Voir l'equation <span class="token-operator">@eq:einstein</span> pour la relation energie-masse.</code></pre>
+
+      <h2>Operations de base</h2>
+
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th>Syntaxe</th>
+            <th>Rendu</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><code>x + y</code></td><td>x + y</td><td>Addition</td></tr>
+          <tr><td><code>x - y</code></td><td>x − y</td><td>Soustraction</td></tr>
+          <tr><td><code>x * y</code></td><td>x × y</td><td>Multiplication</td></tr>
+          <tr><td><code>x / y</code></td><td>x / y</td><td>Division</td></tr>
+          <tr><td><code>x^2</code></td><td>x²</td><td>Exposant</td></tr>
+          <tr><td><code>x_i</code></td><td>x<sub>i</sub></td><td>Indice</td></tr>
+          <tr><td><code>x^2_i</code></td><td>x²<sub>i</sub></td><td>Les deux</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Fractions</h2>
+
+      <pre><code><span class="token-comment">// Fraction simple</span>
+<span class="token-keyword">$</span> a/b <span class="token-keyword">$</span>
+
+<span class="token-comment">// Fraction avec frac()</span>
+<span class="token-keyword">$</span> frac(a + b, c + d) <span class="token-keyword">$</span>
+
+<span class="token-comment">// Fraction complexe</span>
+<span class="token-keyword">$</span> frac(<span class="token-number">1</span>, <span class="token-number">1</span> + frac(<span class="token-number">1</span>, <span class="token-number">1</span> + frac(<span class="token-number">1</span>, x))) <span class="token-keyword">$</span></code></pre>
+
+      <h2>Racines</h2>
+
+      <pre><code><span class="token-comment">// Racine carree</span>
+<span class="token-keyword">$</span> sqrt(x) <span class="token-keyword">$</span>
+
+<span class="token-comment">// Racine n-ieme</span>
+<span class="token-keyword">$</span> root(<span class="token-number">3</span>, x) <span class="token-keyword">$</span>     <span class="token-comment">// Racine cubique</span>
+<span class="token-keyword">$</span> root(n, x) <span class="token-keyword">$</span>     <span class="token-comment">// Racine n-ieme</span></code></pre>
+
+      <h2>Sommes et produits</h2>
+
+      <pre><code><span class="token-comment">// Somme</span>
+<span class="token-keyword">$</span> sum_(i=<span class="token-number">1</span>)^n i^<span class="token-number">2</span> <span class="token-keyword">$</span>
+
+<span class="token-comment">// Produit</span>
+<span class="token-keyword">$</span> product_(i=<span class="token-number">1</span>)^n i <span class="token-keyword">$</span>
+
+<span class="token-comment">// Double somme</span>
+<span class="token-keyword">$</span> sum_(i=<span class="token-number">1</span>)^n sum_(j=<span class="token-number">1</span>)^m a_(i j) <span class="token-keyword">$</span></code></pre>
+
+      <h2>Integrales</h2>
+
+      <pre><code><span class="token-comment">// Integrale simple</span>
+<span class="token-keyword">$</span> integral f(x) dif x <span class="token-keyword">$</span>
+
+<span class="token-comment">// Integrale definie</span>
+<span class="token-keyword">$</span> integral_a^b f(x) dif x <span class="token-keyword">$</span>
+
+<span class="token-comment">// Integrale double</span>
+<span class="token-keyword">$</span> integral.double_D f(x,y) dif x dif y <span class="token-keyword">$</span>
+
+<span class="token-comment">// Integrale de contour</span>
+<span class="token-keyword">$</span> integral.cont f(z) dif z <span class="token-keyword">$</span></code></pre>
+
+      <h2>Limites</h2>
+
+      <pre><code><span class="token-comment">// Limite</span>
+<span class="token-keyword">$</span> lim_(x -> infinity) f(x) <span class="token-keyword">$</span>
+
+<span class="token-comment">// Limite a gauche/droite</span>
+<span class="token-keyword">$</span> lim_(x -> <span class="token-number">0</span>^+) <span class="token-number">1</span>/x = +infinity <span class="token-keyword">$</span></code></pre>
+
+      <h2>Matrices</h2>
+
+      <pre><code><span class="token-comment">// Matrice simple</span>
+<span class="token-keyword">$</span> mat(
+  a, b;
+  c, d
+) <span class="token-keyword">$</span>
+
+<span class="token-comment">// Matrice 3x3</span>
+<span class="token-keyword">$</span> mat(
+  <span class="token-number">1</span>, <span class="token-number">0</span>, <span class="token-number">0</span>;
+  <span class="token-number">0</span>, <span class="token-number">1</span>, <span class="token-number">0</span>;
+  <span class="token-number">0</span>, <span class="token-number">0</span>, <span class="token-number">1</span>
+) <span class="token-keyword">$</span>
+
+<span class="token-comment">// Matrice avec delimiteurs</span>
+<span class="token-keyword">$</span> mat(delim: <span class="token-string">"["</span>,
+  a, b;
+  c, d
+) <span class="token-keyword">$</span></code></pre>
+
+      <h2>Vecteurs</h2>
+
+      <pre><code><span class="token-comment">// Vecteur colonne</span>
+<span class="token-keyword">$</span> vec(x, y, z) <span class="token-keyword">$</span>
+
+<span class="token-comment">// Vecteur avec fleche</span>
+<span class="token-keyword">$</span> arrow(v) <span class="token-keyword">$</span>
+
+<span class="token-comment">// Vecteur gras</span>
+<span class="token-keyword">$</span> bold(v) <span class="token-keyword">$</span></code></pre>
+
+      <h2>Systemes d'equations</h2>
+
+      <pre><code><span class="token-keyword">$</span> cases(
+  x + y = <span class="token-number">10</span>,
+  <span class="token-number">2</span>x - y = <span class="token-number">5</span>
+) <span class="token-keyword">$</span></code></pre>
+
+      <h2>Symboles grecs</h2>
+
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th>Minuscule</th>
+            <th>Majuscule</th>
+            <th>Nom</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><code>alpha</code> α</td><td><code>Alpha</code> Α</td><td>Alpha</td></tr>
+          <tr><td><code>beta</code> β</td><td><code>Beta</code> Β</td><td>Beta</td></tr>
+          <tr><td><code>gamma</code> γ</td><td><code>Gamma</code> Γ</td><td>Gamma</td></tr>
+          <tr><td><code>delta</code> δ</td><td><code>Delta</code> Δ</td><td>Delta</td></tr>
+          <tr><td><code>epsilon</code> ε</td><td><code>Epsilon</code> Ε</td><td>Epsilon</td></tr>
+          <tr><td><code>theta</code> θ</td><td><code>Theta</code> Θ</td><td>Theta</td></tr>
+          <tr><td><code>lambda</code> λ</td><td><code>Lambda</code> Λ</td><td>Lambda</td></tr>
+          <tr><td><code>pi</code> π</td><td><code>Pi</code> Π</td><td>Pi</td></tr>
+          <tr><td><code>sigma</code> σ</td><td><code>Sigma</code> Σ</td><td>Sigma</td></tr>
+          <tr><td><code>omega</code> ω</td><td><code>Omega</code> Ω</td><td>Omega</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Operateurs et symboles</h2>
+
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th>Syntaxe</th>
+            <th>Symbole</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><code>times</code></td><td>×</td><td>Multiplication</td></tr>
+          <tr><td><code>div</code></td><td>÷</td><td>Division</td></tr>
+          <tr><td><code>pm</code></td><td>±</td><td>Plus ou moins</td></tr>
+          <tr><td><code>!=</code></td><td>≠</td><td>Different</td></tr>
+          <tr><td><code><=</code></td><td>≤</td><td>Inferieur ou egal</td></tr>
+          <tr><td><code>>=</code></td><td>≥</td><td>Superieur ou egal</td></tr>
+          <tr><td><code>approx</code></td><td>≈</td><td>Approximation</td></tr>
+          <tr><td><code>equiv</code></td><td>≡</td><td>Equivalent</td></tr>
+          <tr><td><code>in</code></td><td>∈</td><td>Appartient</td></tr>
+          <tr><td><code>subset</code></td><td>⊂</td><td>Sous-ensemble</td></tr>
+          <tr><td><code>union</code></td><td>∪</td><td>Union</td></tr>
+          <tr><td><code>sect</code></td><td>∩</td><td>Intersection</td></tr>
+          <tr><td><code>infinity</code></td><td>∞</td><td>Infini</td></tr>
+          <tr><td><code>partial</code></td><td>∂</td><td>Derivee partielle</td></tr>
+          <tr><td><code>nabla</code></td><td>∇</td><td>Nabla</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Exemples complets</h2>
+
+      <pre><code><span class="token-comment">// Formule d'Euler</span>
+<span class="token-keyword">$</span> e^(i pi) + <span class="token-number">1</span> = <span class="token-number">0</span> <span class="token-keyword">$</span>
+
+<span class="token-comment">// Integrale de Gauss</span>
+<span class="token-keyword">$</span> integral_(-infinity)^(+infinity) e^(-x^<span class="token-number">2</span>) dif x = sqrt(pi) <span class="token-keyword">$</span>
+
+<span class="token-comment">// Theoreme de Pythagore generalise</span>
+<span class="token-keyword">$</span> c^<span class="token-number">2</span> = a^<span class="token-number">2</span> + b^<span class="token-number">2</span> - <span class="token-number">2</span> a b cos(gamma) <span class="token-keyword">$</span>
+
+<span class="token-comment">// Equation de Schrodinger</span>
+<span class="token-keyword">$</span> i hbar frac(partial, partial t) Psi = hat(H) Psi <span class="token-keyword">$</span>
+
+<span class="token-comment">// Serie de Taylor</span>
+<span class="token-keyword">$</span> f(x) = sum_(n=<span class="token-number">0</span>)^infinity frac(f^((n))(a), n!) (x - a)^n <span class="token-keyword">$</span></code></pre>
+
+      <div class="callout callout-info">
+        <div class="callout-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 16v-4M12 8h.01"/>
+          </svg>
+          Astuce
+        </div>
+        <p style="margin: 0;">Utilisez des parentheses pour grouper les elements complexes : <code>x^(a+b)</code> au lieu de <code>x^a+b</code>.</p>
+      </div>
+
+    </main>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom" style="border-top: none; padding-top: 0;">
+        <p>&copy; 2024 NovaType. Tous droits reserves.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../assets/js/main.js"></script>
+</body>
+</html>

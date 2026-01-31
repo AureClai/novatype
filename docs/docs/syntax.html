@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Syntaxe de base NovaType - Guide complet de la syntaxe Typst.">
+  <title>Syntaxe de base - NovaType</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+  <nav class="navbar" id="navbar">
+    <div class="container">
+      <a href="../index.html" class="nav-logo">
+        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="32" height="32" rx="8" fill="#2563eb"/>
+          <path d="M8 10h4l4 12h-4L8 10z" fill="white"/>
+          <path d="M14 10h4l6 12h-4l-6-12z" fill="white" fill-opacity="0.7"/>
+          <circle cx="24" cy="10" r="3" fill="#10b981"/>
+        </svg>
+        NovaType
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="../index.html">Accueil</a></li>
+        <li><a href="../demos.html">Demos</a></li>
+        <li><a href="index.html" class="active">Documentation</a></li>
+        <li><a href="templates.html">Templates</a></li>
+        <li><a href="https://github.com/AureClai/novatype" target="_blank">GitHub</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="getting-started.html" class="btn btn-primary">Commencer</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container docs-layout" style="padding-top: 6rem;">
+    <aside class="docs-sidebar">
+      <nav class="docs-nav">
+        <div class="docs-nav-section">
+          <div class="docs-nav-title">Pour commencer</div>
+          <a href="getting-started.html" class="docs-nav-link">Installation</a>
+          <a href="index.html" class="docs-nav-link">Introduction</a>
+          <a href="quick-start.html" class="docs-nav-link">Demarrage rapide</a>
+        </div>
+        <div class="docs-nav-section">
+          <div class="docs-nav-title">Guide</div>
+          <a href="syntax.html" class="docs-nav-link active">Syntaxe de base</a>
+          <a href="formatting.html" class="docs-nav-link">Mise en forme</a>
+          <a href="math.html" class="docs-nav-link">Equations</a>
+          <a href="tables.html" class="docs-nav-link">Tableaux</a>
+          <a href="figures.html" class="docs-nav-link">Figures</a>
+        </div>
+        <div class="docs-nav-section">
+          <div class="docs-nav-title">Fonctionnalites</div>
+          <a href="citations.html" class="docs-nav-link">Citations</a>
+          <a href="plots.html" class="docs-nav-link">Graphiques</a>
+          <a href="templates.html" class="docs-nav-link">Templates</a>
+          <a href="schemas.html" class="docs-nav-link">Validation</a>
+        </div>
+        <div class="docs-nav-section">
+          <div class="docs-nav-title">Reference</div>
+          <a href="cli.html" class="docs-nav-link">CLI</a>
+          <a href="api.html" class="docs-nav-link">API WebAssembly</a>
+          <a href="config.html" class="docs-nav-link">Configuration</a>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="docs-content">
+      <h1>Syntaxe de base</h1>
+
+      <p class="text-secondary" style="font-size: 1.125rem; margin-bottom: var(--space-2xl);">
+        NovaType utilise la syntaxe Typst, un langage de balisage moderne et expressif. Voici les elements fondamentaux.
+      </p>
+
+      <h2>Modes d'ecriture</h2>
+
+      <p>NovaType possede trois modes principaux :</p>
+
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th>Mode</th>
+            <th>Description</th>
+            <th>Exemple</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Markup</strong></td>
+            <td>Texte avec mise en forme</td>
+            <td><code>Texte *gras* et _italique_</code></td>
+          </tr>
+          <tr>
+            <td><strong>Code</strong></td>
+            <td>Fonctions et logique</td>
+            <td><code>#set text(size: 12pt)</code></td>
+          </tr>
+          <tr>
+            <td><strong>Math</strong></td>
+            <td>Equations mathematiques</td>
+            <td><code>$ x^2 + y^2 = z^2 $</code></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>Texte et paragraphes</h2>
+
+      <p>Le texte brut est ecrit directement. Les paragraphes sont separes par une ligne vide.</p>
+
+      <pre><code>Ceci est un premier paragraphe. Il peut s'etendre
+sur plusieurs lignes dans le code source.
+
+Ceci est un second paragraphe, separe du premier
+par une ligne vide.</code></pre>
+
+      <h2>Mise en forme du texte</h2>
+
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th>Syntaxe</th>
+            <th>Resultat</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>*gras*</code></td>
+            <td><strong>gras</strong></td>
+            <td>Texte en gras</td>
+          </tr>
+          <tr>
+            <td><code>_italique_</code></td>
+            <td><em>italique</em></td>
+            <td>Texte en italique</td>
+          </tr>
+          <tr>
+            <td><code>`code`</code></td>
+            <td><code>code</code></td>
+            <td>Code en ligne</td>
+          </tr>
+          <tr>
+            <td><code>*_gras italique_*</code></td>
+            <td><strong><em>gras italique</em></strong></td>
+            <td>Combinaison</td>
+          </tr>
+          <tr>
+            <td><code>~indice~</code></td>
+            <td>H<sub>2</sub>O</td>
+            <td>Indice (subscript)</td>
+          </tr>
+          <tr>
+            <td><code>^exposant^</code></td>
+            <td>x<sup>2</sup></td>
+            <td>Exposant (superscript)</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>Titres et sections</h2>
+
+      <p>Les titres utilisent le signe <code>=</code>. Le nombre de <code>=</code> determine le niveau :</p>
+
+      <pre><code><span class="token-keyword">=</span> Titre de niveau 1
+
+<span class="token-keyword">==</span> Titre de niveau 2
+
+<span class="token-keyword">===</span> Titre de niveau 3
+
+<span class="token-keyword">====</span> Titre de niveau 4</code></pre>
+
+      <p>Pour activer la numerotation automatique :</p>
+
+      <pre><code><span class="token-keyword">#set</span> heading(numbering: <span class="token-string">"1.1"</span>)   <span class="token-comment">// 1, 1.1, 1.1.1</span>
+<span class="token-keyword">#set</span> heading(numbering: <span class="token-string">"I.A.1"</span>) <span class="token-comment">// I, I.A, I.A.1</span>
+<span class="token-keyword">#set</span> heading(numbering: <span class="token-string">"1."</span>)   <span class="token-comment">// 1., 1.1., 1.1.1.</span></code></pre>
+
+      <h2>Listes</h2>
+
+      <h3>Listes a puces</h3>
+
+      <pre><code>- Premier element
+- Deuxieme element
+  - Sous-element
+  - Autre sous-element
+- Troisieme element</code></pre>
+
+      <h3>Listes numerotees</h3>
+
+      <pre><code>+ Premiere etape
++ Deuxieme etape
+  + Sous-etape A
+  + Sous-etape B
++ Troisieme etape</code></pre>
+
+      <h3>Listes de termes</h3>
+
+      <pre><code>/ NovaType: Systeme de composition moderne
+/ Typst: Moteur de rendu sous-jacent
+/ LaTeX: Systeme traditionnel de composition</code></pre>
+
+      <h2>Liens et references</h2>
+
+      <h3>Liens externes</h3>
+
+      <pre><code><span class="token-comment">// Lien simple</span>
+https://novatype.dev
+
+<span class="token-comment">// Lien avec texte</span>
+<span class="token-keyword">#link</span>(<span class="token-string">"https://novatype.dev"</span>)[Site officiel]</code></pre>
+
+      <h3>Labels et references internes</h3>
+
+      <pre><code><span class="token-comment">// Creer un label</span>
+<span class="token-keyword">=</span> Introduction <span class="token-operator">&lt;intro&gt;</span>
+
+<span class="token-comment">// Referencer le label</span>
+Voir la section <span class="token-operator">@intro</span> pour plus de details.</code></pre>
+
+      <h2>Commentaires</h2>
+
+      <pre><code><span class="token-comment">// Commentaire sur une ligne</span>
+
+<span class="token-comment">/* Commentaire
+   sur plusieurs
+   lignes */</span></code></pre>
+
+      <h2>Blocs de code</h2>
+
+      <pre><code><span class="token-comment">// Code en ligne</span>
+La fonction `print()` affiche du texte.
+
+<span class="token-comment">// Bloc de code</span>
+```python
+def hello():
+    print("Hello, World!")
+```
+
+<span class="token-comment">// Bloc de code avec typst</span>
+<span class="token-keyword">#raw</span>(lang: <span class="token-string">"python"</span>, block: <span class="token-keyword">true</span>, <span class="token-string">`
+def hello():
+    print("Hello!")
+`</span>)</code></pre>
+
+      <h2>Caracteres speciaux</h2>
+
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th>Syntaxe</th>
+            <th>Resultat</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>\*</code></td>
+            <td>*</td>
+            <td>Asterisque literal</td>
+          </tr>
+          <tr>
+            <td><code>\_</code></td>
+            <td>_</td>
+            <td>Underscore literal</td>
+          </tr>
+          <tr>
+            <td><code>\#</code></td>
+            <td>#</td>
+            <td>Diese literal</td>
+          </tr>
+          <tr>
+            <td><code>---</code></td>
+            <td>—</td>
+            <td>Tiret cadratin</td>
+          </tr>
+          <tr>
+            <td><code>--</code></td>
+            <td>–</td>
+            <td>Tiret demi-cadratin</td>
+          </tr>
+          <tr>
+            <td><code>...</code></td>
+            <td>…</td>
+            <td>Points de suspension</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>Fonctions de base</h2>
+
+      <p>Les fonctions commencent par <code>#</code> :</p>
+
+      <pre><code><span class="token-comment">// Espacement vertical</span>
+<span class="token-keyword">#v</span>(<span class="token-number">1cm</span>)        <span class="token-comment">// 1 centimetre</span>
+<span class="token-keyword">#v</span>(<span class="token-number">1em</span>)        <span class="token-comment">// 1 taille de police</span>
+
+<span class="token-comment">// Espacement horizontal</span>
+<span class="token-keyword">#h</span>(<span class="token-number">1cm</span>)
+
+<span class="token-comment">// Saut de page</span>
+<span class="token-keyword">#pagebreak</span>()
+
+<span class="token-comment">// Alignement</span>
+<span class="token-keyword">#align</span>(center)[Texte centre]
+<span class="token-keyword">#align</span>(right)[Texte a droite]
+
+<span class="token-comment">// Bloc avec style</span>
+<span class="token-keyword">#block</span>(fill: rgb(<span class="token-string">"#f0f0f0"</span>), inset: <span class="token-number">1em</span>)[
+  Contenu du bloc
+]</code></pre>
+
+      <div class="callout callout-info">
+        <div class="callout-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 16v-4M12 8h.01"/>
+          </svg>
+          Astuce
+        </div>
+        <p style="margin: 0;">Les crochets <code>[]</code> contiennent du contenu markup, tandis que les parentheses <code>()</code> contiennent des arguments de fonction.</p>
+      </div>
+
+      <h2>Prochaines etapes</h2>
+
+      <div class="grid grid-2" style="margin-top: var(--space-xl);">
+        <a href="formatting.html" class="card" style="text-decoration: none;">
+          <h4 style="color: var(--nova-primary);">Mise en forme</h4>
+          <p class="text-muted" style="margin: 0;">Personnalisez l'apparence de vos documents.</p>
+        </a>
+        <a href="math.html" class="card" style="text-decoration: none;">
+          <h4 style="color: var(--nova-primary);">Equations</h4>
+          <p class="text-muted" style="margin: 0;">Ecrivez des formules mathematiques.</p>
+        </a>
+      </div>
+
+    </main>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom" style="border-top: none; padding-top: 0;">
+        <p>&copy; 2024 NovaType. Tous droits reserves.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../assets/js/main.js"></script>
+</body>
+</html>
