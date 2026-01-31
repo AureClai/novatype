@@ -1,134 +1,155 @@
-# NovaType
+<p align="center">
+  <img src="docs/assets/images/logo.svg" alt="NovaType Logo" width="120" height="120">
+</p>
 
-**La nouvelle frontiere de la composition de documents**
+<h1 align="center">NovaType</h1>
 
-NovaType est un systeme moderne de composition de documents, construit sur le moteur Typst, concu pour remplacer LaTeX avec une solution plus performante, accessible et extensible.
+<p align="center">
+  <strong>La composition typographique, reimaginee.</strong>
+</p>
+
+<p align="center">
+  <a href="https://aureclair.github.io/novatype/">Documentation</a> •
+  <a href="https://aureclair.github.io/novatype/demos.html">Demos</a> •
+  <a href="#installation">Installation</a> •
+  <a href="#utilisation">Utilisation</a>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License MIT">
+  <img src="https://img.shields.io/badge/rust-1.70+-orange.svg" alt="Rust 1.70+">
+  <img src="https://img.shields.io/badge/platform-windows%20%7C%20macos%20%7C%20linux-lightgrey.svg" alt="Platform">
+</p>
+
+---
+
+NovaType est un systeme moderne de composition typographique construit sur [Typst](https://typst.app). Il combine la qualite de LaTeX avec une syntaxe intuitive et une compilation instantanee.
+
+## Pourquoi NovaType ?
+
+| Fonctionnalite | NovaType | LaTeX | Word |
+|----------------|:--------:|:-----:|:----:|
+| Compilation instantanee | ✅ | ❌ | ✅ |
+| Equations mathematiques | ✅ | ✅ | ❌ |
+| Syntaxe simple | ✅ | ❌ | ✅ |
+| Qualite typographique | ✅ | ✅ | ❌ |
+| Visualisation de donnees | ✅ | ❌ | ✅ |
+| Execution navigateur | ✅ | ❌ | ❌ |
 
 ## Caracteristiques
 
-- **Performance Rust** : Compilation incrementale en millisecondes
-- **Syntaxe accessible** : Proche du Markdown, sans boilerplate
-- **Templates universels** : Separation contenu/style avec switch zero-friction
-- **Data-science native** : Visualisation de donnees integree (CSV/JSON vers graphes)
-- **Cloud-native** : Distribution WebAssembly pour execution navigateur
+- **Compilation instantanee** — Visualisez vos modifications en temps reel
+- **Syntaxe intuitive** — Proche du Markdown, sans boilerplate LaTeX
+- **Citations intelligentes** — BibTeX, CrossRef API, Zotero integres
+- **Visualisation de donnees** — Graphiques depuis CSV/JSON
+- **Templates professionnels** — IEEE, Nature, rapports, CV...
+- **WebAssembly** — Compilez dans le navigateur
 
 ## Installation
 
 ```bash
-# Via Cargo
+# Via Cargo (recommande)
 cargo install nova-cli
 
-# Ou telecharger les binaires pre-compiles
-# https://github.com/novatype/novatype/releases
+# Verifier l'installation
+nova --version
 ```
 
-## Utilisation rapide
+<details>
+<summary>Autres methodes d'installation</summary>
+
+### Depuis les sources
+
+```bash
+git clone https://github.com/AureClai/novatype.git
+cd novatype/typst
+cargo build --package nova-cli --release
+```
+
+### Windows (binaires)
+
+Telechargez depuis [Releases](https://github.com/AureClai/novatype/releases).
+
+</details>
+
+## Utilisation
 
 ```bash
 # Creer un nouveau projet
+nova init mon-article
+
+# Avec un template specifique
 nova init mon-article --template ieee-article
 
-# Compiler un document
-nova compile main.typ
+# Compiler
+nova compile main.typ --open
 
 # Mode watch (recompilation automatique)
 nova watch main.typ
-
-# Valider les metadonnees
-nova validate main.typ
 ```
 
-## Structure du projet
-
-```
-novatype/
-├── crates/
-│   ├── nova-core/      # Moteur de compilation
-│   ├── nova-schema/    # Validation schemas/metadonnees
-│   ├── nova-cite/      # Gestion des citations
-│   ├── nova-plot/      # Visualisation de donnees
-│   └── nova-cli/       # Interface ligne de commande
-├── nova-wasm/          # Build WebAssembly
-├── templates/          # Templates officiels
-└── schemas/            # Schemas de validation JSON
-```
-
-## Exemple de document
+## Exemple
 
 ```typ
 ---
-title: "Mon Article Scientifique"
-authors:
-  - name: Jean Dupont
-    email: jean@universite.fr
-    affiliation: Universite de Paris
-template: ieee-article
-citation_style: ieee
-bibliography:
-  - references.bib
+title: "Mon Article"
+author: "Jean Dupont"
+template: article
 ---
 
 = Introduction
 
-Ceci est un exemple de document NovaType.
+Bienvenue dans *NovaType* ! Une syntaxe _simple_ et puissante.
 
-= Methodes
+= Equations
 
-Description des methodes utilisees.
+La formule d'Euler : $ e^(i pi) + 1 = 0 $
 
-= Resultats
-
-Presentation des resultats avec visualisation:
+= Visualisation
 
 #nova-plot(
-  data: "data.csv",
-  type: "line",
-  title: "Evolution temporelle"
+  data: "results.csv",
+  type: "bar",
+  title: "Resultats"
 )
-
-= Conclusion
-
-Resume des conclusions.
-```
-
-## Developpement
-
-```bash
-# Cloner le depot
-git clone https://github.com/novatype/novatype.git
-cd novatype
-
-# Compiler
-cargo build
-
-# Executer les tests
-cargo test --workspace
-
-# Verifier le formatage et les lints
-cargo fmt --check
-cargo clippy --all-targets
-
-# Generer la documentation
-cargo doc --workspace --open
 ```
 
 ## Architecture
 
-Le projet suit une architecture modulaire avec des crates independants:
-
-| Crate | Description |
-|-------|-------------|
-| `nova-core` | Orchestration de la compilation |
-| `nova-schema` | Validation JSON Schema des metadonnees |
-| `nova-cite` | Citations (BibTeX, CrossRef, Zotero) |
-| `nova-plot` | Rendu SVG de graphiques |
-| `nova-cli` | Interface utilisateur CLI |
-| `nova-wasm` | Bindings WebAssembly |
+```
+novatype/
+├── typst/crates/
+│   ├── nova-core/      # Moteur de compilation
+│   ├── nova-schema/    # Validation des metadonnees
+│   ├── nova-cite/      # Gestion des citations
+│   ├── nova-plot/      # Visualisation de donnees
+│   ├── nova-cli/       # Interface ligne de commande
+│   └── nova-wasm/      # Build WebAssembly
+└── docs/               # Site de documentation
+```
 
 ## Contribuer
 
-Les contributions sont les bienvenues! Consultez [CONTRIBUTING.md](CONTRIBUTING.md) pour les directives.
+Les contributions sont les bienvenues ! Consultez les [Issues](https://github.com/AureClai/novatype/issues) pour commencer.
+
+```bash
+# Cloner et compiler
+git clone https://github.com/AureClai/novatype.git
+cd novatype/typst
+cargo build
+
+# Lancer les tests
+cargo test --workspace
+```
 
 ## Licence
 
-Distribue sous licence MIT ou Apache-2.0, au choix.
+MIT License - voir [LICENSE](LICENSE) pour plus de details.
+
+---
+
+<p align="center">
+  <a href="https://aureclair.github.io/novatype/">Site web</a> •
+  <a href="https://github.com/AureClai/novatype/issues">Signaler un bug</a> •
+  <a href="https://github.com/AureClai/novatype/discussions">Discussions</a>
+</p>
