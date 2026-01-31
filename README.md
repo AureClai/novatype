@@ -9,8 +9,8 @@
 </p>
 
 <p align="center">
-  <a href="https://aureclair.github.io/novatype/">Documentation</a> •
-  <a href="https://aureclair.github.io/novatype/demos.html">Demos</a> •
+  <a href="https://aureclai.github.io/novatype/">Documentation</a> •
+  <a href="https://aureclai.github.io/novatype/demos.html">Demos</a> •
   <a href="#installation">Installation</a> •
   <a href="#utilisation">Utilisation</a>
 </p>
@@ -149,7 +149,7 @@ MIT License - voir [LICENSE](LICENSE) pour plus de details.
 ---
 
 <p align="center">
-  <a href="https://aureclair.github.io/novatype/">Site web</a> •
+  <a href="https://aureclai.github.io/novatype/">Site web</a> •
   <a href="https://github.com/AureClai/novatype/issues">Signaler un bug</a> •
   <a href="https://github.com/AureClai/novatype/discussions">Discussions</a>
 </p>
