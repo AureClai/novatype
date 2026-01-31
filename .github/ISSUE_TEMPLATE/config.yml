@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Question & Discussion
+    url: https://github.com/AureClai/novatype/discussions
+    about: Ask questions and discuss NovaType in GitHub Discussions
+  - name: Documentation
+    url: https://aureclai.github.io/novatype/
+    about: Check out our documentation for guides and references
