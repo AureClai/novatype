@@ -945,33 +945,57 @@ Voir aussi @eq:pythagore et @eq:quadratique.`
       },
       bibliography: {
         title: "Bibliographie",
-        description: "Gerez vos citations et references bibliographiques avec un style academique.",
-        code: `// Note: La bibliographie complete necessite
-// un fichier .bib externe. Voici une demo
-// des fonctionnalites de citation inline.
+        description: "Citations et references bibliographiques avec fichier BibTeX embarque.",
+        code: `// === refs.bib ===
+// @book{knuth1984,
+//   author = {Donald E. Knuth},
+//   title = {The TeXbook},
+//   publisher = {Addison-Wesley},
+//   year = {1984},
+// }
+// @article{lamport1994,
+//   author = {Leslie Lamport},
+//   title = {LaTeX: A Document Preparation System},
+//   journal = {Addison-Wesley},
+//   year = {1994},
+// }
+// @misc{typst2023,
+//   author = {Typst GmbH},
+//   title = {Typst: A New Markup-based Typesetting System},
+//   year = {2023},
+//   url = {https://typst.app},
+// }
+// @book{bringhurst2004,
+//   author = {Robert Bringhurst},
+//   title = {The Elements of Typographic Style},
+//   publisher = {Hartley and Marks},
+//   year = {2004},
+//   edition = {3rd},
+// }
+// === end ===
 
 #set heading(numbering: "1.")
 
 = Introduction
 
-La typographie moderne a ete revolutionnee
-par l'informatique. Les travaux de Knuth
-sur TeX ont pose les bases.
+La typographie numerique moderne a ete
+fondee par les travaux de @knuth1984 sur
+le systeme TeX. Plus tard, @lamport1994
+a simplifie son usage avec LaTeX.
 
-= Revue de litterature
+= Systemes de composition
 
-== Systemes de composition
+== Evolution historique
 
-Plusieurs systemes existent :
+L'evolution des systemes de composition :
 
-- *LaTeX* : Standard academique depuis 1985
-- *Typst* : Alternative moderne (2023)
-- *NovaType* : Surcouche intuitive
++ *TeX* (1978) : Precision mathematique @knuth1984
++ *LaTeX* (1984) : Macros simplifiees @lamport1994
++ *Typst* (2023) : Syntaxe moderne @typst2023
 
 == Principes typographiques
 
-Les regles de Bringhurst sont essentielles
-pour une bonne mise en page.
+Comme le souligne @bringhurst2004 :
 
 #block(
   fill: gray.lighten(90%),
@@ -981,38 +1005,15 @@ pour une bonne mise en page.
 )[
   _"La typographie existe pour honorer
   le contenu."_
-  --- Robert Bringhurst
 ]
-
-= Methodologie
-
-Notre approche s'inspire des travaux
-precedents tout en apportant des innovations.
-
-== References dans le texte
-
-En Typst, les citations utilisent la syntaxe :
-- \`\@author2024\` pour les citations
-- \`#cite(<key>)\` pour plus de controle
-- \`#bibliography("refs.bib")\` pour la liste
 
 = Conclusion
 
-L'avenir de la composition documentaire
-passe par des outils accessibles.
+De TeX @knuth1984 a Typst @typst2023,
+l'objectif reste le meme : produire des
+documents de qualite professionnelle.
 
-#v(2em)
-
-#block(
-  fill: blue.lighten(90%),
-  inset: 12pt,
-  radius: 4pt,
-  width: 100%,
-)[
-  *Note :* Pour une bibliographie complete,
-  utilisez un fichier \`.bib\` avec la commande
-  \`#bibliography("references.bib")\`
-]`
+#bibliography("refs.bib", style: "ieee")`
       },
       code: {
         title: "Blocs de code",

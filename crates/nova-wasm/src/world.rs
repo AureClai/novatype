@@ -2,7 +2,22 @@
 //!
 //! This module provides a minimal World implementation that works in WebAssembly
 //! without filesystem access.
+//!
+//! ## Virtual Files
+//!
+//! You can embed virtual files in your source using special comments:
+//!
+//! ```typst
+//! // === refs.bib ===
+//! // @article{einstein1905,
+//! //   author = {Albert Einstein},
+//! //   title = {On the Electrodynamics of Moving Bodies},
+//! //   year = {1905},
+//! // }
+//! // === end ===
+//! ```
 
+use std::collections::HashMap;
 use std::sync::OnceLock;
 
 use chrono::{Datelike, Local, Utc};
@@ -19,12 +34,14 @@ static EMBEDDED_FONTS: OnceLock<EmbeddedFonts> = OnceLock::new();
 /// A World implementation for WebAssembly.
 ///
 /// This provides a minimal environment for compiling Typst documents
-/// without filesystem access.
+/// without filesystem access. Virtual files can be embedded in the source.
 pub struct WasmWorld {
     /// The main source file.
     main: FileId,
-    /// The source content.
+    /// The source content (without virtual file blocks).
     source: Source,
+    /// Virtual files extracted from the source.
+    virtual_files: HashMap<String, String>,
     /// The standard library.
     library: LazyHash<Library>,
 }
@@ -36,12 +53,15 @@ impl WasmWorld {
         let fonts = EMBEDDED_FONTS.get_or_init(EmbeddedFonts::new);
         let _ = fonts; // Ensure fonts are loaded
 
+        // Extract virtual files and clean source
+        let (clean_source, virtual_files) = Self::extract_virtual_files(source);
+
         // Create a virtual file ID for the main source (no package, just a path)
         let path = VirtualPath::new("main.typ");
         let main = FileId::new(None, path);
 
         // Create the source
-        let source = Source::new(main, source.to_string());
+        let source = Source::new(main, clean_source);
 
         // Create the library
         let library = Library::builder().build();
@@ -49,8 +69,77 @@ impl WasmWorld {
         Self {
             main,
             source,
+            virtual_files,
             library: LazyHash::new(library),
         }
+    }
+
+    /// Extract virtual files from source.
+    ///
+    /// Format:
+    /// ```text
+    /// // === filename.ext ===
+    /// // file content line 1
+    /// // file content line 2
+    /// // === end ===
+    /// ```
+    fn extract_virtual_files(source: &str) -> (String, HashMap<String, String>) {
+        let mut virtual_files = HashMap::new();
+        let mut clean_lines = Vec::new();
+        let mut current_file: Option<String> = None;
+        let mut current_content = Vec::new();
+
+        for line in source.lines() {
+            let trimmed = line.trim();
+
+            // Check for file start: // === filename.ext ===
+            if trimmed.starts_with("// ===") && trimmed.ends_with("===") && current_file.is_none() {
+                let inner = trimmed
+                    .strip_prefix("// ===")
+                    .unwrap()
+                    .strip_suffix("===")
+                    .unwrap()
+                    .trim();
+
+                if inner != "end" && !inner.is_empty() {
+                    current_file = Some(inner.to_string());
+                    continue;
+                }
+            }
+
+            // Check for file end: // === end ===
+            if trimmed == "// === end ===" {
+                if let Some(filename) = current_file.take() {
+                    let content = current_content.join("\n");
+                    virtual_files.insert(filename, content);
+                    current_content.clear();
+                }
+                continue;
+            }
+
+            // If inside a virtual file block, collect content
+            if current_file.is_some() {
+                // Remove leading "// " from content lines
+                let content_line = if let Some(stripped) = trimmed.strip_prefix("// ") {
+                    stripped
+                } else if trimmed == "//" {
+                    ""
+                } else {
+                    trimmed
+                };
+                current_content.push(content_line.to_string());
+            } else {
+                // Regular source line
+                clean_lines.push(line.to_string());
+            }
+        }
+
+        (clean_lines.join("\n"), virtual_files)
+    }
+
+    /// Get a virtual file by name.
+    fn get_virtual_file(&self, name: &str) -> Option<&String> {
+        self.virtual_files.get(name)
     }
 }
 
@@ -72,7 +161,14 @@ impl World for WasmWorld {
         if id == self.main {
             Ok(self.source.clone())
         } else {
-            Err(FileError::NotFound(id.vpath().as_rootless_path().into()))
+            // Check virtual files for .typ files
+            let path = id.vpath().as_rootless_path().to_string_lossy();
+            if let Some(content) = self.get_virtual_file(&path.to_string()) {
+                let source = Source::new(id, content.clone());
+                Ok(source)
+            } else {
+                Err(FileError::NotFound(id.vpath().as_rootless_path().into()))
+            }
         }
     }
 
@@ -81,7 +177,13 @@ impl World for WasmWorld {
             // Return the source as bytes
             Ok(Bytes::new(self.source.text().as_bytes().to_vec()))
         } else {
-            Err(FileError::NotFound(id.vpath().as_rootless_path().into()))
+            // Check virtual files
+            let path = id.vpath().as_rootless_path().to_string_lossy();
+            if let Some(content) = self.get_virtual_file(&path.to_string()) {
+                Ok(Bytes::new(content.as_bytes().to_vec()))
+            } else {
+                Err(FileError::NotFound(id.vpath().as_rootless_path().into()))
+            }
         }
     }
 
@@ -158,5 +260,29 @@ mod tests {
         let book = world.book();
         // Should have some fonts loaded
         assert!(!book.is_empty());
+    }
+
+    #[test]
+    fn extract_virtual_files() {
+        let source = r#"
+// === refs.bib ===
+// @article{test,
+//   author = {Test},
+// }
+// === end ===
+
+= Hello World
+"#;
+        let world = WasmWorld::new(source);
+
+        // Check virtual file exists
+        assert!(world.virtual_files.contains_key("refs.bib"));
+        let bib = world.virtual_files.get("refs.bib").unwrap();
+        assert!(bib.contains("@article{test"));
+
+        // Check source is clean
+        let clean = world.source.text();
+        assert!(!clean.contains("=== refs.bib ==="));
+        assert!(clean.contains("Hello World"));
     }
 }
