@@ -11,58 +11,37 @@
   <link rel="stylesheet" href="assets/css/style.css">
   <style>
     :root {
-      --toolbar-height: 56px;
-      --sidebar-width: 0px;
+      --navbar-height: 64px;
+      --controls-height: 48px;
     }
 
     body {
       overflow: hidden;
     }
 
-    /* Toolbar */
-    .playground-toolbar {
+    /* Controls bar under navbar */
+    .playground-controls {
       position: fixed;
-      top: 0;
+      top: var(--navbar-height);
       left: 0;
       right: 0;
-      height: var(--toolbar-height);
+      height: var(--controls-height);
       background: var(--nova-darker);
       border-bottom: 1px solid var(--nova-dark);
       display: flex;
       align-items: center;
       padding: 0 var(--space-lg);
       gap: var(--space-lg);
-      z-index: 100;
+      z-index: 90;
     }
 
-    .toolbar-logo {
-      display: flex;
-      align-items: center;
-      gap: var(--space-sm);
-      color: white;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 1.1rem;
-    }
-
-    .toolbar-logo svg {
-      width: 28px;
-      height: 28px;
-    }
-
-    .toolbar-divider {
-      width: 1px;
-      height: 24px;
-      background: var(--nova-dark);
-    }
-
-    .toolbar-section {
+    .controls-section {
       display: flex;
       align-items: center;
       gap: var(--space-sm);
     }
 
-    .toolbar-label {
+    .controls-label {
       font-size: 0.75rem;
       color: var(--nova-secondary);
       text-transform: uppercase;
@@ -78,7 +57,7 @@
       display: flex;
       align-items: center;
       gap: var(--space-sm);
-      padding: var(--space-sm) var(--space-md);
+      padding: 6px var(--space-md);
       background: var(--nova-dark);
       border: 1px solid var(--nova-secondary);
       border-radius: var(--radius-md);
@@ -117,7 +96,7 @@
       transform: translateY(-10px);
       transition: all 0.2s;
       z-index: 200;
-      max-height: 400px;
+      max-height: 70vh;
       overflow-y: auto;
     }
 
@@ -185,7 +164,7 @@
     }
 
     /* Status */
-    .toolbar-status {
+    .controls-status {
       margin-left: auto;
       display: flex;
       align-items: center;
@@ -227,8 +206,8 @@
     /* Main Layout */
     .playground-container {
       display: flex;
-      height: calc(100vh - var(--toolbar-height));
-      margin-top: var(--toolbar-height);
+      height: calc(100vh - var(--navbar-height) - var(--controls-height));
+      margin-top: calc(var(--navbar-height) + var(--controls-height));
     }
 
     .editor-pane {
@@ -429,7 +408,7 @@
         display: none;
       }
 
-      .toolbar-label {
+      .controls-label {
         display: none;
       }
 
@@ -440,22 +419,40 @@
   </style>
 </head>
 <body>
-  <!-- Toolbar -->
-  <div class="playground-toolbar">
-    <a href="index.html" class="toolbar-logo">
-      <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect width="32" height="32" rx="8" fill="#2563eb"/>
-        <path d="M8 10h4l4 12h-4L8 10z" fill="white"/>
-        <path d="M14 10h4l6 12h-4l-6-12z" fill="white" fill-opacity="0.7"/>
-        <circle cx="24" cy="10" r="3" fill="#10b981"/>
-      </svg>
-      NovaType
-    </a>
+  <!-- Navigation (same as other pages) -->
+  <nav class="navbar" id="navbar">
+    <div class="container">
+      <a href="index.html" class="nav-logo">
+        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="32" height="32" rx="8" fill="#2563eb"/>
+          <path d="M8 10h4l4 12h-4L8 10z" fill="white"/>
+          <path d="M14 10h4l6 12h-4l-6-12z" fill="white" fill-opacity="0.7"/>
+          <circle cx="24" cy="10" r="3" fill="#10b981"/>
+        </svg>
+        NovaType
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html">Accueil</a></li>
+        <li><a href="demos.html" class="active">Demos</a></li>
+        <li><a href="docs/index.html">Documentation</a></li>
+        <li><a href="docs/templates.html">Templates</a></li>
+        <li><a href="https://github.com/AureClai/novatype" target="_blank">GitHub</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="docs/getting-started.html" class="btn btn-primary">Commencer</a>
+        <button class="nav-toggle" id="navToggle" aria-label="Menu">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 12h18M3 6h18M3 18h18"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </nav>
 
-    <div class="toolbar-divider"></div>
-
-    <div class="toolbar-section">
-      <span class="toolbar-label">Exemples</span>
+  <!-- Controls bar -->
+  <div class="playground-controls">
+    <div class="controls-section">
+      <span class="controls-label">Exemples</span>
       <div class="dropdown" id="examplesDropdown">
         <button class="dropdown-btn" id="examplesBtn">
           <span id="currentExample">Hello World</span>
@@ -528,7 +525,7 @@
       </div>
     </div>
 
-    <div class="toolbar-status">
+    <div class="controls-status">
       <span class="status-dot loading" id="statusDot"></span>
       <span id="statusText">Chargement...</span>
     </div>
@@ -569,6 +566,7 @@
     </div>
   </div>
 
+  <script src="assets/js/main.js"></script>
   <script type="module">
     import { initNovaCompiler, compile } from './assets/js/nova-compiler.js';
 
