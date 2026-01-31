@@ -315,9 +315,11 @@
       flex: 1;
       overflow: auto;
       padding: var(--space-lg);
-      display: flex;
-      justify-content: center;
-      background: #f8fafc;
+      background: #e2e8f0;
+    }
+
+    .preview-result {
+      min-height: 100%;
     }
 
     .preview-loading {
@@ -343,18 +345,37 @@
       to { transform: rotate(360deg); }
     }
 
-    .preview-result {
-      background: white;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-      border-radius: var(--radius-sm);
-      overflow: hidden;
-      max-width: 100%;
+    .preview-document {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-lg);
+      padding-bottom: var(--space-xl);
     }
 
-    .preview-result svg {
+    .preview-page {
+      background: white;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .preview-page svg {
       display: block;
-      max-width: 100%;
+      width: 100%;
       height: auto;
+    }
+
+    .preview-page-number {
+      position: absolute;
+      bottom: 8px;
+      right: 12px;
+      background: rgba(0,0,0,0.6);
+      color: white;
+      font-size: 0.7rem;
+      padding: 2px 8px;
+      border-radius: 10px;
     }
 
     .preview-error {
@@ -1081,19 +1102,22 @@ de mes salutations distinguees.
         const result = await compile(source);
 
         if (result.success && result.svg_pages.length > 0) {
-          previewResult.innerHTML = result.svg_pages[0];
+          // Render all pages as a scrollable document
+          const pagesHtml = result.svg_pages.map((svg, index) => `
+            <div class="preview-page">
+              ${svg}
+              ${result.svg_pages.length > 1 ? `<span class="preview-page-number">${index + 1} / ${result.svg_pages.length}</span>` : ''}
+            </div>
+          `).join('');
+
+          previewResult.innerHTML = `<div class="preview-document">${pagesHtml}</div>`;
           previewResult.style.display = 'block';
           previewError.classList.remove('visible');
 
-          // Scale SVG
-          const svg = previewResult.querySelector('svg');
-          if (svg) {
-            svg.style.maxWidth = '100%';
-            svg.style.height = 'auto';
-          }
-
           statusDot.className = 'status-dot ready';
-          statusText.textContent = 'Pret';
+          statusText.textContent = result.svg_pages.length > 1
+            ? `Pret (${result.svg_pages.length} pages)`
+            : 'Pret';
         } else {
           previewError.textContent = result.errors.join('\n');
           previewError.classList.add('visible');
