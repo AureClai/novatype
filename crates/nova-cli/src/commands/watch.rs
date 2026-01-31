@@ -72,17 +72,17 @@ pub async fn watch(args: WatchArgs) -> Result<()> {
                 print!("\x1B[2J\x1B[1;1H");
             }
 
-            println!("[{}] Change detected, recompiling...",
-                chrono_lite_timestamp());
+            println!(
+                "[{}] Change detected, recompiling...",
+                chrono_lite_timestamp()
+            );
 
             match run_compile(&args).await {
                 Ok(()) => {
-                    println!("[{}] Compilation successful.\n",
-                        chrono_lite_timestamp());
+                    println!("[{}] Compilation successful.\n", chrono_lite_timestamp());
                 }
                 Err(e) => {
-                    eprintln!("[{}] Compilation failed: {}\n",
-                        chrono_lite_timestamp(), e);
+                    eprintln!("[{}] Compilation failed: {}\n", chrono_lite_timestamp(), e);
                 }
             }
         }

@@ -102,8 +102,8 @@ impl NovaCompiler {
             .map_err(|e| JsValue::from_str(&format!("Parse error: {e}")))?;
 
         // Compile with Typst
-        let svg_pages = compile_to_svg(content)
-            .map_err(|errors| JsValue::from_str(&errors.join("\n")))?;
+        let svg_pages =
+            compile_to_svg(content).map_err(|errors| JsValue::from_str(&errors.join("\n")))?;
 
         svg_pages
             .into_iter()
@@ -200,7 +200,16 @@ fn compile_to_svg(source: &str) -> Result<Vec<String>, Vec<String>> {
         Err(errors) => {
             let error_messages: Vec<String> = errors
                 .iter()
-                .map(|e| format!("{}: {}", e.span.id().map(|id| format!("{:?}", id)).unwrap_or_default(), e.message))
+                .map(|e| {
+                    format!(
+                        "{}: {}",
+                        e.span
+                            .id()
+                            .map(|id| format!("{:?}", id))
+                            .unwrap_or_default(),
+                        e.message
+                    )
+                })
                 .collect();
             Err(error_messages)
         }

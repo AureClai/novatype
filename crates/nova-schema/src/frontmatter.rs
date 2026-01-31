@@ -63,15 +63,16 @@ impl FrontmatterParser {
     }
 
     /// Parse YAML frontmatter.
-    fn parse_yaml<'a, T: DeserializeOwned>(&self, content: &'a str) -> Result<(Option<T>, &'a str)> {
+    fn parse_yaml<'a, T: DeserializeOwned>(
+        &self,
+        content: &'a str,
+    ) -> Result<(Option<T>, &'a str)> {
         let inner = &content[3..]; // Skip opening ---
 
-        let end = inner
-            .find("\n---")
-            .ok_or_else(|| Error::FrontmatterParse {
-                message: "unclosed YAML frontmatter".to_string(),
-                line: None,
-            })?;
+        let end = inner.find("\n---").ok_or_else(|| Error::FrontmatterParse {
+            message: "unclosed YAML frontmatter".to_string(),
+            line: None,
+        })?;
 
         let yaml_content = inner[..end].trim();
         let remaining_start = 3 + end + 4; // Skip "---" + content + "\n---"
@@ -90,15 +91,16 @@ impl FrontmatterParser {
     }
 
     /// Parse TOML frontmatter.
-    fn parse_toml<'a, T: DeserializeOwned>(&self, content: &'a str) -> Result<(Option<T>, &'a str)> {
+    fn parse_toml<'a, T: DeserializeOwned>(
+        &self,
+        content: &'a str,
+    ) -> Result<(Option<T>, &'a str)> {
         let inner = &content[3..]; // Skip opening +++
 
-        let end = inner
-            .find("\n+++")
-            .ok_or_else(|| Error::FrontmatterParse {
-                message: "unclosed TOML frontmatter".to_string(),
-                line: None,
-            })?;
+        let end = inner.find("\n+++").ok_or_else(|| Error::FrontmatterParse {
+            message: "unclosed TOML frontmatter".to_string(),
+            line: None,
+        })?;
 
         let toml_content = inner[..end].trim();
         let remaining_start = 3 + end + 4; // Skip "+++" + content + "\n+++"
@@ -123,15 +125,13 @@ impl FrontmatterParser {
     pub fn extract_raw<'a>(&self, content: &'a str) -> Option<(&'a str, FrontmatterFormat)> {
         let content = content.trim_start();
 
-        if content.starts_with("---") {
-            let content = &content[3..];
+        if let Some(content) = content.strip_prefix("---") {
             if let Some(end) = content.find("\n---") {
                 return Some((&content[..end], FrontmatterFormat::Yaml));
             }
         }
 
-        if content.starts_with("+++") {
-            let content = &content[3..];
+        if let Some(content) = content.strip_prefix("+++") {
             if let Some(end) = content.find("\n+++") {
                 return Some((&content[..end], FrontmatterFormat::Toml));
             }

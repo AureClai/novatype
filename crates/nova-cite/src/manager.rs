@@ -163,9 +163,7 @@ impl CitationManager {
 
     /// Check if a string looks like a DOI.
     fn looks_like_doi(key: &str) -> bool {
-        key.starts_with("10.")
-            || key.starts_with("https://doi.org/")
-            || key.starts_with("doi:")
+        key.starts_with("10.") || key.starts_with("https://doi.org/") || key.starts_with("doi:")
     }
 
     /// Convert CrossRef work to BibEntry.
@@ -294,7 +292,9 @@ mod tests {
     #[test]
     fn looks_like_doi() {
         assert!(CitationManager::looks_like_doi("10.1234/test"));
-        assert!(CitationManager::looks_like_doi("https://doi.org/10.1234/test"));
+        assert!(CitationManager::looks_like_doi(
+            "https://doi.org/10.1234/test"
+        ));
         assert!(CitationManager::looks_like_doi("doi:10.1234/test"));
         assert!(!CitationManager::looks_like_doi("smith2023"));
     }

@@ -349,10 +349,7 @@ mod tests {
             CitationStyle::from_name("ieee").unwrap(),
             CitationStyle::Ieee
         );
-        assert_eq!(
-            CitationStyle::from_name("APA").unwrap(),
-            CitationStyle::Apa
-        );
+        assert_eq!(CitationStyle::from_name("APA").unwrap(), CitationStyle::Apa);
         assert!(CitationStyle::from_name("invalid").is_err());
     }
 

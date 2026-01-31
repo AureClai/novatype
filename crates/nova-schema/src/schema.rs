@@ -38,9 +38,10 @@ impl Schema {
         let name = name.into();
         debug!(%name, "Creating schema");
 
-        let compiled = jsonschema::JSONSchema::compile(&schema).map_err(|e| Error::InvalidSchema {
-            message: e.to_string(),
-        })?;
+        let compiled =
+            jsonschema::JSONSchema::compile(&schema).map_err(|e| Error::InvalidSchema {
+                message: e.to_string(),
+            })?;
 
         Ok(Self {
             name,

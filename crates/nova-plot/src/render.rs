@@ -236,7 +236,11 @@ impl<'a> Renderer<'a> {
             let y_pos = y + h - (h * f64::from(i) / 5.0);
             svg.push_str(&format!(
                 r#"<line x1="{}" y1="{}" x2="{}" y2="{}" stroke="{}" stroke-width="1"/>"#,
-                x, y_pos, x + w, y_pos, grid_color
+                x,
+                y_pos,
+                x + w,
+                y_pos,
+                grid_color
             ));
         }
 
@@ -245,7 +249,11 @@ impl<'a> Renderer<'a> {
             let x_pos = x + (w * f64::from(i) / 5.0);
             svg.push_str(&format!(
                 r#"<line x1="{}" y1="{}" x2="{}" y2="{}" stroke="{}" stroke-width="1"/>"#,
-                x_pos, y, x_pos, y + h, grid_color
+                x_pos,
+                y,
+                x_pos,
+                y + h,
+                grid_color
             ));
         }
 
@@ -261,13 +269,21 @@ impl<'a> Renderer<'a> {
         // X axis
         svg.push_str(&format!(
             r#"<line x1="{}" y1="{}" x2="{}" y2="{}" stroke="{}" stroke-width="2"/>"#,
-            x, y + h, x + w, y + h, axis_color
+            x,
+            y + h,
+            x + w,
+            y + h,
+            axis_color
         ));
 
         // Y axis
         svg.push_str(&format!(
             r#"<line x1="{}" y1="{}" x2="{}" y2="{}" stroke="{}" stroke-width="2"/>"#,
-            x, y, x, y + h, axis_color
+            x,
+            y,
+            x,
+            y + h,
+            axis_color
         ));
 
         // X axis ticks and labels
@@ -409,7 +425,11 @@ impl<'a> Renderer<'a> {
 
             svg.push_str(&format!(
                 r#"<rect x="{}" y="{}" width="{}" height="{}" fill="{}"/>"#,
-                x, y, bar_width, height, color.to_hex()
+                x,
+                y,
+                bar_width,
+                height,
+                color.to_hex()
             ));
 
             // Label
@@ -478,17 +498,19 @@ impl<'a> Renderer<'a> {
         let y_col = self.chart.y_column.as_deref().unwrap_or("y");
 
         // Try to get columns by name, or use first two columns
-        let x_data = table.column_as_f64(x_col).or_else(|| {
-            table.headers.first().and_then(|h| table.column_as_f64(h))
-        }).ok_or_else(|| Error::MissingColumn {
-            column: x_col.to_string(),
-        })?;
+        let x_data = table
+            .column_as_f64(x_col)
+            .or_else(|| table.headers.first().and_then(|h| table.column_as_f64(h)))
+            .ok_or_else(|| Error::MissingColumn {
+                column: x_col.to_string(),
+            })?;
 
-        let y_data = table.column_as_f64(y_col).or_else(|| {
-            table.headers.get(1).and_then(|h| table.column_as_f64(h))
-        }).ok_or_else(|| Error::MissingColumn {
-            column: y_col.to_string(),
-        })?;
+        let y_data = table
+            .column_as_f64(y_col)
+            .or_else(|| table.headers.get(1).and_then(|h| table.column_as_f64(h)))
+            .ok_or_else(|| Error::MissingColumn {
+                column: y_col.to_string(),
+            })?;
 
         Ok((x_data, y_data))
     }
@@ -501,11 +523,12 @@ impl<'a> Renderer<'a> {
         }
 
         let labels = table.column_as_str(&table.headers[0]).unwrap_or_default();
-        let values = table.column_as_f64(&table.headers[1]).ok_or_else(|| {
-            Error::MissingColumn {
-                column: table.headers[1].clone(),
-            }
-        })?;
+        let values =
+            table
+                .column_as_f64(&table.headers[1])
+                .ok_or_else(|| Error::MissingColumn {
+                    column: table.headers[1].clone(),
+                })?;
 
         Ok((labels, values))
     }
@@ -545,12 +568,8 @@ mod tests {
 
     #[test]
     fn render_line_chart() {
-        let data = DataSource::from_points(vec![
-            (1.0, 10.0),
-            (2.0, 20.0),
-            (3.0, 15.0),
-            (4.0, 25.0),
-        ]);
+        let data =
+            DataSource::from_points(vec![(1.0, 10.0), (2.0, 20.0), (3.0, 15.0), (4.0, 25.0)]);
 
         let chart = Chart::new(ChartType::Line)
             .with_title("Test Line Chart")

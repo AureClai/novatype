@@ -146,7 +146,10 @@ mod tests {
     #[test]
     fn create_world() {
         let world = WasmWorld::new("Hello, world!");
-        assert_eq!(world.source(world.main()).unwrap().text().as_str(), "Hello, world!");
+        assert_eq!(
+            world.source(world.main()).unwrap().text().as_str(),
+            "Hello, world!"
+        );
     }
 
     #[test]

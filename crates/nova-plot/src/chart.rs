@@ -21,13 +21,10 @@ pub enum ChartType {
     Area,
 }
 
-impl ChartType {
-    /// Parse from string.
-    ///
-    /// # Errors
-    ///
-    /// Returns an error if the type is not recognized.
-    pub fn from_str(s: &str) -> Result<Self> {
+impl std::str::FromStr for ChartType {
+    type Err = Error;
+
+    fn from_str(s: &str) -> Result<Self> {
         match s.to_lowercase().as_str() {
             "line" => Ok(Self::Line),
             "bar" => Ok(Self::Bar),

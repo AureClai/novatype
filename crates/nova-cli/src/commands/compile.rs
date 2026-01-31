@@ -4,7 +4,7 @@ use crate::OutputFormat;
 use anyhow::{Context, Result};
 use clap::Args;
 use nova_schema::FrontmatterParser;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use std::process::Command;
 use tracing::{debug, info};
 
@@ -57,7 +57,8 @@ pub async fn compile(args: CompileArgs) -> Result<()> {
             OutputFormat::Svg => "svg",
             OutputFormat::Png => "png",
         };
-        args.input.with_file_name(format!("{}.{}", stem.to_string_lossy(), ext))
+        args.input
+            .with_file_name(format!("{}.{}", stem.to_string_lossy(), ext))
     });
 
     // Read input file
@@ -101,9 +102,9 @@ pub async fn compile(args: CompileArgs) -> Result<()> {
 
     // Execute compilation
     info!("Running typst compile...");
-    let output = cmd.output().with_context(|| {
-        format!("Failed to execute typst binary at {:?}", typst_path)
-    })?;
+    let output = cmd
+        .output()
+        .with_context(|| format!("Failed to execute typst binary at {:?}", typst_path))?;
 
     // Clean up temp file if created
     if let Some(temp) = temp_file {
@@ -114,11 +115,7 @@ pub async fn compile(args: CompileArgs) -> Result<()> {
     if !output.status.success() {
         let stderr = String::from_utf8_lossy(&output.stderr);
         let stdout = String::from_utf8_lossy(&output.stdout);
-        anyhow::bail!(
-            "Typst compilation failed:\n{}\n{}",
-            stderr,
-            stdout
-        );
+        anyhow::bail!("Typst compilation failed:\n{}\n{}", stderr, stdout);
     }
 
     println!("Compiled: {:?} -> {:?}", args.input, output_path);
@@ -135,7 +132,7 @@ pub async fn compile(args: CompileArgs) -> Result<()> {
 ///
 /// If the content has YAML/TOML frontmatter, strip it and create a temp file.
 /// Returns the processed content and optional temp file path.
-fn preprocess_content(content: &str, input: &PathBuf) -> Result<(String, Option<PathBuf>)> {
+fn preprocess_content(content: &str, input: &Path) -> Result<(String, Option<PathBuf>)> {
     let parser = FrontmatterParser::new();
 
     // Try to extract frontmatter
@@ -189,7 +186,7 @@ fn find_typst_binary() -> Result<PathBuf> {
 }
 
 /// Open a file with the system's default application.
-fn open_file(path: &PathBuf) -> Result<()> {
+fn open_file(path: &Path) -> Result<()> {
     #[cfg(target_os = "windows")]
     {
         std::process::Command::new("cmd")

@@ -176,8 +176,8 @@ pub enum DependencyKind {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use tempfile::NamedTempFile;
     use std::io::Write;
+    use tempfile::NamedTempFile;
 
     #[test]
     fn document_new_is_empty() {

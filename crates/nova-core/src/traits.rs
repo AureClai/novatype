@@ -11,8 +11,8 @@
 //! 2. **Mockability**: All traits are object-safe where possible
 //! 3. **Error Transparency**: Errors propagate with full context
 
-use crate::error::Result;
 use crate::document::Document;
+use crate::error::Result;
 
 #[cfg(test)]
 use mockall::automock;

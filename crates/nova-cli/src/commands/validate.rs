@@ -2,7 +2,7 @@
 
 use anyhow::{Context, Result};
 use clap::Args;
-use nova_schema::{FrontmatterParser, Schema, article_schema};
+use nova_schema::{article_schema, FrontmatterParser, Schema};
 use std::path::PathBuf;
 use tracing::info;
 
@@ -69,8 +69,8 @@ fn validate_file(
     schema_path: Option<&PathBuf>,
     strict: bool,
 ) -> Result<Vec<String>> {
-    let content = std::fs::read_to_string(path)
-        .with_context(|| format!("Failed to read {:?}", path))?;
+    let content =
+        std::fs::read_to_string(path).with_context(|| format!("Failed to read {:?}", path))?;
 
     let mut errors = Vec::new();
 

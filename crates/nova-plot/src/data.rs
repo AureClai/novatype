@@ -25,19 +25,12 @@ impl DataSource {
         let path = path.as_ref();
         let mut reader = csv::Reader::from_path(path)?;
 
-        let headers: Vec<String> = reader
-            .headers()?
-            .iter()
-            .map(String::from)
-            .collect();
+        let headers: Vec<String> = reader.headers()?.iter().map(String::from).collect();
 
         let mut rows = Vec::new();
         for result in reader.records() {
             let record = result?;
-            let row: Vec<Value> = record
-                .iter()
-                .map(|s| Value::parse(s))
-                .collect();
+            let row: Vec<Value> = record.iter().map(Value::parse).collect();
             rows.push(row);
         }
 
@@ -52,19 +45,12 @@ impl DataSource {
     pub fn from_csv_string(content: &str) -> Result<Self> {
         let mut reader = csv::Reader::from_reader(content.as_bytes());
 
-        let headers: Vec<String> = reader
-            .headers()?
-            .iter()
-            .map(String::from)
-            .collect();
+        let headers: Vec<String> = reader.headers()?.iter().map(String::from).collect();
 
         let mut rows = Vec::new();
         for result in reader.records() {
             let record = result?;
-            let row: Vec<Value> = record
-                .iter()
-                .map(|s| Value::parse(s))
-                .collect();
+            let row: Vec<Value> = record.iter().map(Value::parse).collect();
             rows.push(row);
         }
 
@@ -95,12 +81,8 @@ impl DataSource {
 
                 // Check if it's an array of objects (table format)
                 if arr[0].is_object() {
-                    let headers: Vec<String> = arr[0]
-                        .as_object()
-                        .unwrap()
-                        .keys()
-                        .cloned()
-                        .collect();
+                    let headers: Vec<String> =
+                        arr[0].as_object().unwrap().keys().cloned().collect();
 
                     let rows: Vec<Vec<Value>> = arr
                         .iter()
@@ -117,10 +99,7 @@ impl DataSource {
                     Ok(Self::Table(Table { headers, rows }))
                 } else {
                     // Array of values (single series)
-                    let values: Vec<f64> = arr
-                        .iter()
-                        .filter_map(|v| v.as_f64())
-                        .collect();
+                    let values: Vec<f64> = arr.iter().filter_map(|v| v.as_f64()).collect();
 
                     Ok(Self::Series(vec![Series {
                         name: "data".to_string(),
@@ -255,9 +234,7 @@ impl Value {
     #[must_use]
     pub fn from_json(value: Option<serde_json::Value>) -> Self {
         match value {
-            Some(serde_json::Value::Number(n)) => {
-                Self::Number(n.as_f64().unwrap_or(0.0))
-            }
+            Some(serde_json::Value::Number(n)) => Self::Number(n.as_f64().unwrap_or(0.0)),
             Some(serde_json::Value::String(s)) => Self::String(s),
             Some(serde_json::Value::Null) | None => Self::Null,
             Some(v) => Self::String(v.to_string()),

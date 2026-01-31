@@ -83,8 +83,7 @@ pub async fn init(args: InitArgs) -> Result<()> {
 /// Generate the main document content based on template.
 fn generate_main_document(template: &str) -> String {
     match template {
-        "article" | "ieee-article" => {
-            r#"---
+        "article" | "ieee-article" => r#"---
 title: "My Article"
 authors:
   - name: Author Name
@@ -117,10 +116,8 @@ Discuss your findings.
 
 Summarize your conclusions.
 "#
-            .to_string()
-        }
-        "report" => {
-            r#"---
+        .to_string(),
+        "report" => r#"---
 title: "My Report"
 authors:
   - name: Author Name
@@ -148,10 +145,8 @@ Key recommendations.
 
 Supporting materials.
 "#
-            .to_string()
-        }
-        "book" => {
-            r#"---
+        .to_string(),
+        "book" => r#"---
 title: "My Book"
 authors:
   - name: Author Name
@@ -170,8 +165,7 @@ Welcome to this book.
 
 #include "chapters/02-background.typ"
 "#
-            .to_string()
-        }
+        .to_string(),
         _ => {
             format!(
                 r#"---
