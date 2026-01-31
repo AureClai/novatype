@@ -878,7 +878,11 @@ $ product_(i=1)^n a_i = a_1 dot a_2 dot dots dot a_n $`
       "cross-refs": {
         title: "References croisees",
         description: "Creez des liens entre figures, equations et sections. Les references sont cliquables dans le document.",
-        code: `= References croisees
+        code: `// Activer la numerotation
+#set heading(numbering: "1.")
+#set math.equation(numbering: "(1)")
+
+= References croisees <sec:intro>
 
 Les references croisees permettent de lier
 differentes parties de votre document.
