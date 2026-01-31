@@ -28,8 +28,12 @@ coverage/
 
 # Test artifacts
 /tests/output/
+test-*.typ
+*-article/
 
 # WASM build
 /nova-wasm/pkg/
 *.wasm
-typst/
+
+# Generated PDFs
+*.pdf
