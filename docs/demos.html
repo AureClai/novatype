@@ -526,6 +526,17 @@
           </button>
 
           <div class="dropdown-divider"></div>
+          <div class="dropdown-header">References</div>
+          <button class="dropdown-item" data-example="cross-refs">
+            <div class="dropdown-item-title">References croisees</div>
+            <div class="dropdown-item-desc">Figures, equations, sections</div>
+          </button>
+          <button class="dropdown-item" data-example="bibliography">
+            <div class="dropdown-item-title">Bibliographie</div>
+            <div class="dropdown-item-desc">Citations et references</div>
+          </button>
+
+          <div class="dropdown-divider"></div>
           <div class="dropdown-header">Code</div>
           <button class="dropdown-item" data-example="code">
             <div class="dropdown-item-title">Blocs de code</div>
@@ -863,6 +874,141 @@ $ product_(i=1)^n a_i = a_1 dot a_2 dot dots dot a_n $`
   ],
   caption: [Description de la figure]
 )`
+      },
+      "cross-refs": {
+        title: "References croisees",
+        description: "Creez des liens entre figures, equations et sections. Les references sont cliquables dans le document.",
+        code: `= References croisees
+
+Les references croisees permettent de lier
+differentes parties de votre document.
+
+== Equations numerotees <sec:equations>
+
+L'equation d'Einstein :
+
+$ E = m c^2 $ <eq:einstein>
+
+Le theoreme de Pythagore :
+
+$ a^2 + b^2 = c^2 $ <eq:pythagore>
+
+La formule quadratique :
+
+$ x = (-b plus.minus sqrt(b^2 - 4 a c)) / (2 a) $ <eq:quadratique>
+
+== Figures <sec:figures>
+
+#figure(
+  rect(width: 150pt, height: 80pt, fill: blue.lighten(80%))[
+    #align(center + horizon)[Graphique A]
+  ],
+  caption: [Premier graphique de resultats]
+) <fig:graphique-a>
+
+#figure(
+  rect(width: 150pt, height: 80pt, fill: green.lighten(80%))[
+    #align(center + horizon)[Graphique B]
+  ],
+  caption: [Second graphique comparatif]
+) <fig:graphique-b>
+
+== Tableaux <sec:tableaux>
+
+#figure(
+  table(
+    columns: 3,
+    [*X*], [*Y*], [*Z*],
+    [1], [2], [3],
+    [4], [5], [6],
+  ),
+  caption: [Donnees experimentales]
+) <tab:donnees>
+
+== Utilisation des references
+
+Comme montre dans @eq:einstein, l'energie
+et la masse sont equivalentes.
+
+La @fig:graphique-a presente les resultats
+initiaux, tandis que la @fig:graphique-b
+montre la comparaison.
+
+Les donnees du @tab:donnees confirment
+l'hypothese presentee en @sec:equations.
+
+Voir aussi @eq:pythagore et @eq:quadratique.`
+      },
+      bibliography: {
+        title: "Bibliographie",
+        description: "Gerez vos citations et references bibliographiques avec un style academique.",
+        code: `// Note: La bibliographie complete necessite
+// un fichier .bib externe. Voici une demo
+// des fonctionnalites de citation inline.
+
+#set heading(numbering: "1.")
+
+= Introduction
+
+La typographie moderne a ete revolutionnee
+par l'informatique. Les travaux de Knuth
+sur TeX ont pose les bases.
+
+= Revue de litterature
+
+== Systemes de composition
+
+Plusieurs systemes existent :
+
+- *LaTeX* : Standard academique depuis 1985
+- *Typst* : Alternative moderne (2023)
+- *NovaType* : Surcouche intuitive
+
+== Principes typographiques
+
+Les regles de Bringhurst sont essentielles
+pour une bonne mise en page.
+
+#block(
+  fill: gray.lighten(90%),
+  inset: 12pt,
+  radius: 4pt,
+  width: 100%,
+)[
+  _"La typographie existe pour honorer
+  le contenu."_
+  --- Robert Bringhurst
+]
+
+= Methodologie
+
+Notre approche s'inspire des travaux
+precedents tout en apportant des innovations.
+
+== References dans le texte
+
+En Typst, les citations utilisent la syntaxe :
+- \`\@author2024\` pour les citations
+- \`#cite(<key>)\` pour plus de controle
+- \`#bibliography("refs.bib")\` pour la liste
+
+= Conclusion
+
+L'avenir de la composition documentaire
+passe par des outils accessibles.
+
+#v(2em)
+
+#block(
+  fill: blue.lighten(90%),
+  inset: 12pt,
+  radius: 4pt,
+  width: 100%,
+)[
+  *Note :* Pour une bibliographie complete,
+  utilisez un fichier \`.bib\` avec la commande
+  \`#bibliography("references.bib")\`
+]`
       },
       code: {
         title: "Blocs de code",
