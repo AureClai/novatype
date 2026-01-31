@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Reference complete de la CLI NovaType - Toutes les commandes et options disponibles.">
+  <title>CLI Reference - NovaType</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar" id="navbar">
+    <div class="container">
+      <a href="../index.html" class="nav-logo">
+        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="32" height="32" rx="8" fill="#2563eb"/>
+          <path d="M8 10h4l4 12h-4L8 10z" fill="white"/>
+          <path d="M14 10h4l6 12h-4l-6-12z" fill="white" fill-opacity="0.7"/>
+          <circle cx="24" cy="10" r="3" fill="#10b981"/>
+        </svg>
+        NovaType
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="../index.html">Accueil</a></li>
+        <li><a href="../demos.html">Demos</a></li>
+        <li><a href="index.html" class="active">Documentation</a></li>
+        <li><a href="templates.html">Templates</a></li>
+        <li><a href="https://github.com/novatype" target="_blank">GitHub</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="getting-started.html" class="btn btn-primary">Commencer</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Documentation Layout -->
+  <div class="container docs-layout" style="padding-top: 6rem;">
+    <!-- Sidebar -->
+    <aside class="docs-sidebar">
+      <nav class="docs-nav">
+        <div class="docs-nav-section">
+          <div class="docs-nav-title">Pour commencer</div>
+          <a href="getting-started.html" class="docs-nav-link">Installation</a>
+          <a href="index.html" class="docs-nav-link">Introduction</a>
+          <a href="quick-start.html" class="docs-nav-link">Demarrage rapide</a>
+        </div>
+        <div class="docs-nav-section">
+          <div class="docs-nav-title">Guide</div>
+          <a href="syntax.html" class="docs-nav-link">Syntaxe de base</a>
+          <a href="formatting.html" class="docs-nav-link">Mise en forme</a>
+          <a href="math.html" class="docs-nav-link">Equations</a>
+          <a href="tables.html" class="docs-nav-link">Tableaux</a>
+          <a href="figures.html" class="docs-nav-link">Figures</a>
+        </div>
+        <div class="docs-nav-section">
+          <div class="docs-nav-title">Fonctionnalites</div>
+          <a href="citations.html" class="docs-nav-link">Citations</a>
+          <a href="plots.html" class="docs-nav-link">Graphiques</a>
+          <a href="templates.html" class="docs-nav-link">Templates</a>
+          <a href="schemas.html" class="docs-nav-link">Validation</a>
+        </div>
+        <div class="docs-nav-section">
+          <div class="docs-nav-title">Reference</div>
+          <a href="cli.html" class="docs-nav-link active">CLI</a>
+          <a href="api.html" class="docs-nav-link">API WebAssembly</a>
+          <a href="config.html" class="docs-nav-link">Configuration</a>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- Content -->
+    <main class="docs-content">
+      <h1>Reference CLI</h1>
+
+      <p class="text-secondary" style="font-size: 1.125rem; margin-bottom: var(--space-2xl);">
+        Documentation complete de toutes les commandes disponibles dans la CLI NovaType.
+      </p>
+
+      <h2>Vue d'ensemble</h2>
+
+      <pre><code><span class="token-function">$</span> nova --help
+
+<span class="token-keyword">NovaType</span> - Modern typesetting system
+
+Usage: nova <span class="token-operator">&lt;COMMAND&gt;</span>
+
+Commands:
+  compile   Compile un document Typst en PDF/SVG/PNG
+  init      Initialise un nouveau projet NovaType
+  watch     Surveille les fichiers et recompile automatiquement
+  validate  Valide les metadonnees d'un document
+  template  Gere les templates
+
+Options:
+  -h, --help     Affiche l'aide
+  -V, --version  Affiche la version</code></pre>
+
+      <!-- nova compile -->
+      <h2 id="compile">nova compile</h2>
+
+      <p>Compile un document Typst en PDF, SVG ou PNG.</p>
+
+      <h3>Syntaxe</h3>
+
+      <pre><code>nova compile <span class="token-operator">&lt;INPUT&gt;</span> [OPTIONS]</code></pre>
+
+      <h3>Arguments</h3>
+
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th>Argument</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>&lt;INPUT&gt;</code></td>
+            <td>Chemin vers le fichier source <code>.typ</code></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Options</h3>
+
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th>Option</th>
+            <th>Description</th>
+            <th>Defaut</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>-o, --output &lt;PATH&gt;</code></td>
+            <td>Chemin du fichier de sortie</td>
+            <td><code>&lt;input&gt;.pdf</code></td>
+          </tr>
+          <tr>
+            <td><code>-f, --format &lt;FORMAT&gt;</code></td>
+            <td>Format de sortie : <code>pdf</code>, <code>svg</code>, <code>png</code></td>
+            <td><code>pdf</code></td>
+          </tr>
+          <tr>
+            <td><code>--open</code></td>
+            <td>Ouvre le document apres compilation</td>
+            <td><code>false</code></td>
+          </tr>
+          <tr>
+            <td><code>--root &lt;PATH&gt;</code></td>
+            <td>Repertoire racine pour les chemins relatifs</td>
+            <td>Dossier courant</td>
+          </tr>
+          <tr>
+            <td><code>--font-path &lt;PATH&gt;</code></td>
+            <td>Repertoires additionnels pour les polices</td>
+            <td>-</td>
+          </tr>
+          <tr>
+            <td><code>-v, --verbose</code></td>
+            <td>Active les logs detailles</td>
+            <td><code>false</code></td>
+          </tr>
+          <tr>
+            <td><code>-q, --quiet</code></td>
+            <td>Supprime les messages non-erreur</td>
+            <td><code>false</code></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Exemples</h3>
+
+      <pre><code><span class="token-comment"># Compilation simple</span>
+<span class="token-function">$</span> nova compile main.typ
+
+<span class="token-comment"># Compiler et ouvrir</span>
+<span class="token-function">$</span> nova compile main.typ --open
+
+<span class="token-comment"># Exporter en SVG</span>
+<span class="token-function">$</span> nova compile main.typ -f svg -o output.svg
+
+<span class="token-comment"># Exporter en PNG haute resolution</span>
+<span class="token-function">$</span> nova compile main.typ -f png -o figure.png
+
+<span class="token-comment"># Avec polices personnalisees</span>
+<span class="token-function">$</span> nova compile main.typ --font-path ./fonts/</code></pre>
+
+      <!-- nova init -->
+      <h2 id="init">nova init</h2>
+
+      <p>Initialise un nouveau projet NovaType avec la structure recommandee.</p>
+
+      <h3>Syntaxe</h3>
+
+      <pre><code>nova init <span class="token-operator">&lt;NAME&gt;</span> [OPTIONS]</code></pre>
+
+      <h3>Arguments</h3>
+
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th>Argument</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>&lt;NAME&gt;</code></td>
+            <td>Nom du projet (sera le nom du dossier)</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Options</h3>
+
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th>Option</th>
+            <th>Description</th>
+            <th>Defaut</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>-t, --template &lt;TEMPLATE&gt;</code></td>
+            <td>Template a utiliser</td>
+            <td><code>article</code></td>
+          </tr>
+          <tr>
+            <td><code>--no-git</code></td>
+            <td>Ne pas initialiser de repository Git</td>
+            <td><code>false</code></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Templates disponibles</h3>
+
+      <ul>
+        <li><code>article</code> - Article simple (defaut)</li>
+        <li><code>ieee-article</code> - Format IEEE</li>
+        <li><code>nature-article</code> - Format Nature</li>
+        <li><code>report</code> - Rapport technique</li>
+        <li><code>book</code> - Livre avec chapitres</li>
+        <li><code>presentation</code> - Slides</li>
+        <li><code>cv</code> - Curriculum vitae</li>
+      </ul>
+
+      <h3>Exemples</h3>
+
+      <pre><code><span class="token-comment"># Nouveau projet avec template par defaut</span>
+<span class="token-function">$</span> nova init mon-article
+
+<span class="token-comment"># Projet avec template IEEE</span>
+<span class="token-function">$</span> nova init conference-paper --template ieee-article
+
+<span class="token-comment"># Sans Git</span>
+<span class="token-function">$</span> nova init draft --no-git</code></pre>
+
+      <h3>Structure creee</h3>
+
+      <pre><code>mon-article/
+├── main.typ        <span class="token-comment"># Document principal</span>
+├── nova.toml       <span class="token-comment"># Configuration du projet</span>
+├── references.bib  <span class="token-comment"># Bibliographie</span>
+└── .gitignore      <span class="token-comment"># Fichiers ignores par Git</span></code></pre>
+
+      <!-- nova watch -->
+      <h2 id="watch">nova watch</h2>
+
+      <p>Surveille les modifications du fichier source et recompile automatiquement.</p>
+
+      <h3>Syntaxe</h3>
+
+      <pre><code>nova watch <span class="token-operator">&lt;INPUT&gt;</span> [OPTIONS]</code></pre>
+
+      <h3>Options</h3>
+
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th>Option</th>
+            <th>Description</th>
+            <th>Defaut</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>-o, --output &lt;PATH&gt;</code></td>
+            <td>Chemin du fichier de sortie</td>
+            <td><code>&lt;input&gt;.pdf</code></td>
+          </tr>
+          <tr>
+            <td><code>-f, --format &lt;FORMAT&gt;</code></td>
+            <td>Format de sortie</td>
+            <td><code>pdf</code></td>
+          </tr>
+          <tr>
+            <td><code>--debounce &lt;MS&gt;</code></td>
+            <td>Delai avant recompilation (ms)</td>
+            <td><code>300</code></td>
+          </tr>
+          <tr>
+            <td><code>--clear</code></td>
+            <td>Effacer le terminal avant chaque build</td>
+            <td><code>false</code></td>
+          </tr>
+          <tr>
+            <td><code>--font-path &lt;PATH&gt;</code></td>
+            <td>Repertoires additionnels pour les polices</td>
+            <td>-</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Exemples</h3>
+
+      <pre><code><span class="token-comment"># Surveillance simple</span>
+<span class="token-function">$</span> nova watch main.typ
+
+<span class="token-comment"># Avec nettoyage du terminal</span>
+<span class="token-function">$</span> nova watch main.typ --clear
+
+<span class="token-comment"># Delai de recompilation personnalise</span>
+<span class="token-function">$</span> nova watch main.typ --debounce 500</code></pre>
+
+      <div class="callout callout-info">
+        <div class="callout-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 16v-4M12 8h.01"/>
+          </svg>
+          Astuce
+        </div>
+        <p style="margin: 0;">Utilisez <code>Ctrl+C</code> pour arreter la surveillance.</p>
+      </div>
+
+      <!-- nova validate -->
+      <h2 id="validate">nova validate</h2>
+
+      <p>Valide les metadonnees (frontmatter) d'un document contre un schema JSON.</p>
+
+      <h3>Syntaxe</h3>
+
+      <pre><code>nova validate <span class="token-operator">&lt;INPUT&gt;</span>... [OPTIONS]</code></pre>
+
+      <h3>Options</h3>
+
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th>Option</th>
+            <th>Description</th>
+            <th>Defaut</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>--schema &lt;PATH&gt;</code></td>
+            <td>Chemin vers un schema personnalise</td>
+            <td>Schema du template</td>
+          </tr>
+          <tr>
+            <td><code>--strict</code></td>
+            <td>Mode strict (frontmatter obligatoire)</td>
+            <td><code>false</code></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Exemples</h3>
+
+      <pre><code><span class="token-comment"># Valider un document</span>
+<span class="token-function">$</span> nova validate main.typ
+
+<span class="token-comment"># Valider plusieurs documents</span>
+<span class="token-function">$</span> nova validate chapter1.typ chapter2.typ chapter3.typ
+
+<span class="token-comment"># Avec schema personnalise</span>
+<span class="token-function">$</span> nova validate main.typ --schema my-schema.json
+
+<span class="token-comment"># Mode strict</span>
+<span class="token-function">$</span> nova validate main.typ --strict</code></pre>
+
+      <!-- nova template -->
+      <h2 id="template">nova template</h2>
+
+      <p>Gere les templates NovaType.</p>
+
+      <h3>Sous-commandes</h3>
+
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th>Commande</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>nova template list</code></td>
+            <td>Liste tous les templates disponibles</td>
+          </tr>
+          <tr>
+            <td><code>nova template info &lt;NAME&gt;</code></td>
+            <td>Affiche les details d'un template</td>
+          </tr>
+          <tr>
+            <td><code>nova template install &lt;SOURCE&gt;</code></td>
+            <td>Installe un template depuis un package ou chemin</td>
+          </tr>
+          <tr>
+            <td><code>nova template new &lt;NAME&gt;</code></td>
+            <td>Cree un nouveau template personnalise</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Exemples</h3>
+
+      <pre><code><span class="token-comment"># Lister les templates</span>
+<span class="token-function">$</span> nova template list
+
+Templates disponibles:
+  article        Simple article for general documents
+  ieee-article   IEEE journal article format
+  nature-article Nature journal formatting
+  report         Business/technical reports
+  book           Book with chapter support
+  presentation   Slide presentations
+  cv             Curriculum vitae/resume
+
+<span class="token-comment"># Informations sur un template</span>
+<span class="token-function">$</span> nova template info ieee-article
+
+Template: ieee-article
+Description: IEEE journal article format
+Required fields: title, authors
+Optional fields: abstract, keywords, bibliography
+
+<span class="token-comment"># Creer un template personnalise</span>
+<span class="token-function">$</span> nova template new mon-template</code></pre>
+
+      <h2>Variables d'environnement</h2>
+
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th>Variable</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>NOVA_FONT_PATH</code></td>
+            <td>Chemins additionnels pour les polices (separes par <code>:</code>)</td>
+          </tr>
+          <tr>
+            <td><code>NOVA_TEMPLATE_PATH</code></td>
+            <td>Chemins additionnels pour les templates</td>
+          </tr>
+          <tr>
+            <td><code>NOVA_LOG</code></td>
+            <td>Niveau de log (<code>error</code>, <code>warn</code>, <code>info</code>, <code>debug</code>, <code>trace</code>)</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>Codes de sortie</h2>
+
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th>Code</th>
+            <th>Signification</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>0</code></td>
+            <td>Succes</td>
+          </tr>
+          <tr>
+            <td><code>1</code></td>
+            <td>Erreur de compilation</td>
+          </tr>
+          <tr>
+            <td><code>2</code></td>
+            <td>Erreur de validation</td>
+          </tr>
+          <tr>
+            <td><code>3</code></td>
+            <td>Fichier non trouve</td>
+          </tr>
+        </tbody>
+      </table>
+
+    </main>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom" style="border-top: none; padding-top: 0;">
+        <p>&copy; 2024 NovaType. Tous droits reserves.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../assets/js/main.js"></script>
+</body>
+</html>

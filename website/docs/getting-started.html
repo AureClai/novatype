@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Guide d'installation de NovaType - Demarrez rapidement avec le systeme de composition typographique moderne.">
+  <title>Installation - NovaType</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar" id="navbar">
+    <div class="container">
+      <a href="../index.html" class="nav-logo">
+        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="32" height="32" rx="8" fill="#2563eb"/>
+          <path d="M8 10h4l4 12h-4L8 10z" fill="white"/>
+          <path d="M14 10h4l6 12h-4l-6-12z" fill="white" fill-opacity="0.7"/>
+          <circle cx="24" cy="10" r="3" fill="#10b981"/>
+        </svg>
+        NovaType
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="../index.html">Accueil</a></li>
+        <li><a href="../demos.html">Demos</a></li>
+        <li><a href="index.html" class="active">Documentation</a></li>
+        <li><a href="templates.html">Templates</a></li>
+        <li><a href="https://github.com/novatype" target="_blank">GitHub</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="getting-started.html" class="btn btn-primary">Commencer</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Documentation Layout -->
+  <div class="container docs-layout" style="padding-top: 6rem;">
+    <!-- Sidebar -->
+    <aside class="docs-sidebar">
+      <nav class="docs-nav">
+        <div class="docs-nav-section">
+          <div class="docs-nav-title">Pour commencer</div>
+          <a href="getting-started.html" class="docs-nav-link active">Installation</a>
+          <a href="index.html" class="docs-nav-link">Introduction</a>
+          <a href="quick-start.html" class="docs-nav-link">Demarrage rapide</a>
+        </div>
+        <div class="docs-nav-section">
+          <div class="docs-nav-title">Guide</div>
+          <a href="syntax.html" class="docs-nav-link">Syntaxe de base</a>
+          <a href="formatting.html" class="docs-nav-link">Mise en forme</a>
+          <a href="math.html" class="docs-nav-link">Equations</a>
+          <a href="tables.html" class="docs-nav-link">Tableaux</a>
+          <a href="figures.html" class="docs-nav-link">Figures</a>
+        </div>
+        <div class="docs-nav-section">
+          <div class="docs-nav-title">Fonctionnalites</div>
+          <a href="citations.html" class="docs-nav-link">Citations</a>
+          <a href="plots.html" class="docs-nav-link">Graphiques</a>
+          <a href="templates.html" class="docs-nav-link">Templates</a>
+          <a href="schemas.html" class="docs-nav-link">Validation</a>
+        </div>
+        <div class="docs-nav-section">
+          <div class="docs-nav-title">Reference</div>
+          <a href="cli.html" class="docs-nav-link">CLI</a>
+          <a href="api.html" class="docs-nav-link">API WebAssembly</a>
+          <a href="config.html" class="docs-nav-link">Configuration</a>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- Content -->
+    <main class="docs-content">
+      <h1>Installation</h1>
+
+      <p class="text-secondary" style="font-size: 1.125rem; margin-bottom: var(--space-2xl);">
+        Installez NovaType sur votre systeme en quelques minutes.
+      </p>
+
+      <h2>Prerequis</h2>
+
+      <p>Avant d'installer NovaType, assurez-vous d'avoir :</p>
+
+      <ul>
+        <li><strong>Rust</strong> (version 1.70 ou superieure) - <a href="https://rustup.rs" target="_blank">Installer Rust</a></li>
+        <li><strong>Git</strong> - Pour cloner le repository</li>
+      </ul>
+
+      <h2>Installation via Cargo</h2>
+
+      <p>La methode recommandee est d'utiliser Cargo :</p>
+
+      <pre><code><span class="token-comment"># Installer NovaType</span>
+<span class="token-function">$</span> cargo install nova-cli
+
+<span class="token-comment"># Verifier l'installation</span>
+<span class="token-function">$</span> nova --version
+nova-cli 1.0.0</code></pre>
+
+      <h2>Installation depuis les sources</h2>
+
+      <p>Pour installer la derniere version de developpement :</p>
+
+      <pre><code><span class="token-comment"># Cloner le repository</span>
+<span class="token-function">$</span> git clone https://github.com/novatype/novatype.git
+<span class="token-function">$</span> cd novatype
+
+<span class="token-comment"># Compiler en mode release</span>
+<span class="token-function">$</span> cargo build --release
+
+<span class="token-comment"># L'executable se trouve dans target/release/nova</span>
+<span class="token-function">$</span> ./target/release/nova --version</code></pre>
+
+      <div class="callout callout-info">
+        <div class="callout-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 16v-4M12 8h.01"/>
+          </svg>
+          Astuce
+        </div>
+        <p style="margin: 0;">Ajoutez <code>target/release</code> a votre PATH pour acceder a <code>nova</code> depuis n'importe ou.</p>
+      </div>
+
+      <h2>Installation sur Windows</h2>
+
+      <pre><code><span class="token-comment"># Avec PowerShell</span>
+<span class="token-function">></span> cargo install nova-cli
+
+<span class="token-comment"># Ou telecharger le binaire pre-compile</span>
+<span class="token-comment"># depuis github.com/novatype/releases</span></code></pre>
+
+      <h2>Installation sur macOS</h2>
+
+      <pre><code><span class="token-comment"># Via Homebrew (bientot disponible)</span>
+<span class="token-function">$</span> brew install novatype
+
+<span class="token-comment"># Ou via Cargo</span>
+<span class="token-function">$</span> cargo install nova-cli</code></pre>
+
+      <h2>Installation sur Linux</h2>
+
+      <pre><code><span class="token-comment"># Via Cargo</span>
+<span class="token-function">$</span> cargo install nova-cli
+
+<span class="token-comment"># Sur Arch Linux (AUR)</span>
+<span class="token-function">$</span> yay -S novatype</code></pre>
+
+      <h2>Verification de l'installation</h2>
+
+      <p>Apres l'installation, verifiez que tout fonctionne :</p>
+
+      <pre><code><span class="token-comment"># Afficher l'aide</span>
+<span class="token-function">$</span> nova --help
+
+<span class="token-keyword">NovaType - Modern typesetting system</span>
+
+Usage: nova <span class="token-operator">&lt;COMMAND&gt;</span>
+
+Commands:
+  compile   Compile un document
+  init      Initialise un nouveau projet
+  watch     Surveille et recompile automatiquement
+  validate  Valide les metadonnees du document
+  template  Gere les templates
+
+Options:
+  -h, --help     Afficher l'aide
+  -V, --version  Afficher la version</code></pre>
+
+      <h2>Premier projet</h2>
+
+      <p>Creez votre premier document NovaType :</p>
+
+      <pre><code><span class="token-comment"># Creer un nouveau projet</span>
+<span class="token-function">$</span> nova init mon-article
+
+<span class="token-comment"># Se deplacer dans le dossier</span>
+<span class="token-function">$</span> cd mon-article
+
+<span class="token-comment"># Compiler le document</span>
+<span class="token-function">$</span> nova compile main.typ --open</code></pre>
+
+      <p>Cette commande cree la structure suivante :</p>
+
+      <pre><code>mon-article/
+├── main.typ        <span class="token-comment"># Document principal</span>
+├── nova.toml       <span class="token-comment"># Configuration du projet</span>
+├── references.bib  <span class="token-comment"># Bibliographie</span>
+└── .gitignore</code></pre>
+
+      <h2>Configuration de l'editeur</h2>
+
+      <h3>Visual Studio Code</h3>
+
+      <p>Installez l'extension Typst pour la coloration syntaxique et l'autocompletion :</p>
+
+      <pre><code><span class="token-function">$</span> code --install-extension nvarner.typst-lsp</code></pre>
+
+      <h3>Neovim</h3>
+
+      <p>Utilisez le plugin <code>typst.vim</code> avec votre gestionnaire de plugins prefere.</p>
+
+      <h3>Autres editeurs</h3>
+
+      <p>NovaType utilise la syntaxe Typst, donc tout editeur supportant Typst fonctionnera.</p>
+
+      <div class="callout callout-success">
+        <div class="callout-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+            <path d="M22 4L12 14.01l-3-3"/>
+          </svg>
+          Pret !
+        </div>
+        <p style="margin: 0;">Vous etes maintenant pret a utiliser NovaType. Consultez le <a href="quick-start.html">guide de demarrage rapide</a> pour apprendre les bases.</p>
+      </div>
+
+      <h2>Prochaines etapes</h2>
+
+      <div class="grid grid-2" style="margin-top: var(--space-xl);">
+        <a href="quick-start.html" class="card" style="text-decoration: none;">
+          <h4 style="color: var(--nova-primary);">Demarrage rapide</h4>
+          <p class="text-muted" style="margin: 0;">Creez votre premier document en 5 minutes.</p>
+        </a>
+        <a href="syntax.html" class="card" style="text-decoration: none;">
+          <h4 style="color: var(--nova-primary);">Syntaxe de base</h4>
+          <p class="text-muted" style="margin: 0;">Apprenez les fondamentaux de NovaType.</p>
+        </a>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom" style="border-top: none; padding-top: 0;">
+        <p>&copy; 2024 NovaType. Tous droits reserves.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../assets/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+# Build artifacts
+/target/
+/nova-wasm/pkg/
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*~
+.*.swp
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Rust
+**/*.rs.bk
+Cargo.lock
+
+# Coverage
+*.profraw
+*.profdata
+lcov.info
+coverage/
+
+# Documentation build
+/docs/build/
+
+# Test artifacts
+/tests/output/
+
+# WASM build
+/nova-wasm/pkg/
+*.wasm
+typst/

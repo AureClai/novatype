@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://novatype.dev/schemas/article.json",
+  "title": "NovaType Article Schema",
+  "description": "Schema for validating article document metadata",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Document title"
+    },
+    "authors": {
+      "type": "array",
+      "description": "List of document authors",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Author's full name"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "Author's email address"
+          },
+          "affiliation": {
+            "type": "string",
+            "description": "Author's institutional affiliation"
+          },
+          "orcid": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{4}-\\d{4}-\\d{3}[\\dX]$",
+            "description": "ORCID identifier"
+          }
+        },
+        "required": ["name"]
+      }
+    },
+    "date": {
+      "type": "string",
+      "description": "Document date (ISO 8601 or 'auto')"
+    },
+    "abstract": {
+      "type": "string",
+      "description": "Document abstract"
+    },
+    "keywords": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Keywords for indexing"
+    },
+    "template": {
+      "type": "string",
+      "description": "Template name to use"
+    },
+    "citation_style": {
+      "type": "string",
+      "enum": ["ieee", "apa", "chicago", "harvard", "nature", "vancouver"],
+      "description": "Citation formatting style"
+    },
+    "bibliography": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Bibliography file paths"
+    },
+    "language": {
+      "type": "string",
+      "pattern": "^[a-z]{2}(-[A-Z]{2})?$",
+      "description": "Document language (e.g., 'en', 'fr-CA')"
+    }
+  },
+  "required": ["title"]
+}

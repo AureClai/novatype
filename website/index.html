@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="NovaType - Systeme de composition typographique moderne. Creez des documents scientifiques professionnels avec une syntaxe intuitive et une compilation instantanee.">
+  <meta name="keywords" content="NovaType, Typst, LaTeX, composition typographique, documents scientifiques, PDF">
+  <title>NovaType - Composition Typographique Moderne</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar" id="navbar">
+    <div class="container">
+      <a href="index.html" class="nav-logo">
+        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="32" height="32" rx="8" fill="#2563eb"/>
+          <path d="M8 10h4l4 12h-4L8 10z" fill="white"/>
+          <path d="M14 10h4l6 12h-4l-6-12z" fill="white" fill-opacity="0.7"/>
+          <circle cx="24" cy="10" r="3" fill="#10b981"/>
+        </svg>
+        NovaType
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html" class="active">Accueil</a></li>
+        <li><a href="demos.html">Demos</a></li>
+        <li><a href="docs/index.html">Documentation</a></li>
+        <li><a href="docs/templates.html">Templates</a></li>
+        <li><a href="https://github.com/novatype" target="_blank">GitHub</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="docs/getting-started.html" class="btn btn-primary">Commencer</a>
+        <button class="nav-toggle" id="navToggle" aria-label="Menu">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 12h18M3 6h18M3 18h18"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-badge">
+          <span class="dot"></span>
+          Version 1.0 disponible
+        </div>
+        <h1>La composition typographique reimaginee</h1>
+        <p>
+          NovaType combine la puissance de LaTeX avec une syntaxe moderne et intuitive.
+          Creez des documents scientifiques professionnels avec une compilation instantanee,
+          des citations intelligentes et des visualisations de donnees integrees.
+        </p>
+        <div class="hero-actions">
+          <a href="docs/getting-started.html" class="btn btn-primary btn-lg">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+            Commencer
+          </a>
+          <a href="demos.html" class="btn btn-outline btn-lg">
+            Voir les demos
+          </a>
+        </div>
+        <div class="hero-code">
+          <div class="dots">
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+          </div>
+          <pre><code><span class="token-comment">// Installation rapide</span>
+<span class="token-function">$</span> nova init mon-article
+<span class="token-function">$</span> nova compile main.typ --open
+
+<span class="token-comment">// Votre premier document</span>
+<span class="token-keyword">#set</span> document(title: <span class="token-string">"Mon Article"</span>)
+<span class="token-keyword">=</span> Introduction
+Bienvenue dans <span class="token-property">*NovaType*</span>!</code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features section">
+    <div class="container">
+      <div class="features-header">
+        <h2>Pourquoi NovaType ?</h2>
+        <p>Une solution complete pour la redaction scientifique moderne, construite sur les meilleures technologies.</p>
+      </div>
+      <div class="grid grid-3">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+            </svg>
+          </div>
+          <h3>Compilation Instantanee</h3>
+          <p>Visualisez vos modifications en temps reel. Fini les longues attentes de compilation LaTeX.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+            </svg>
+          </div>
+          <h3>Syntaxe Intuitive</h3>
+          <p>Une syntaxe claire et lisible, inspiree de Markdown mais avec toute la puissance necessaire.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 19.5A2.5 2.5 0 016.5 17H20"/>
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/>
+            </svg>
+          </div>
+          <h3>Citations Intelligentes</h3>
+          <p>BibTeX, CrossRef API, Zotero. Gerez vos references avec des styles academiques (APA, IEEE, Chicago...).</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 3v18h18"/>
+              <path d="M18 17l-5-5-4 4-3-3"/>
+            </svg>
+          </div>
+          <h3>Visualisation de Donnees</h3>
+          <p>Creez des graphiques directement depuis vos CSV/JSON. Line, Bar, Scatter, Pie et plus encore.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+              <path d="M3 9h18M9 21V9"/>
+            </svg>
+          </div>
+          <h3>Templates Professionnels</h3>
+          <p>IEEE, Nature, rapports, presentations, CV... Demarrez rapidement avec nos modeles pre-configures.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/>
+            </svg>
+          </div>
+          <h3>WebAssembly</h3>
+          <p>Compilez vos documents directement dans le navigateur. Aucune installation requise pour vos utilisateurs.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Comparison Section -->
+  <section class="section section-alt">
+    <div class="container">
+      <div class="features-header">
+        <h2>NovaType vs. Alternatives</h2>
+        <p>Comparez NovaType aux solutions existantes et decouvrez pourquoi il est temps de changer.</p>
+      </div>
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th>Fonctionnalite</th>
+            <th>NovaType</th>
+            <th>LaTeX</th>
+            <th>Word</th>
+            <th>Markdown</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Compilation instantanee</td>
+            <td><span class="check-icon">&#10003;</span></td>
+            <td><span class="cross-icon">&#10007;</span></td>
+            <td><span class="check-icon">&#10003;</span></td>
+            <td><span class="check-icon">&#10003;</span></td>
+          </tr>
+          <tr>
+            <td>Equations mathematiques avancees</td>
+            <td><span class="check-icon">&#10003;</span></td>
+            <td><span class="check-icon">&#10003;</span></td>
+            <td><span class="cross-icon">&#10007;</span></td>
+            <td><span class="cross-icon">&#10007;</span></td>
+          </tr>
+          <tr>
+            <td>Gestion des citations</td>
+            <td><span class="check-icon">&#10003;</span></td>
+            <td><span class="check-icon">&#10003;</span></td>
+            <td><span class="check-icon">&#10003;</span></td>
+            <td><span class="cross-icon">&#10007;</span></td>
+          </tr>
+          <tr>
+            <td>Syntaxe simple</td>
+            <td><span class="check-icon">&#10003;</span></td>
+            <td><span class="cross-icon">&#10007;</span></td>
+            <td><span class="check-icon">&#10003;</span></td>
+            <td><span class="check-icon">&#10003;</span></td>
+          </tr>
+          <tr>
+            <td>Visualisation de donnees integree</td>
+            <td><span class="check-icon">&#10003;</span></td>
+            <td><span class="cross-icon">&#10007;</span></td>
+            <td><span class="check-icon">&#10003;</span></td>
+            <td><span class="cross-icon">&#10007;</span></td>
+          </tr>
+          <tr>
+            <td>Validation de schema</td>
+            <td><span class="check-icon">&#10003;</span></td>
+            <td><span class="cross-icon">&#10007;</span></td>
+            <td><span class="cross-icon">&#10007;</span></td>
+            <td><span class="cross-icon">&#10007;</span></td>
+          </tr>
+          <tr>
+            <td>Execution dans le navigateur</td>
+            <td><span class="check-icon">&#10003;</span></td>
+            <td><span class="cross-icon">&#10007;</span></td>
+            <td><span class="cross-icon">&#10007;</span></td>
+            <td><span class="check-icon">&#10003;</span></td>
+          </tr>
+          <tr>
+            <td>Qualite typographique professionnelle</td>
+            <td><span class="check-icon">&#10003;</span></td>
+            <td><span class="check-icon">&#10003;</span></td>
+            <td><span class="cross-icon">&#10007;</span></td>
+            <td><span class="cross-icon">&#10007;</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Code Example Section -->
+  <section class="section">
+    <div class="container">
+      <div class="features-header">
+        <h2>Simple et Puissant</h2>
+        <p>Decouvrez la syntaxe NovaType a travers des exemples concrets.</p>
+      </div>
+      <div class="code-example">
+        <div class="code-tabs">
+          <button class="code-tab active" data-tab="basic">Document de base</button>
+          <button class="code-tab" data-tab="math">Equations</button>
+          <button class="code-tab" data-tab="citations">Citations</button>
+          <button class="code-tab" data-tab="plots">Graphiques</button>
+        </div>
+        <div class="code-content">
+          <pre id="code-basic"><code><span class="token-comment">// Configuration du document</span>
+<span class="token-keyword">#set</span> document(title: <span class="token-string">"Mon Article Scientifique"</span>, author: <span class="token-string">"Dr. Martin"</span>)
+<span class="token-keyword">#set</span> page(paper: <span class="token-string">"a4"</span>, margin: <span class="token-number">2.5cm</span>)
+<span class="token-keyword">#set</span> text(font: <span class="token-string">"Arial"</span>, size: <span class="token-number">11pt</span>, lang: <span class="token-string">"fr"</span>)
+
+<span class="token-comment">// Titre centre</span>
+<span class="token-keyword">#align</span>(center)[
+  <span class="token-keyword">#text</span>(size: <span class="token-number">24pt</span>, weight: <span class="token-string">"bold"</span>)[Titre du Document]
+  <span class="token-keyword">#v</span>(<span class="token-number">1em</span>)
+  Auteur | <span class="token-keyword">#datetime.today</span>().display()
+]
+
+<span class="token-comment">// Contenu</span>
+<span class="token-keyword">=</span> Introduction
+
+Votre texte ici avec du <span class="token-property">*gras*</span> et de l'<span class="token-property">_italique_</span>.
+
+<span class="token-keyword">=</span> Methodologie
+
+- Premier point
+- Deuxieme point
+- Troisieme point</code></pre>
+          <pre id="code-math" class="hidden"><code><span class="token-comment">// Equations en ligne</span>
+La formule d'Euler : <span class="token-keyword">$</span> e^(i pi) + <span class="token-number">1</span> = <span class="token-number">0</span> <span class="token-keyword">$</span>
+
+<span class="token-comment">// Equations numerotees</span>
+<span class="token-keyword">$</span> integral_(-infinity)^(+infinity) e^(-x^<span class="token-number">2</span>) dif x = sqrt(pi) <span class="token-keyword">$</span> <span class="token-operator">&lt;eq:gauss&gt;</span>
+
+Voir l'equation <span class="token-operator">@eq:gauss</span> pour la demonstration.
+
+<span class="token-comment">// Matrices</span>
+<span class="token-keyword">$</span> bold(A) = mat(
+  a_(<span class="token-number">11</span>), a_(<span class="token-number">12</span>);
+  a_(<span class="token-number">21</span>), a_(<span class="token-number">22</span>)
+) <span class="token-keyword">$</span>
+
+<span class="token-comment">// Systemes d'equations</span>
+<span class="token-keyword">$</span> cases(
+  x + y = <span class="token-number">10</span>,
+  x - y = <span class="token-number">2</span>
+) <span class="token-keyword">$</span></code></pre>
+          <pre id="code-citations" class="hidden"><code><span class="token-comment">// Frontmatter YAML avec bibliographie</span>
+<span class="token-operator">---</span>
+<span class="token-property">title</span>: <span class="token-string">"Mon Article"</span>
+<span class="token-property">bibliography</span>: <span class="token-string">"references.bib"</span>
+<span class="token-property">citation_style</span>: <span class="token-string">"ieee"</span>
+<span class="token-operator">---</span>
+
+<span class="token-comment">// Citation simple</span>
+Selon les travaux de <span class="token-operator">@knuth1984</span>, la typographie...
+
+<span class="token-comment">// Citation avec page</span>
+Comme mentionne dans <span class="token-operator">@lamport1994</span>[p. 42]...
+
+<span class="token-comment">// Citations multiples</span>
+Plusieurs etudes <span class="token-operator">@smith2020</span> <span class="token-operator">@jones2021</span> confirment...
+
+<span class="token-comment">// Bibliographie automatique</span>
+<span class="token-keyword">#bibliography</span>(<span class="token-string">"references.bib"</span>, style: <span class="token-string">"ieee"</span>)</code></pre>
+          <pre id="code-plots" class="hidden"><code><span class="token-comment">// Graphique depuis CSV</span>
+<span class="token-keyword">#nova-plot</span>(
+  data: <span class="token-string">"data.csv"</span>,
+  type: <span class="token-string">"line"</span>,
+  title: <span class="token-string">"Evolution temporelle"</span>,
+  x-label: <span class="token-string">"Temps (s)"</span>,
+  y-label: <span class="token-string">"Valeur"</span>
+)
+
+<span class="token-comment">// Graphique en barres</span>
+<span class="token-keyword">#nova-plot</span>(
+  data: <span class="token-string">"results.json"</span>,
+  type: <span class="token-string">"bar"</span>,
+  title: <span class="token-string">"Comparaison des methodes"</span>,
+  colors: (<span class="token-string">"#2563eb"</span>, <span class="token-string">"#10b981"</span>, <span class="token-string">"#f59e0b"</span>)
+)
+
+<span class="token-comment">// Nuage de points</span>
+<span class="token-keyword">#nova-plot</span>(
+  data: <span class="token-string">"correlation.csv"</span>,
+  type: <span class="token-string">"scatter"</span>,
+  title: <span class="token-string">"Correlation X-Y"</span>,
+  trend-line: <span class="token-keyword">true</span>
+)</code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Templates Section -->
+  <section class="section section-alt">
+    <div class="container">
+      <div class="features-header">
+        <h2>Templates Professionnels</h2>
+        <p>Demarrez rapidement avec nos modeles pre-configures pour tous vos besoins.</p>
+      </div>
+      <div class="grid grid-4">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+                <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/>
+              </svg>
+            </div>
+            <h4>Article</h4>
+          </div>
+          <p class="text-muted">Articles generaux et documents academiques simples.</p>
+          <code class="text-primary">nova init -t article</code>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M12 6v6l4 2"/>
+              </svg>
+            </div>
+            <h4>IEEE</h4>
+          </div>
+          <p class="text-muted">Format officiel IEEE pour conferences et journaux.</p>
+          <code class="text-primary">nova init -t ieee-article</code>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/>
+                <path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/>
+              </svg>
+            </div>
+            <h4>Nature</h4>
+          </div>
+          <p class="text-muted">Style Nature pour publications scientifiques.</p>
+          <code class="text-primary">nova init -t nature-article</code>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                <path d="M22 6l-10 7L2 6"/>
+              </svg>
+            </div>
+            <h4>Report</h4>
+          </div>
+          <p class="text-muted">Rapports techniques et business.</p>
+          <code class="text-primary">nova init -t report</code>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 19.5A2.5 2.5 0 016.5 17H20"/>
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/>
+              </svg>
+            </div>
+            <h4>Book</h4>
+          </div>
+          <p class="text-muted">Livres et documents longs avec chapitres.</p>
+          <code class="text-primary">nova init -t book</code>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                <path d="M8 21h8M12 17v4"/>
+              </svg>
+            </div>
+            <h4>Presentation</h4>
+          </div>
+          <p class="text-muted">Slides et presentations professionnelles.</p>
+          <code class="text-primary">nova init -t presentation</code>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
+                <circle cx="12" cy="7" r="4"/>
+              </svg>
+            </div>
+            <h4>CV</h4>
+          </div>
+          <p class="text-muted">Curriculum vitae et resumes elegants.</p>
+          <code class="text-primary">nova init -t cv</code>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                <path d="M2 17l10 5 10-5"/>
+                <path d="M2 12l10 5 10-5"/>
+              </svg>
+            </div>
+            <h4>Custom</h4>
+          </div>
+          <p class="text-muted">Creez vos propres templates.</p>
+          <code class="text-primary">nova template new</code>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="section" style="background: linear-gradient(135deg, var(--nova-primary) 0%, var(--nova-primary-dark) 100%); color: white;">
+    <div class="container text-center">
+      <h2 style="color: white;">Pret a revolutionner votre redaction ?</h2>
+      <p style="color: rgba(255,255,255,0.8); max-width: 600px; margin: var(--space-lg) auto;">
+        Rejoignez des milliers de chercheurs et professionnels qui ont adopte NovaType pour leurs documents.
+      </p>
+      <div class="flex-center gap-md" style="margin-top: var(--space-xl);">
+        <a href="docs/getting-started.html" class="btn btn-lg" style="background: white; color: var(--nova-primary);">
+          Commencer gratuitement
+        </a>
+        <a href="docs/index.html" class="btn btn-lg" style="background: rgba(255,255,255,0.2); color: white; border: 2px solid rgba(255,255,255,0.5);">
+          Lire la documentation
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="nav-logo" style="color: white;">
+            <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" width="32" height="32">
+              <rect width="32" height="32" rx="8" fill="#2563eb"/>
+              <path d="M8 10h4l4 12h-4L8 10z" fill="white"/>
+              <path d="M14 10h4l6 12h-4l-6-12z" fill="white" fill-opacity="0.7"/>
+              <circle cx="24" cy="10" r="3" fill="#10b981"/>
+            </svg>
+            NovaType
+          </a>
+          <p>Systeme de composition typographique moderne pour la redaction scientifique.</p>
+        </div>
+        <div>
+          <h4 class="footer-title">Produit</h4>
+          <ul class="footer-links">
+            <li><a href="docs/getting-started.html">Installation</a></li>
+            <li><a href="docs/templates.html">Templates</a></li>
+            <li><a href="demos.html">Demos</a></li>
+            <li><a href="docs/cli.html">CLI Reference</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-title">Documentation</h4>
+          <ul class="footer-links">
+            <li><a href="docs/index.html">Guide</a></li>
+            <li><a href="docs/citations.html">Citations</a></li>
+            <li><a href="docs/plots.html">Graphiques</a></li>
+            <li><a href="docs/api.html">API WebAssembly</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-title">Communaute</h4>
+          <ul class="footer-links">
+            <li><a href="https://github.com/novatype" target="_blank">GitHub</a></li>
+            <li><a href="https://discord.gg/novatype" target="_blank">Discord</a></li>
+            <li><a href="https://twitter.com/novatype" target="_blank">Twitter</a></li>
+            <li><a href="mailto:contact@novatype.dev">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2024 NovaType. Tous droits reserves.</p>
+        <div class="footer-social">
+          <a href="https://github.com/novatype" target="_blank" aria-label="GitHub">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+            </svg>
+          </a>
+          <a href="https://discord.gg/novatype" target="_blank" aria-label="Discord">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 00-.041-.106 13.107 13.107 0 01-1.872-.892.077.077 0 01-.008-.128 10.2 10.2 0 00.372-.292.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.839 19.839 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+            </svg>
+          </a>
+          <a href="https://twitter.com/novatype" target="_blank" aria-label="Twitter">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

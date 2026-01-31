@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Demos interactives NovaType - Testez la syntaxe et visualisez le rendu en temps reel.">
+  <title>Demos - NovaType</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <style>
+    .demo-page-hero {
+      padding: 8rem 0 3rem;
+      background: var(--nova-lighter);
+    }
+    .demo-examples {
+      display: grid;
+      gap: var(--space-xl);
+      margin-top: var(--space-2xl);
+    }
+    .demo-card {
+      background: var(--nova-white);
+      border: 1px solid var(--nova-light);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+    .demo-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--space-md) var(--space-lg);
+      background: var(--nova-lighter);
+      border-bottom: 1px solid var(--nova-light);
+    }
+    .demo-card-title {
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    .demo-card-body {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+    .demo-input, .demo-output {
+      padding: var(--space-lg);
+    }
+    .demo-input {
+      background: var(--nova-darker);
+      border-right: 1px solid var(--nova-light);
+    }
+    .demo-input textarea {
+      width: 100%;
+      min-height: 300px;
+      background: transparent;
+      border: none;
+      color: var(--nova-light);
+      font-family: var(--font-mono);
+      font-size: 0.875rem;
+      line-height: 1.7;
+      resize: vertical;
+    }
+    .demo-input textarea:focus {
+      outline: none;
+    }
+    .demo-output {
+      background: var(--nova-white);
+      min-height: 300px;
+    }
+    .demo-output-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--nova-secondary);
+      margin-bottom: var(--space-md);
+    }
+    .demo-result {
+      font-family: 'Times New Roman', serif;
+      line-height: 1.8;
+    }
+    .demo-result h1 {
+      font-size: 1.5rem;
+      margin-bottom: var(--space-md);
+      color: var(--nova-primary);
+    }
+    .demo-result h2 {
+      font-size: 1.25rem;
+      margin-top: var(--space-lg);
+      margin-bottom: var(--space-sm);
+    }
+    .demo-result .equation {
+      text-align: center;
+      padding: var(--space-md);
+      background: var(--nova-lighter);
+      border-radius: var(--radius-sm);
+      margin: var(--space-md) 0;
+      font-style: italic;
+    }
+    .demo-result table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: var(--space-md) 0;
+    }
+    .demo-result th, .demo-result td {
+      padding: var(--space-sm);
+      border: 1px solid var(--nova-light);
+      text-align: left;
+    }
+    .demo-result th {
+      background: var(--nova-lighter);
+      font-weight: 600;
+    }
+    .demo-result figure {
+      margin: var(--space-lg) 0;
+      text-align: center;
+    }
+    .demo-result figcaption {
+      font-size: 0.875rem;
+      color: var(--nova-secondary);
+      margin-top: var(--space-sm);
+    }
+    .demo-chart {
+      background: var(--nova-lighter);
+      border-radius: var(--radius-md);
+      padding: var(--space-lg);
+      height: 200px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-around;
+      gap: var(--space-sm);
+    }
+    .demo-bar {
+      width: 40px;
+      background: linear-gradient(to top, var(--nova-primary), var(--nova-primary-light));
+      border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+      transition: height 0.3s ease;
+    }
+    @media (max-width: 968px) {
+      .demo-card-body {
+        grid-template-columns: 1fr;
+      }
+      .demo-input {
+        border-right: none;
+        border-bottom: 1px solid var(--nova-light);
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar" id="navbar">
+    <div class="container">
+      <a href="index.html" class="nav-logo">
+        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="32" height="32" rx="8" fill="#2563eb"/>
+          <path d="M8 10h4l4 12h-4L8 10z" fill="white"/>
+          <path d="M14 10h4l6 12h-4l-6-12z" fill="white" fill-opacity="0.7"/>
+          <circle cx="24" cy="10" r="3" fill="#10b981"/>
+        </svg>
+        NovaType
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html">Accueil</a></li>
+        <li><a href="demos.html" class="active">Demos</a></li>
+        <li><a href="docs/index.html">Documentation</a></li>
+        <li><a href="docs/templates.html">Templates</a></li>
+        <li><a href="https://github.com/novatype" target="_blank">GitHub</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="docs/getting-started.html" class="btn btn-primary">Commencer</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="demo-page-hero">
+    <div class="container">
+      <div class="features-header" style="margin-bottom: 0;">
+        <h1>Demos Interactives</h1>
+        <p>Explorez la syntaxe NovaType et visualisez le rendu en temps reel. Modifiez le code a gauche pour voir le resultat a droite.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Demos -->
+  <section class="section">
+    <div class="container">
+      <div class="demo-examples">
+
+        <!-- Demo 1: Document de base -->
+        <div class="demo-card">
+          <div class="demo-card-header">
+            <span class="demo-card-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--nova-primary)" stroke-width="2">
+                <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+                <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/>
+              </svg>
+              Document de base
+            </span>
+            <span class="text-muted" style="font-size: 0.875rem;">Syntaxe fondamentale</span>
+          </div>
+          <div class="demo-card-body">
+            <div class="demo-input">
+              <textarea id="demo1-input" spellcheck="false">// Configuration
+#set document(title: "Mon Article")
+#set text(font: "Arial", size: 11pt)
+
+// Titre
+#align(center)[
+  #text(size: 20pt, weight: "bold")[
+    Introduction a NovaType
+  ]
+  #v(0.5em)
+  Par Dr. Martin | Janvier 2024
+]
+
+= Premiere Section
+
+Ceci est un paragraphe avec du *texte en gras*
+et de l'_italique_. NovaType rend la
+redaction simple et intuitive.
+
+= Deuxieme Section
+
+- Premier element de liste
+- Deuxieme element
+- Troisieme element
+
++ Liste numerotee
++ Deuxieme point
++ Troisieme point</textarea>
+            </div>
+            <div class="demo-output">
+              <div class="demo-output-label">Apercu du rendu</div>
+              <div class="demo-result" id="demo1-output">
+                <div style="text-align: center; margin-bottom: 1.5em;">
+                  <h1 style="margin-bottom: 0.5em;">Introduction a NovaType</h1>
+                  <p style="color: var(--nova-secondary); margin: 0;">Par Dr. Martin | Janvier 2024</p>
+                </div>
+                <h2 style="color: var(--nova-primary); border-bottom: 2px solid var(--nova-primary); padding-bottom: 0.3em;">1. Premiere Section</h2>
+                <p>Ceci est un paragraphe avec du <strong>texte en gras</strong> et de l'<em>italique</em>. NovaType rend la redaction simple et intuitive.</p>
+                <h2 style="color: var(--nova-primary); border-bottom: 2px solid var(--nova-primary); padding-bottom: 0.3em;">2. Deuxieme Section</h2>
+                <ul>
+                  <li>Premier element de liste</li>
+                  <li>Deuxieme element</li>
+                  <li>Troisieme element</li>
+                </ul>
+                <ol>
+                  <li>Liste numerotee</li>
+                  <li>Deuxieme point</li>
+                  <li>Troisieme point</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Demo 2: Equations mathematiques -->
+        <div class="demo-card">
+          <div class="demo-card-header">
+            <span class="demo-card-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--nova-primary)" stroke-width="2">
+                <path d="M4 4h16M4 8h10M4 12h16M4 16h10M4 20h16"/>
+              </svg>
+              Equations Mathematiques
+            </span>
+            <span class="text-muted" style="font-size: 0.875rem;">Formules et notations</span>
+          </div>
+          <div class="demo-card-body">
+            <div class="demo-input">
+              <textarea id="demo2-input" spellcheck="false">= Equations en NovaType
+
+== Equations en ligne
+
+La celebre formule d'Euler : $ e^(i pi) + 1 = 0 $
+
+== Equations centrees
+
+L'integrale de Gauss :
+
+$ integral_(-infinity)^(+infinity) e^(-x^2) dif x = sqrt(pi) $
+
+== Matrices
+
+$ bold(A) = mat(
+  1, 2, 3;
+  4, 5, 6;
+  7, 8, 9
+) $
+
+== Systemes d'equations
+
+$ cases(
+  x + y = 10,
+  2x - y = 5
+) $
+
+Solution : $x = 5$ et $y = 5$</textarea>
+            </div>
+            <div class="demo-output">
+              <div class="demo-output-label">Apercu du rendu</div>
+              <div class="demo-result" id="demo2-output">
+                <h2 style="color: var(--nova-primary); border-bottom: 2px solid var(--nova-primary); padding-bottom: 0.3em;">Equations en NovaType</h2>
+                <h3>Equations en ligne</h3>
+                <p>La celebre formule d'Euler : <em>e<sup>ipi</sup> + 1 = 0</em></p>
+                <h3>Equations centrees</h3>
+                <p>L'integrale de Gauss :</p>
+                <div class="equation">
+                  <math display="block">
+                    <mrow><msubsup><mo>&int;</mo><mrow><mo>-</mo><mo>&infin;</mo></mrow><mrow><mo>+</mo><mo>&infin;</mo></mrow></msubsup><msup><mi>e</mi><mrow><mo>-</mo><msup><mi>x</mi><mn>2</mn></msup></mrow></msup><mi>dx</mi><mo>=</mo><msqrt><mi>&pi;</mi></msqrt></mrow>
+                  </math>
+                  <div style="font-family: var(--font-mono); font-size: 1.1em;">integral_{-infty}^{+infty} e^{-x^2} dx = sqrt(pi)</div>
+                </div>
+                <h3>Matrices</h3>
+                <div class="equation">
+                  <table style="margin: 0 auto; border: none;">
+                    <tr><td style="border: none; padding: 0.3em; text-align: center;">1</td><td style="border: none; padding: 0.3em; text-align: center;">2</td><td style="border: none; padding: 0.3em; text-align: center;">3</td></tr>
+                    <tr><td style="border: none; padding: 0.3em; text-align: center;">4</td><td style="border: none; padding: 0.3em; text-align: center;">5</td><td style="border: none; padding: 0.3em; text-align: center;">6</td></tr>
+                    <tr><td style="border: none; padding: 0.3em; text-align: center;">7</td><td style="border: none; padding: 0.3em; text-align: center;">8</td><td style="border: none; padding: 0.3em; text-align: center;">9</td></tr>
+                  </table>
+                </div>
+                <h3>Systemes d'equations</h3>
+                <div class="equation">
+                  x + y = 10<br>
+                  2x - y = 5
+                </div>
+                <p>Solution : <em>x = 5</em> et <em>y = 5</em></p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Demo 3: Tableaux et figures -->
+        <div class="demo-card">
+          <div class="demo-card-header">
+            <span class="demo-card-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--nova-primary)" stroke-width="2">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                <path d="M3 9h18M9 21V9"/>
+              </svg>
+              Tableaux et Figures
+            </span>
+            <span class="text-muted" style="font-size: 0.875rem;">Presentation des donnees</span>
+          </div>
+          <div class="demo-card-body">
+            <div class="demo-input">
+              <textarea id="demo3-input" spellcheck="false">= Resultats de l'etude
+
+== Tableau comparatif
+
+#figure(
+  table(
+    columns: 4,
+    [*Methode*], [*Precision*], [*Rappel*], [*F1*],
+    [Baseline], [0.72], [0.68], [0.70],
+    [Model A], [0.85], [0.82], [0.83],
+    [Model B], [0.89], [0.87], [0.88],
+    [NovaType], [0.94], [0.91], [0.92],
+  ),
+  caption: [Comparaison des performances]
+) <tab:results>
+
+Les resultats du @tab:results montrent que
+NovaType surpasse les autres methodes.
+
+== Graphique
+
+#nova-plot(
+  data: "results.csv",
+  type: "bar",
+  title: "Performance par methode"
+)</textarea>
+            </div>
+            <div class="demo-output">
+              <div class="demo-output-label">Apercu du rendu</div>
+              <div class="demo-result" id="demo3-output">
+                <h2 style="color: var(--nova-primary); border-bottom: 2px solid var(--nova-primary); padding-bottom: 0.3em;">Resultats de l'etude</h2>
+                <h3>Tableau comparatif</h3>
+                <figure>
+                  <table>
+                    <thead>
+                      <tr><th>Methode</th><th>Precision</th><th>Rappel</th><th>F1</th></tr>
+                    </thead>
+                    <tbody>
+                      <tr><td>Baseline</td><td>0.72</td><td>0.68</td><td>0.70</td></tr>
+                      <tr><td>Model A</td><td>0.85</td><td>0.82</td><td>0.83</td></tr>
+                      <tr><td>Model B</td><td>0.89</td><td>0.87</td><td>0.88</td></tr>
+                      <tr style="background: rgba(37, 99, 235, 0.1);"><td><strong>NovaType</strong></td><td><strong>0.94</strong></td><td><strong>0.91</strong></td><td><strong>0.92</strong></td></tr>
+                    </tbody>
+                  </table>
+                  <figcaption>Tableau 1 : Comparaison des performances</figcaption>
+                </figure>
+                <p>Les resultats du <em>Tableau 1</em> montrent que NovaType surpasse les autres methodes.</p>
+                <h3>Graphique</h3>
+                <figure>
+                  <div class="demo-chart">
+                    <div style="text-align: center;">
+                      <div class="demo-bar" style="height: 70%;"></div>
+                      <div style="font-size: 0.75rem; margin-top: 0.5em;">Baseline</div>
+                    </div>
+                    <div style="text-align: center;">
+                      <div class="demo-bar" style="height: 83%;"></div>
+                      <div style="font-size: 0.75rem; margin-top: 0.5em;">Model A</div>
+                    </div>
+                    <div style="text-align: center;">
+                      <div class="demo-bar" style="height: 88%;"></div>
+                      <div style="font-size: 0.75rem; margin-top: 0.5em;">Model B</div>
+                    </div>
+                    <div style="text-align: center;">
+                      <div class="demo-bar" style="height: 92%; background: linear-gradient(to top, var(--nova-accent), #34d399);"></div>
+                      <div style="font-size: 0.75rem; margin-top: 0.5em;">NovaType</div>
+                    </div>
+                  </div>
+                  <figcaption>Figure 1 : Performance par methode (F1-Score)</figcaption>
+                </figure>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Demo 4: Citations -->
+        <div class="demo-card">
+          <div class="demo-card-header">
+            <span class="demo-card-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--nova-primary)" stroke-width="2">
+                <path d="M4 19.5A2.5 2.5 0 016.5 17H20"/>
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/>
+              </svg>
+              Citations et Bibliographie
+            </span>
+            <span class="text-muted" style="font-size: 0.875rem;">Gestion des references</span>
+          </div>
+          <div class="demo-card-body">
+            <div class="demo-input">
+              <textarea id="demo4-input" spellcheck="false">---
+title: "Mon Article Scientifique"
+bibliography: "references.bib"
+citation_style: "ieee"
+---
+
+= Introduction
+
+La composition typographique moderne trouve
+ses racines dans les travaux fondateurs de
+Knuth @knuth1984 sur TeX.
+
+LaTeX, developpe par Lamport @lamport1994,
+a democratise ces outils aupres de la
+communaute scientifique.
+
+Des etudes recentes @smith2020 @jones2021
+montrent l'interet croissant pour des
+alternatives plus modernes.
+
+= Conclusion
+
+NovaType represente l'evolution naturelle
+de ces systemes @madje2023.
+
+#bibliography("references.bib", style: "ieee")</textarea>
+            </div>
+            <div class="demo-output">
+              <div class="demo-output-label">Apercu du rendu</div>
+              <div class="demo-result" id="demo4-output">
+                <h2 style="color: var(--nova-primary); border-bottom: 2px solid var(--nova-primary); padding-bottom: 0.3em;">1. Introduction</h2>
+                <p>La composition typographique moderne trouve ses racines dans les travaux fondateurs de Knuth <sup>[1]</sup> sur TeX.</p>
+                <p>LaTeX, developpe par Lamport <sup>[2]</sup>, a democratise ces outils aupres de la communaute scientifique.</p>
+                <p>Des etudes recentes <sup>[3], [4]</sup> montrent l'interet croissant pour des alternatives plus modernes.</p>
+                <h2 style="color: var(--nova-primary); border-bottom: 2px solid var(--nova-primary); padding-bottom: 0.3em;">2. Conclusion</h2>
+                <p>NovaType represente l'evolution naturelle de ces systemes <sup>[5]</sup>.</p>
+                <h2 style="color: var(--nova-primary); border-bottom: 2px solid var(--nova-primary); padding-bottom: 0.3em;">References</h2>
+                <ol style="font-size: 0.9em; line-height: 1.6;">
+                  <li>D. E. Knuth, <em>The TeXbook</em>, Addison-Wesley, 1984.</li>
+                  <li>L. Lamport, <em>LaTeX: A Document Preparation System</em>, Addison-Wesley, 1994.</li>
+                  <li>J. Smith et al., "Modern typesetting systems," <em>J. Doc. Eng.</em>, vol. 12, no. 3, pp. 45-62, 2020.</li>
+                  <li>M. Jones, "Alternatives to LaTeX," <em>TUGboat</em>, vol. 42, no. 1, pp. 12-18, 2021.</li>
+                  <li>L. Madje and M. Haug, "Typst: A new approach," <em>J. Doc. Eng.</em>, vol. 15, no. 2, pp. 112-128, 2023.</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Demo 5: Template complet -->
+        <div class="demo-card">
+          <div class="demo-card-header">
+            <span class="demo-card-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--nova-primary)" stroke-width="2">
+                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                <path d="M2 17l10 5 10-5"/>
+                <path d="M2 12l10 5 10-5"/>
+              </svg>
+              Template IEEE Complet
+            </span>
+            <span class="text-muted" style="font-size: 0.875rem;">Document academique</span>
+          </div>
+          <div class="demo-card-body">
+            <div class="demo-input">
+              <textarea id="demo5-input" spellcheck="false">---
+title: "NovaType: A Modern Approach to
+        Scientific Document Composition"
+authors:
+  - name: "Jean Dupont"
+    affiliation: "Universite de Paris"
+    email: "jean.dupont@univ-paris.fr"
+  - name: "Marie Martin"
+    affiliation: "CNRS"
+abstract: |
+  This paper presents NovaType, a modern
+  document composition system that combines
+  the typographic quality of LaTeX with an
+  intuitive syntax and instant compilation.
+keywords:
+  - typesetting
+  - scientific writing
+  - Typst
+template: ieee-article
+---
+
+= Introduction
+
+NovaType addresses the limitations of
+existing document preparation systems...
+
+= Methodology
+
+== System Architecture
+
+The core architecture consists of:
++ Incremental compiler
++ Schema validator
++ Citation manager
++ Plot generator
+
+= Results
+
+Our evaluation shows significant
+improvements in productivity (34%
+reduction in writing time).
+
+= Conclusion
+
+NovaType represents a viable alternative
+for scientific document preparation.</textarea>
+            </div>
+            <div class="demo-output">
+              <div class="demo-output-label">Apercu du rendu (IEEE Style)</div>
+              <div class="demo-result" id="demo5-output" style="font-family: 'Times New Roman', serif;">
+                <div style="text-align: center; margin-bottom: 1.5em;">
+                  <h1 style="font-size: 1.4rem; margin-bottom: 1em;">NovaType: A Modern Approach to Scientific Document Composition</h1>
+                  <p style="margin: 0.3em 0;"><strong>Jean Dupont</strong></p>
+                  <p style="font-size: 0.9em; color: var(--nova-secondary); margin: 0;">Universite de Paris<br>jean.dupont@univ-paris.fr</p>
+                  <p style="margin: 0.8em 0 0.3em;"><strong>Marie Martin</strong></p>
+                  <p style="font-size: 0.9em; color: var(--nova-secondary); margin: 0;">CNRS</p>
+                </div>
+                <div style="background: var(--nova-lighter); padding: 1em; border-radius: var(--radius-sm); margin-bottom: 1.5em;">
+                  <p style="margin: 0;"><strong>Abstract</strong> - This paper presents NovaType, a modern document composition system that combines the typographic quality of LaTeX with an intuitive syntax and instant compilation.</p>
+                  <p style="margin: 0.5em 0 0; font-size: 0.9em;"><strong>Keywords:</strong> typesetting, scientific writing, Typst</p>
+                </div>
+                <div style="column-count: 2; column-gap: 2em; font-size: 0.9em;">
+                  <h3 style="font-size: 1em; margin-top: 0;">I. INTRODUCTION</h3>
+                  <p>NovaType addresses the limitations of existing document preparation systems...</p>
+                  <h3 style="font-size: 1em;">II. METHODOLOGY</h3>
+                  <p><em>A. System Architecture</em></p>
+                  <p>The core architecture consists of:</p>
+                  <ol style="padding-left: 1.5em;">
+                    <li>Incremental compiler</li>
+                    <li>Schema validator</li>
+                    <li>Citation manager</li>
+                    <li>Plot generator</li>
+                  </ol>
+                  <h3 style="font-size: 1em;">III. RESULTS</h3>
+                  <p>Our evaluation shows significant improvements in productivity (34% reduction in writing time).</p>
+                  <h3 style="font-size: 1em;">IV. CONCLUSION</h3>
+                  <p>NovaType represents a viable alternative for scientific document preparation.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Try It Section -->
+  <section class="section section-alt">
+    <div class="container text-center">
+      <h2>Pret a essayer ?</h2>
+      <p class="text-muted" style="max-width: 500px; margin: var(--space-md) auto;">
+        Installez NovaType en quelques secondes et commencez a creer vos documents.
+      </p>
+      <div class="hero-code" style="max-width: 600px; margin: var(--space-xl) auto 0; text-align: left;">
+        <div class="dots">
+          <span class="dot"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+        </div>
+        <pre><code><span class="token-comment"># Installation</span>
+<span class="token-function">$</span> cargo install nova-cli
+
+<span class="token-comment"># Creer un nouveau projet</span>
+<span class="token-function">$</span> nova init mon-article --template ieee-article
+
+<span class="token-comment"># Compiler et ouvrir</span>
+<span class="token-function">$</span> nova compile main.typ --open
+
+<span class="token-comment"># Mode watch (auto-recompilation)</span>
+<span class="token-function">$</span> nova watch main.typ</code></pre>
+      </div>
+      <div class="flex-center gap-md" style="margin-top: var(--space-xl);">
+        <a href="docs/getting-started.html" class="btn btn-primary btn-lg">Guide d'installation</a>
+        <a href="docs/index.html" class="btn btn-outline btn-lg">Documentation</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="nav-logo" style="color: white;">
+            <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" width="32" height="32">
+              <rect width="32" height="32" rx="8" fill="#2563eb"/>
+              <path d="M8 10h4l4 12h-4L8 10z" fill="white"/>
+              <path d="M14 10h4l6 12h-4l-6-12z" fill="white" fill-opacity="0.7"/>
+              <circle cx="24" cy="10" r="3" fill="#10b981"/>
+            </svg>
+            NovaType
+          </a>
+          <p>Systeme de composition typographique moderne pour la redaction scientifique.</p>
+        </div>
+        <div>
+          <h4 class="footer-title">Produit</h4>
+          <ul class="footer-links">
+            <li><a href="docs/getting-started.html">Installation</a></li>
+            <li><a href="docs/templates.html">Templates</a></li>
+            <li><a href="demos.html">Demos</a></li>
+            <li><a href="docs/cli.html">CLI Reference</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-title">Documentation</h4>
+          <ul class="footer-links">
+            <li><a href="docs/index.html">Guide</a></li>
+            <li><a href="docs/citations.html">Citations</a></li>
+            <li><a href="docs/plots.html">Graphiques</a></li>
+            <li><a href="docs/api.html">API WebAssembly</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-title">Communaute</h4>
+          <ul class="footer-links">
+            <li><a href="https://github.com/novatype" target="_blank">GitHub</a></li>
+            <li><a href="https://discord.gg/novatype" target="_blank">Discord</a></li>
+            <li><a href="https://twitter.com/novatype" target="_blank">Twitter</a></li>
+            <li><a href="mailto:contact@novatype.dev">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2024 NovaType. Tous droits reserves.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

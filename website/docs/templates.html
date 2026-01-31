@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Templates NovaType - Modeles professionnels pour documents scientifiques, rapports et presentations.">
+  <title>Templates - NovaType</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar" id="navbar">
+    <div class="container">
+      <a href="../index.html" class="nav-logo">
+        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="32" height="32" rx="8" fill="#2563eb"/>
+          <path d="M8 10h4l4 12h-4L8 10z" fill="white"/>
+          <path d="M14 10h4l6 12h-4l-6-12z" fill="white" fill-opacity="0.7"/>
+          <circle cx="24" cy="10" r="3" fill="#10b981"/>
+        </svg>
+        NovaType
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="../index.html">Accueil</a></li>
+        <li><a href="../demos.html">Demos</a></li>
+        <li><a href="index.html" class="active">Documentation</a></li>
+        <li><a href="templates.html">Templates</a></li>
+        <li><a href="https://github.com/novatype" target="_blank">GitHub</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="getting-started.html" class="btn btn-primary">Commencer</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Documentation Layout -->
+  <div class="container docs-layout" style="padding-top: 6rem;">
+    <!-- Sidebar -->
+    <aside class="docs-sidebar">
+      <nav class="docs-nav">
+        <div class="docs-nav-section">
+          <div class="docs-nav-title">Pour commencer</div>
+          <a href="getting-started.html" class="docs-nav-link">Installation</a>
+          <a href="index.html" class="docs-nav-link">Introduction</a>
+          <a href="quick-start.html" class="docs-nav-link">Demarrage rapide</a>
+        </div>
+        <div class="docs-nav-section">
+          <div class="docs-nav-title">Guide</div>
+          <a href="syntax.html" class="docs-nav-link">Syntaxe de base</a>
+          <a href="formatting.html" class="docs-nav-link">Mise en forme</a>
+          <a href="math.html" class="docs-nav-link">Equations</a>
+          <a href="tables.html" class="docs-nav-link">Tableaux</a>
+          <a href="figures.html" class="docs-nav-link">Figures</a>
+        </div>
+        <div class="docs-nav-section">
+          <div class="docs-nav-title">Fonctionnalites</div>
+          <a href="citations.html" class="docs-nav-link">Citations</a>
+          <a href="plots.html" class="docs-nav-link">Graphiques</a>
+          <a href="templates.html" class="docs-nav-link active">Templates</a>
+          <a href="schemas.html" class="docs-nav-link">Validation</a>
+        </div>
+        <div class="docs-nav-section">
+          <div class="docs-nav-title">Reference</div>
+          <a href="cli.html" class="docs-nav-link">CLI</a>
+          <a href="api.html" class="docs-nav-link">API WebAssembly</a>
+          <a href="config.html" class="docs-nav-link">Configuration</a>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- Content -->
+    <main class="docs-content">
+      <h1>Templates</h1>
+
+      <p class="text-secondary" style="font-size: 1.125rem; margin-bottom: var(--space-2xl);">
+        NovaType inclut des templates professionnels pour differents types de documents. Utilisez-les comme point de depart ou creez vos propres modeles.
+      </p>
+
+      <h2>Templates disponibles</h2>
+
+      <div class="grid grid-2" style="margin: var(--space-xl) 0;">
+
+        <!-- Article -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+                <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/>
+              </svg>
+            </div>
+            <h4>article</h4>
+          </div>
+          <p class="text-muted">Article simple pour documents generaux. Ideal pour commencer.</p>
+          <pre style="margin: var(--space-md) 0 0;"><code>nova init mon-doc -t article</code></pre>
+          <p style="margin-top: var(--space-md); font-size: 0.875rem;"><strong>Champs requis:</strong> title<br><strong>Champs optionnels:</strong> author, date, abstract</p>
+        </div>
+
+        <!-- IEEE -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon" style="background: var(--nova-accent);">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M12 6v6l4 2"/>
+              </svg>
+            </div>
+            <h4>ieee-article</h4>
+          </div>
+          <p class="text-muted">Format officiel IEEE pour conferences et journaux scientifiques.</p>
+          <pre style="margin: var(--space-md) 0 0;"><code>nova init paper -t ieee-article</code></pre>
+          <p style="margin-top: var(--space-md); font-size: 0.875rem;"><strong>Champs requis:</strong> title, authors<br><strong>Champs optionnels:</strong> abstract, keywords, bibliography</p>
+        </div>
+
+        <!-- Nature -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon" style="background: var(--nova-warning);">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/>
+                <path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/>
+              </svg>
+            </div>
+            <h4>nature-article</h4>
+          </div>
+          <p class="text-muted">Style Nature pour publications dans les journaux Nature.</p>
+          <pre style="margin: var(--space-md) 0 0;"><code>nova init research -t nature-article</code></pre>
+          <p style="margin-top: var(--space-md); font-size: 0.875rem;"><strong>Champs requis:</strong> title, authors<br><strong>Champs optionnels:</strong> abstract, keywords, affiliations</p>
+        </div>
+
+        <!-- Report -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                <path d="M22 6l-10 7L2 6"/>
+              </svg>
+            </div>
+            <h4>report</h4>
+          </div>
+          <p class="text-muted">Rapports techniques et business avec table des matieres.</p>
+          <pre style="margin: var(--space-md) 0 0;"><code>nova init rapport -t report</code></pre>
+          <p style="margin-top: var(--space-md); font-size: 0.875rem;"><strong>Champs requis:</strong> title<br><strong>Champs optionnels:</strong> author, date, organization, version</p>
+        </div>
+
+        <!-- Book -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon" style="background: #8b5cf6;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 19.5A2.5 2.5 0 016.5 17H20"/>
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/>
+              </svg>
+            </div>
+            <h4>book</h4>
+          </div>
+          <p class="text-muted">Livres et documents longs avec support de chapitres.</p>
+          <pre style="margin: var(--space-md) 0 0;"><code>nova init livre -t book</code></pre>
+          <p style="margin-top: var(--space-md); font-size: 0.875rem;"><strong>Champs requis:</strong> title, author<br><strong>Champs optionnels:</strong> publisher, year, isbn</p>
+        </div>
+
+        <!-- Presentation -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon" style="background: #ec4899;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                <path d="M8 21h8M12 17v4"/>
+              </svg>
+            </div>
+            <h4>presentation</h4>
+          </div>
+          <p class="text-muted">Slides et presentations professionnelles.</p>
+          <pre style="margin: var(--space-md) 0 0;"><code>nova init slides -t presentation</code></pre>
+          <p style="margin-top: var(--space-md); font-size: 0.875rem;"><strong>Champs requis:</strong> title<br><strong>Champs optionnels:</strong> author, date, event</p>
+        </div>
+
+        <!-- CV -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon" style="background: #14b8a6;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
+                <circle cx="12" cy="7" r="4"/>
+              </svg>
+            </div>
+            <h4>cv</h4>
+          </div>
+          <p class="text-muted">Curriculum vitae et resumes elegants.</p>
+          <pre style="margin: var(--space-md) 0 0;"><code>nova init mon-cv -t cv</code></pre>
+          <p style="margin-top: var(--space-md); font-size: 0.875rem;"><strong>Champs requis:</strong> name<br><strong>Champs optionnels:</strong> email, phone, address, linkedin</p>
+        </div>
+
+      </div>
+
+      <h2>Utiliser un template</h2>
+
+      <h3>Initialisation</h3>
+
+      <pre><code><span class="token-comment"># Creer un projet avec un template</span>
+<span class="token-function">$</span> nova init mon-article --template ieee-article
+
+<span class="token-comment"># Se deplacer dans le projet</span>
+<span class="token-function">$</span> cd mon-article
+
+<span class="token-comment"># Editer le fichier principal</span>
+<span class="token-function">$</span> code main.typ</code></pre>
+
+      <h3>Structure d'un projet</h3>
+
+      <pre><code>mon-article/
+├── main.typ          <span class="token-comment"># Document principal avec frontmatter</span>
+├── nova.toml         <span class="token-comment"># Configuration du projet</span>
+├── references.bib    <span class="token-comment"># Bibliographie BibTeX</span>
+└── .gitignore</code></pre>
+
+      <h3>Exemple de document IEEE</h3>
+
+      <pre><code><span class="token-comment">// Frontmatter YAML</span>
+<span class="token-operator">---</span>
+<span class="token-property">title</span>: <span class="token-string">"NovaType: A Modern Approach to Scientific Document Composition"</span>
+<span class="token-property">authors</span>:
+  - <span class="token-property">name</span>: <span class="token-string">"Jean Dupont"</span>
+    <span class="token-property">affiliation</span>: <span class="token-string">"Universite de Paris"</span>
+    <span class="token-property">email</span>: <span class="token-string">"jean.dupont@univ-paris.fr"</span>
+  - <span class="token-property">name</span>: <span class="token-string">"Marie Martin"</span>
+    <span class="token-property">affiliation</span>: <span class="token-string">"CNRS"</span>
+<span class="token-property">abstract</span>: <span class="token-operator">|</span>
+  This paper presents NovaType, a modern document
+  composition system combining LaTeX quality with
+  intuitive syntax and instant compilation.
+<span class="token-property">keywords</span>:
+  - typesetting
+  - scientific writing
+  - Typst
+<span class="token-property">template</span>: <span class="token-string">ieee-article</span>
+<span class="token-property">bibliography</span>: <span class="token-string">"references.bib"</span>
+<span class="token-property">citation_style</span>: <span class="token-string">"ieee"</span>
+<span class="token-operator">---</span>
+
+<span class="token-keyword">=</span> Introduction
+
+NovaType addresses the limitations of existing
+document preparation systems...
+
+<span class="token-keyword">=</span> Methodology
+
+<span class="token-keyword">==</span> System Architecture
+
+The core architecture consists of several modules...
+
+<span class="token-keyword">=</span> Results
+
+Our evaluation demonstrates significant improvements...
+
+<span class="token-keyword">=</span> Conclusion
+
+NovaType represents a viable alternative for
+scientific document preparation.</code></pre>
+
+      <h2>Creer un template personnalise</h2>
+
+      <h3>Structure d'un template</h3>
+
+      <pre><code>mon-template/
+├── template.toml     <span class="token-comment"># Metadonnees et schema</span>
+├── main.typ          <span class="token-comment"># Code Typst du template</span>
+└── schema.json       <span class="token-comment"># Schema JSON (optionnel)</span></code></pre>
+
+      <h3>template.toml</h3>
+
+      <pre><code><span class="token-property">[template]</span>
+<span class="token-property">name</span> = <span class="token-string">"mon-template"</span>
+<span class="token-property">description</span> = <span class="token-string">"Mon template personnalise"</span>
+<span class="token-property">version</span> = <span class="token-string">"1.0.0"</span>
+<span class="token-property">author</span> = <span class="token-string">"Votre Nom"</span>
+
+<span class="token-property">[schema]</span>
+<span class="token-property">required</span> = [<span class="token-string">"title"</span>, <span class="token-string">"author"</span>]
+<span class="token-property">optional</span> = [<span class="token-string">"date"</span>, <span class="token-string">"abstract"</span>, <span class="token-string">"keywords"</span>]</code></pre>
+
+      <h3>Commandes de gestion</h3>
+
+      <pre><code><span class="token-comment"># Creer un nouveau template</span>
+<span class="token-function">$</span> nova template new mon-template
+
+<span class="token-comment"># Lister les templates installes</span>
+<span class="token-function">$</span> nova template list
+
+<span class="token-comment"># Informations sur un template</span>
+<span class="token-function">$</span> nova template info ieee-article
+
+<span class="token-comment"># Installer un template externe</span>
+<span class="token-function">$</span> nova template install ./chemin/vers/template</code></pre>
+
+      <h2>Personnalisation</h2>
+
+      <h3>Modifier les couleurs</h3>
+
+      <pre><code><span class="token-comment">// Definir vos couleurs personnalisees</span>
+<span class="token-keyword">#let</span> primary = rgb(<span class="token-string">"#your-color"</span>)
+<span class="token-keyword">#let</span> secondary = rgb(<span class="token-string">"#your-color"</span>)
+<span class="token-keyword">#let</span> accent = rgb(<span class="token-string">"#your-color"</span>)</code></pre>
+
+      <h3>Modifier les polices</h3>
+
+      <pre><code><span class="token-comment">// Police principale</span>
+<span class="token-keyword">#set</span> text(font: <span class="token-string">"Georgia"</span>, size: <span class="token-number">11pt</span>)
+
+<span class="token-comment">// Police pour les titres</span>
+<span class="token-keyword">#show</span> heading: set text(font: <span class="token-string">"Helvetica"</span>)</code></pre>
+
+      <h3>Modifier les marges</h3>
+
+      <pre><code><span class="token-comment">// Marges personnalisees</span>
+<span class="token-keyword">#set</span> page(
+  paper: <span class="token-string">"a4"</span>,
+  margin: (top: <span class="token-number">3cm</span>, bottom: <span class="token-number">2cm</span>, left: <span class="token-number">2.5cm</span>, right: <span class="token-number">2.5cm</span>)
+)</code></pre>
+
+      <div class="callout callout-success">
+        <div class="callout-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+            <path d="M22 4L12 14.01l-3-3"/>
+          </svg>
+          Conseil
+        </div>
+        <p style="margin: 0;">Les templates NovaType sont entierement personnalisables. N'hesitez pas a les modifier selon vos besoins ou a creer les votres.</p>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom" style="border-top: none; padding-top: 0;">
+        <p>&copy; 2024 NovaType. Tous droits reserves.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../assets/js/main.js"></script>
+</body>
+</html>

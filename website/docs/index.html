@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Documentation complete de NovaType - Guide de reference pour la composition typographique moderne.">
+  <title>Documentation - NovaType</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar" id="navbar">
+    <div class="container">
+      <a href="../index.html" class="nav-logo">
+        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="32" height="32" rx="8" fill="#2563eb"/>
+          <path d="M8 10h4l4 12h-4L8 10z" fill="white"/>
+          <path d="M14 10h4l6 12h-4l-6-12z" fill="white" fill-opacity="0.7"/>
+          <circle cx="24" cy="10" r="3" fill="#10b981"/>
+        </svg>
+        NovaType
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="../index.html">Accueil</a></li>
+        <li><a href="../demos.html">Demos</a></li>
+        <li><a href="index.html" class="active">Documentation</a></li>
+        <li><a href="templates.html">Templates</a></li>
+        <li><a href="https://github.com/novatype" target="_blank">GitHub</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="getting-started.html" class="btn btn-primary">Commencer</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Documentation Layout -->
+  <div class="container docs-layout" style="padding-top: 6rem;">
+    <!-- Sidebar -->
+    <aside class="docs-sidebar">
+      <nav class="docs-nav">
+        <div class="docs-nav-section">
+          <div class="docs-nav-title">Pour commencer</div>
+          <a href="getting-started.html" class="docs-nav-link">Installation</a>
+          <a href="index.html" class="docs-nav-link active">Introduction</a>
+          <a href="quick-start.html" class="docs-nav-link">Demarrage rapide</a>
+        </div>
+        <div class="docs-nav-section">
+          <div class="docs-nav-title">Guide</div>
+          <a href="syntax.html" class="docs-nav-link">Syntaxe de base</a>
+          <a href="formatting.html" class="docs-nav-link">Mise en forme</a>
+          <a href="math.html" class="docs-nav-link">Equations</a>
+          <a href="tables.html" class="docs-nav-link">Tableaux</a>
+          <a href="figures.html" class="docs-nav-link">Figures</a>
+        </div>
+        <div class="docs-nav-section">
+          <div class="docs-nav-title">Fonctionnalites</div>
+          <a href="citations.html" class="docs-nav-link">Citations</a>
+          <a href="plots.html" class="docs-nav-link">Graphiques</a>
+          <a href="templates.html" class="docs-nav-link">Templates</a>
+          <a href="schemas.html" class="docs-nav-link">Validation</a>
+        </div>
+        <div class="docs-nav-section">
+          <div class="docs-nav-title">Reference</div>
+          <a href="cli.html" class="docs-nav-link">CLI</a>
+          <a href="api.html" class="docs-nav-link">API WebAssembly</a>
+          <a href="config.html" class="docs-nav-link">Configuration</a>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- Content -->
+    <main class="docs-content">
+      <h1>Documentation NovaType</h1>
+
+      <p class="text-secondary" style="font-size: 1.125rem; margin-bottom: var(--space-2xl);">
+        Bienvenue dans la documentation officielle de NovaType, le systeme de composition typographique moderne pour la redaction scientifique.
+      </p>
+
+      <h2>Qu'est-ce que NovaType ?</h2>
+
+      <p>NovaType est un systeme de composition typographique de nouvelle generation, construit sur le moteur <a href="https://typst.app" target="_blank">Typst</a>. Il combine la qualite typographique de LaTeX avec une syntaxe moderne et intuitive, offrant une experience de redaction fluide pour les documents scientifiques et techniques.</p>
+
+      <div class="callout callout-info">
+        <div class="callout-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 16v-4M12 8h.01"/>
+          </svg>
+          Note
+        </div>
+        <p style="margin: 0;">NovaType est entierement compatible avec la syntaxe Typst. Tout document Typst valide fonctionne avec NovaType.</p>
+      </div>
+
+      <h2>Caracteristiques principales</h2>
+
+      <div class="grid grid-2" style="margin: var(--space-xl) 0;">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+              </svg>
+            </div>
+            <h4>Compilation instantanee</h4>
+          </div>
+          <p class="text-muted" style="margin: 0;">Visualisez vos modifications en temps reel avec notre moteur de compilation incremental.</p>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 19.5A2.5 2.5 0 016.5 17H20"/>
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/>
+              </svg>
+            </div>
+            <h4>Citations intelligentes</h4>
+          </div>
+          <p class="text-muted" style="margin: 0;">BibTeX, CrossRef API et Zotero integres avec 6+ styles de citation.</p>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 3v18h18"/>
+                <path d="M18 17l-5-5-4 4-3-3"/>
+              </svg>
+            </div>
+            <h4>Visualisation de donnees</h4>
+          </div>
+          <p class="text-muted" style="margin: 0;">Creez des graphiques directement depuis vos fichiers CSV ou JSON.</p>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                <path d="M2 17l10 5 10-5"/>
+                <path d="M2 12l10 5 10-5"/>
+              </svg>
+            </div>
+            <h4>Templates professionnels</h4>
+          </div>
+          <p class="text-muted" style="margin: 0;">IEEE, Nature, rapports, presentations et plus encore.</p>
+        </div>
+      </div>
+
+      <h2>Architecture du systeme</h2>
+
+      <p>NovaType est compose de plusieurs modules specialises :</p>
+
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th>Module</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>nova-cli</code></td>
+            <td>Interface en ligne de commande (compile, init, watch, validate, template)</td>
+          </tr>
+          <tr>
+            <td><code>nova-core</code></td>
+            <td>Moteur de compilation et orchestration</td>
+          </tr>
+          <tr>
+            <td><code>nova-schema</code></td>
+            <td>Validation de metadonnees avec JSON Schema</td>
+          </tr>
+          <tr>
+            <td><code>nova-cite</code></td>
+            <td>Gestion des citations et bibliographies</td>
+          </tr>
+          <tr>
+            <td><code>nova-plot</code></td>
+            <td>Generation de graphiques SVG</td>
+          </tr>
+          <tr>
+            <td><code>nova-wasm</code></td>
+            <td>Compilation WebAssembly pour le navigateur</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>Exemple rapide</h2>
+
+      <p>Voici un exemple minimal de document NovaType :</p>
+
+      <pre><code><span class="token-comment">// Configuration du document</span>
+<span class="token-keyword">#set</span> document(title: <span class="token-string">"Mon Premier Document"</span>)
+<span class="token-keyword">#set</span> page(paper: <span class="token-string">"a4"</span>, margin: <span class="token-number">2.5cm</span>)
+<span class="token-keyword">#set</span> text(font: <span class="token-string">"Arial"</span>, size: <span class="token-number">11pt</span>, lang: <span class="token-string">"fr"</span>)
+
+<span class="token-comment">// Titre</span>
+<span class="token-keyword">#align</span>(center)[
+  <span class="token-keyword">#text</span>(size: <span class="token-number">24pt</span>, weight: <span class="token-string">"bold"</span>)[Mon Premier Document]
+]
+
+<span class="token-keyword">=</span> Introduction
+
+Bienvenue dans NovaType ! Ce systeme vous permet de creer
+des documents <span class="token-property">*professionnels*</span> avec une syntaxe <span class="token-property">_simple_</span>.
+
+<span class="token-keyword">=</span> Mathematiques
+
+La formule d'Euler : <span class="token-keyword">$</span> e^(i pi) + <span class="token-number">1</span> = <span class="token-number">0</span> <span class="token-keyword">$</span></code></pre>
+
+      <h2>Prochaines etapes</h2>
+
+      <div class="grid grid-3" style="margin-top: var(--space-xl);">
+        <a href="getting-started.html" class="card" style="text-decoration: none;">
+          <h4 style="color: var(--nova-primary);">Installation</h4>
+          <p class="text-muted" style="margin: 0;">Installez NovaType sur votre systeme.</p>
+        </a>
+        <a href="syntax.html" class="card" style="text-decoration: none;">
+          <h4 style="color: var(--nova-primary);">Syntaxe de base</h4>
+          <p class="text-muted" style="margin: 0;">Apprenez les fondamentaux.</p>
+        </a>
+        <a href="templates.html" class="card" style="text-decoration: none;">
+          <h4 style="color: var(--nova-primary);">Templates</h4>
+          <p class="text-muted" style="margin: 0;">Explorez les modeles disponibles.</p>
+        </a>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom" style="border-top: none; padding-top: 0;">
+        <p>&copy; 2024 NovaType. Tous droits reserves.</p>
+        <div class="footer-social">
+          <a href="https://github.com/novatype" target="_blank" aria-label="GitHub">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../assets/js/main.js"></script>
+</body>
+</html>

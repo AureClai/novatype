@@ -1,0 +1,16 @@
+# Build output
+/build/
+*.pdf
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# NovaType cache
+.nova/

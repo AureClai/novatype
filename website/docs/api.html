@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="API WebAssembly NovaType - Compilez des documents dans le navigateur avec JavaScript.">
+  <title>API WebAssembly - NovaType</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar" id="navbar">
+    <div class="container">
+      <a href="../index.html" class="nav-logo">
+        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="32" height="32" rx="8" fill="#2563eb"/>
+          <path d="M8 10h4l4 12h-4L8 10z" fill="white"/>
+          <path d="M14 10h4l6 12h-4l-6-12z" fill="white" fill-opacity="0.7"/>
+          <circle cx="24" cy="10" r="3" fill="#10b981"/>
+        </svg>
+        NovaType
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="../index.html">Accueil</a></li>
+        <li><a href="../demos.html">Demos</a></li>
+        <li><a href="index.html" class="active">Documentation</a></li>
+        <li><a href="templates.html">Templates</a></li>
+        <li><a href="https://github.com/novatype" target="_blank">GitHub</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="getting-started.html" class="btn btn-primary">Commencer</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Documentation Layout -->
+  <div class="container docs-layout" style="padding-top: 6rem;">
+    <!-- Sidebar -->
+    <aside class="docs-sidebar">
+      <nav class="docs-nav">
+        <div class="docs-nav-section">
+          <div class="docs-nav-title">Pour commencer</div>
+          <a href="getting-started.html" class="docs-nav-link">Installation</a>
+          <a href="index.html" class="docs-nav-link">Introduction</a>
+          <a href="quick-start.html" class="docs-nav-link">Demarrage rapide</a>
+        </div>
+        <div class="docs-nav-section">
+          <div class="docs-nav-title">Guide</div>
+          <a href="syntax.html" class="docs-nav-link">Syntaxe de base</a>
+          <a href="formatting.html" class="docs-nav-link">Mise en forme</a>
+          <a href="math.html" class="docs-nav-link">Equations</a>
+          <a href="tables.html" class="docs-nav-link">Tableaux</a>
+          <a href="figures.html" class="docs-nav-link">Figures</a>
+        </div>
+        <div class="docs-nav-section">
+          <div class="docs-nav-title">Fonctionnalites</div>
+          <a href="citations.html" class="docs-nav-link">Citations</a>
+          <a href="plots.html" class="docs-nav-link">Graphiques</a>
+          <a href="templates.html" class="docs-nav-link">Templates</a>
+          <a href="schemas.html" class="docs-nav-link">Validation</a>
+        </div>
+        <div class="docs-nav-section">
+          <div class="docs-nav-title">Reference</div>
+          <a href="cli.html" class="docs-nav-link">CLI</a>
+          <a href="api.html" class="docs-nav-link active">API WebAssembly</a>
+          <a href="config.html" class="docs-nav-link">Configuration</a>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- Content -->
+    <main class="docs-content">
+      <h1>API WebAssembly</h1>
+
+      <p class="text-secondary" style="font-size: 1.125rem; margin-bottom: var(--space-2xl);">
+        Le module <code>nova-wasm</code> permet de compiler des documents NovaType directement dans le navigateur via WebAssembly.
+      </p>
+
+      <h2>Installation</h2>
+
+      <h3>Via npm</h3>
+
+      <pre><code><span class="token-function">npm</span> install @novatype/wasm</code></pre>
+
+      <h3>Via CDN</h3>
+
+      <pre><code><span class="token-operator">&lt;</span><span class="token-keyword">script</span> type=<span class="token-string">"module"</span><span class="token-operator">&gt;</span>
+  <span class="token-keyword">import</span> { NovaCompiler } <span class="token-keyword">from</span> <span class="token-string">'https://unpkg.com/@novatype/wasm'</span>;
+<span class="token-operator">&lt;/</span><span class="token-keyword">script</span><span class="token-operator">&gt;</span></code></pre>
+
+      <h2>Utilisation de base</h2>
+
+      <pre><code><span class="token-keyword">import</span> { NovaCompiler } <span class="token-keyword">from</span> <span class="token-string">'@novatype/wasm'</span>;
+
+<span class="token-comment">// Initialiser le compilateur</span>
+<span class="token-keyword">const</span> compiler = <span class="token-keyword">await</span> NovaCompiler.init();
+
+<span class="token-comment">// Code source Typst</span>
+<span class="token-keyword">const</span> source = <span class="token-string">`
+#set document(title: "Mon Document")
+#set page(paper: "a4")
+
+= Introduction
+
+Bonjour depuis le navigateur!
+`</span>;
+
+<span class="token-comment">// Compiler en SVG</span>
+<span class="token-keyword">const</span> result = <span class="token-keyword">await</span> compiler.compile(source);
+
+<span class="token-keyword">if</span> (result.success) {
+  <span class="token-comment">// result.svg contient le SVG genere</span>
+  document.getElementById(<span class="token-string">'preview'</span>).innerHTML = result.svg;
+} <span class="token-keyword">else</span> {
+  console.error(<span class="token-string">'Erreur:'</span>, result.errors);
+}</code></pre>
+
+      <h2>API Reference</h2>
+
+      <h3>NovaCompiler</h3>
+
+      <h4>NovaCompiler.init(options?)</h4>
+
+      <p>Initialise une nouvelle instance du compilateur.</p>
+
+      <pre><code><span class="token-keyword">const</span> compiler = <span class="token-keyword">await</span> NovaCompiler.init({
+  <span class="token-comment">// Options</span>
+  fonts: [<span class="token-string">'./fonts/custom.ttf'</span>],  <span class="token-comment">// Polices additionnelles</span>
+  root: <span class="token-string">'./documents/'</span>           <span class="token-comment">// Repertoire racine virtuel</span>
+});</code></pre>
+
+      <h4>compiler.compile(source, options?)</h4>
+
+      <p>Compile un document et retourne le resultat.</p>
+
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th>Parametre</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>source</code></td>
+            <td>string</td>
+            <td>Code source Typst</td>
+          </tr>
+          <tr>
+            <td><code>options.format</code></td>
+            <td>string</td>
+            <td><code>'svg'</code> ou <code>'pdf'</code> (defaut: <code>'svg'</code>)</td>
+          </tr>
+          <tr>
+            <td><code>options.page</code></td>
+            <td>number</td>
+            <td>Page a rendre (defaut: toutes)</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h4>Resultat</h4>
+
+      <pre><code><span class="token-keyword">interface</span> CompileResult {
+  success: <span class="token-keyword">boolean</span>;
+  svg?: <span class="token-keyword">string</span>;        <span class="token-comment">// SVG genere (si format='svg')</span>
+  pdf?: Uint8Array;    <span class="token-comment">// PDF en bytes (si format='pdf')</span>
+  pages: <span class="token-keyword">number</span>;       <span class="token-comment">// Nombre de pages</span>
+  errors?: Error[];    <span class="token-comment">// Erreurs de compilation</span>
+  warnings?: Warning[]; <span class="token-comment">// Avertissements</span>
+}</code></pre>
+
+      <h4>compiler.validate(source)</h4>
+
+      <p>Valide les metadonnees d'un document.</p>
+
+      <pre><code><span class="token-keyword">const</span> validation = <span class="token-keyword">await</span> compiler.validate(source);
+
+<span class="token-keyword">if</span> (validation.valid) {
+  console.log(<span class="token-string">'Metadonnees valides:'</span>, validation.metadata);
+} <span class="token-keyword">else</span> {
+  console.error(<span class="token-string">'Erreurs:'</span>, validation.errors);
+}</code></pre>
+
+      <h4>compiler.addFile(path, content)</h4>
+
+      <p>Ajoute un fichier au systeme de fichiers virtuel.</p>
+
+      <pre><code><span class="token-comment">// Ajouter un fichier BibTeX</span>
+compiler.addFile(<span class="token-string">'references.bib'</span>, <span class="token-string">`
+@book{knuth1984,
+  author = {Knuth, Donald E.},
+  title = {The TeXbook},
+  year = {1984}
+}
+`</span>);
+
+<span class="token-comment">// Ajouter une image (en base64)</span>
+compiler.addFile(<span class="token-string">'image.png'</span>, imageBase64, { encoding: <span class="token-string">'base64'</span> });</code></pre>
+
+      <h2>Exemple complet</h2>
+
+      <pre><code><span class="token-operator">&lt;!</span>DOCTYPE html<span class="token-operator">&gt;</span>
+<span class="token-operator">&lt;</span>html<span class="token-operator">&gt;</span>
+<span class="token-operator">&lt;</span>head<span class="token-operator">&gt;</span>
+  <span class="token-operator">&lt;</span>title<span class="token-operator">&gt;</span>NovaType Editor<span class="token-operator">&lt;/</span>title<span class="token-operator">&gt;</span>
+  <span class="token-operator">&lt;</span>style<span class="token-operator">&gt;</span>
+    .container { display: flex; height: 100vh; }
+    .editor { flex: 1; }
+    .preview { flex: 1; background: #f5f5f5; overflow: auto; }
+    textarea { width: 100%; height: 100%; font-family: monospace; }
+  <span class="token-operator">&lt;/</span>style<span class="token-operator">&gt;</span>
+<span class="token-operator">&lt;/</span>head<span class="token-operator">&gt;</span>
+<span class="token-operator">&lt;</span>body<span class="token-operator">&gt;</span>
+  <span class="token-operator">&lt;</span>div class=<span class="token-string">"container"</span><span class="token-operator">&gt;</span>
+    <span class="token-operator">&lt;</span>div class=<span class="token-string">"editor"</span><span class="token-operator">&gt;</span>
+      <span class="token-operator">&lt;</span>textarea id=<span class="token-string">"source"</span><span class="token-operator">&gt;</span>= Hello World
+
+Bienvenue dans NovaType!
+
+$ e^(i pi) + 1 = 0 $<span class="token-operator">&lt;/</span>textarea<span class="token-operator">&gt;</span>
+    <span class="token-operator">&lt;/</span>div<span class="token-operator">&gt;</span>
+    <span class="token-operator">&lt;</span>div class=<span class="token-string">"preview"</span> id=<span class="token-string">"preview"</span><span class="token-operator">&gt;&lt;/</span>div<span class="token-operator">&gt;</span>
+  <span class="token-operator">&lt;/</span>div<span class="token-operator">&gt;</span>
+
+  <span class="token-operator">&lt;</span>script type=<span class="token-string">"module"</span><span class="token-operator">&gt;</span>
+    <span class="token-keyword">import</span> { NovaCompiler } <span class="token-keyword">from</span> <span class="token-string">'@novatype/wasm'</span>;
+
+    <span class="token-keyword">const</span> compiler = <span class="token-keyword">await</span> NovaCompiler.init();
+    <span class="token-keyword">const</span> sourceEl = document.getElementById(<span class="token-string">'source'</span>);
+    <span class="token-keyword">const</span> previewEl = document.getElementById(<span class="token-string">'preview'</span>);
+
+    <span class="token-keyword">let</span> timeout;
+
+    <span class="token-keyword">async function</span> compile() {
+      <span class="token-keyword">const</span> result = <span class="token-keyword">await</span> compiler.compile(sourceEl.value);
+      <span class="token-keyword">if</span> (result.success) {
+        previewEl.innerHTML = result.svg;
+      } <span class="token-keyword">else</span> {
+        previewEl.innerHTML = <span class="token-string">`&lt;pre style="color:red"&gt;${result.errors.join('\n')}&lt;/pre&gt;`</span>;
+      }
+    }
+
+    sourceEl.addEventListener(<span class="token-string">'input'</span>, () => {
+      clearTimeout(timeout);
+      timeout = setTimeout(compile, <span class="token-number">300</span>);
+    });
+
+    compile();
+  <span class="token-operator">&lt;/</span>script<span class="token-operator">&gt;</span>
+<span class="token-operator">&lt;/</span>body<span class="token-operator">&gt;</span>
+<span class="token-operator">&lt;/</span>html<span class="token-operator">&gt;</span></code></pre>
+
+      <h2>Export PDF</h2>
+
+      <pre><code><span class="token-keyword">async function</span> downloadPDF() {
+  <span class="token-keyword">const</span> result = <span class="token-keyword">await</span> compiler.compile(source, { format: <span class="token-string">'pdf'</span> });
+
+  <span class="token-keyword">if</span> (result.success) {
+    <span class="token-keyword">const</span> blob = <span class="token-keyword">new</span> Blob([result.pdf], { type: <span class="token-string">'application/pdf'</span> });
+    <span class="token-keyword">const</span> url = URL.createObjectURL(blob);
+
+    <span class="token-keyword">const</span> a = document.createElement(<span class="token-string">'a'</span>);
+    a.href = url;
+    a.download = <span class="token-string">'document.pdf'</span>;
+    a.click();
+
+    URL.revokeObjectURL(url);
+  }
+}</code></pre>
+
+      <h2>Gestion des erreurs</h2>
+
+      <pre><code><span class="token-keyword">try</span> {
+  <span class="token-keyword">const</span> result = <span class="token-keyword">await</span> compiler.compile(source);
+
+  <span class="token-keyword">if</span> (!result.success) {
+    <span class="token-keyword">for</span> (<span class="token-keyword">const</span> error <span class="token-keyword">of</span> result.errors) {
+      console.error(<span class="token-string">`Ligne ${error.line}: ${error.message}`</span>);
+
+      <span class="token-comment">// Afficher dans l'interface</span>
+      highlightError(error.line, error.column);
+    }
+  }
+
+  <span class="token-comment">// Traiter les warnings</span>
+  <span class="token-keyword">for</span> (<span class="token-keyword">const</span> warning <span class="token-keyword">of</span> result.warnings || []) {
+    console.warn(<span class="token-string">`Warning: ${warning.message}`</span>);
+  }
+} <span class="token-keyword">catch</span> (e) {
+  console.error(<span class="token-string">'Erreur fatale:'</span>, e);
+}</code></pre>
+
+      <h2>React Integration</h2>
+
+      <pre><code><span class="token-keyword">import</span> { useState, useEffect, useCallback } <span class="token-keyword">from</span> <span class="token-string">'react'</span>;
+<span class="token-keyword">import</span> { NovaCompiler } <span class="token-keyword">from</span> <span class="token-string">'@novatype/wasm'</span>;
+
+<span class="token-keyword">function</span> useNovaCompiler() {
+  <span class="token-keyword">const</span> [compiler, setCompiler] = useState(<span class="token-keyword">null</span>);
+  <span class="token-keyword">const</span> [loading, setLoading] = useState(<span class="token-keyword">true</span>);
+
+  useEffect(() => {
+    NovaCompiler.init().then(c => {
+      setCompiler(c);
+      setLoading(<span class="token-keyword">false</span>);
+    });
+  }, []);
+
+  <span class="token-keyword">const</span> compile = useCallback(<span class="token-keyword">async</span> (source) => {
+    <span class="token-keyword">if</span> (!compiler) <span class="token-keyword">return null</span>;
+    <span class="token-keyword">return</span> compiler.compile(source);
+  }, [compiler]);
+
+  <span class="token-keyword">return</span> { compile, loading };
+}
+
+<span class="token-keyword">function</span> NovaEditor() {
+  <span class="token-keyword">const</span> { compile, loading } = useNovaCompiler();
+  <span class="token-keyword">const</span> [source, setSource] = useState(<span class="token-string">'= Hello\n\nWorld!'</span>);
+  <span class="token-keyword">const</span> [preview, setPreview] = useState(<span class="token-string">''</span>);
+
+  useEffect(() => {
+    <span class="token-keyword">const</span> timer = setTimeout(<span class="token-keyword">async</span> () => {
+      <span class="token-keyword">const</span> result = <span class="token-keyword">await</span> compile(source);
+      <span class="token-keyword">if</span> (result?.success) {
+        setPreview(result.svg);
+      }
+    }, <span class="token-number">300</span>);
+    <span class="token-keyword">return</span> () => clearTimeout(timer);
+  }, [source, compile]);
+
+  <span class="token-keyword">if</span> (loading) <span class="token-keyword">return</span> <span class="token-operator">&lt;</span>div<span class="token-operator">&gt;</span>Chargement...<span class="token-operator">&lt;/</span>div<span class="token-operator">&gt;</span>;
+
+  <span class="token-keyword">return</span> (
+    <span class="token-operator">&lt;</span>div className=<span class="token-string">"editor"</span><span class="token-operator">&gt;</span>
+      <span class="token-operator">&lt;</span>textarea
+        value={source}
+        onChange={e => setSource(e.target.value)}
+      /<span class="token-operator">&gt;</span>
+      <span class="token-operator">&lt;</span>div dangerouslySetInnerHTML={{ __html: preview }} /<span class="token-operator">&gt;</span>
+    <span class="token-operator">&lt;/</span>div<span class="token-operator">&gt;</span>
+  );
+}</code></pre>
+
+      <div class="callout callout-warning">
+        <div class="callout-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+            <path d="M12 9v4M12 17h.01"/>
+          </svg>
+          Performance
+        </div>
+        <p style="margin: 0;">Le module WASM fait environ 5 Mo. Utilisez un debounce de 200-300ms pour eviter les recompilations excessives lors de la frappe.</p>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom" style="border-top: none; padding-top: 0;">
+        <p>&copy; 2024 NovaType. Tous droits reserves.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../assets/js/main.js"></script>
+</body>
+</html>

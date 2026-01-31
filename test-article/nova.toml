@@ -1,0 +1,15 @@
+[project]
+name = "test-article"
+version = "0.1.0"
+
+[document]
+main = "main.typ"
+template = "article"
+
+[output]
+format = "pdf"
+directory = "build"
+
+[citations]
+style = "ieee"
+bibliography = ["references.bib"]

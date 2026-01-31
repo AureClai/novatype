@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://novatype.dev/schemas/report.json",
+  "title": "NovaType Report Schema",
+  "description": "Schema for validating report document metadata",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Report title"
+    },
+    "subtitle": {
+      "type": "string",
+      "description": "Report subtitle"
+    },
+    "authors": {
+      "type": "array",
+      "description": "Report authors",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "role": {
+            "type": "string",
+            "description": "Author's role (e.g., 'Lead Analyst')"
+          }
+        },
+        "required": ["name"]
+      }
+    },
+    "organization": {
+      "type": "string",
+      "description": "Organization name"
+    },
+    "department": {
+      "type": "string",
+      "description": "Department or division"
+    },
+    "date": {
+      "type": "string",
+      "description": "Report date"
+    },
+    "version": {
+      "type": "string",
+      "description": "Document version"
+    },
+    "classification": {
+      "type": "string",
+      "enum": ["public", "internal", "confidential", "restricted"],
+      "description": "Document classification level"
+    },
+    "executive_summary": {
+      "type": "string",
+      "description": "Executive summary"
+    },
+    "template": {
+      "type": "string"
+    },
+    "toc": {
+      "type": "boolean",
+      "default": true,
+      "description": "Include table of contents"
+    },
+    "logo": {
+      "type": "string",
+      "description": "Path to organization logo"
+    }
+  },
+  "required": ["title"]
+}
