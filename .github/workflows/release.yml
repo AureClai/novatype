@@ -29,11 +29,11 @@ jobs:
             target: x86_64-pc-windows-msvc
             artifact: nova.exe
             use_cross: false
-          - os: macos-latest
+          - os: macos-13
             target: x86_64-apple-darwin
             artifact: nova
             use_cross: false
-          - os: macos-latest
+          - os: macos-14
             target: aarch64-apple-darwin
             artifact: nova
             use_cross: false
