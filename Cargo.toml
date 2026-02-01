@@ -28,7 +28,7 @@ typst = "0.13"
 typst-pdf = "0.13"
 typst-svg = "0.13"
 typst-syntax = "0.13"
-typst-assets = { git = "https://github.com/typst/typst-assets", rev = "57a38ca" }
+typst-assets = "0.13"
 comemo = "0.4"
 ecow = { version = "0.2", features = ["serde"] }
 fontdb = { version = "0.22", default-features = false }
