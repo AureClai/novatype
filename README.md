@@ -12,13 +12,17 @@
   <a href="https://aureclai.github.io/novatype/">Documentation</a> •
   <a href="https://aureclai.github.io/novatype/demos.html">Demos</a> •
   <a href="#installation">Installation</a> •
-  <a href="#usage">Usage</a>
+  <a href="#usage">Usage</a> •
+  <a href="https://marketplace.visualstudio.com/items?itemName=aureclai.novatype">VS Code Extension</a>
 </p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License MIT">
   <img src="https://img.shields.io/badge/rust-1.70+-orange.svg" alt="Rust 1.70+">
   <img src="https://img.shields.io/badge/platform-windows%20%7C%20macos%20%7C%20linux-lightgrey.svg" alt="Platform">
+  <a href="https://marketplace.visualstudio.com/items?itemName=aureclai.novatype">
+    <img src="https://img.shields.io/visual-studio-marketplace/v/aureclai.novatype?label=VS%20Code&logo=visual-studio-code" alt="VS Code Extension">
+  </a>
 </p>
 
 ---
@@ -71,6 +75,23 @@ cargo build --package nova-cli --release
 Download from [Releases](https://github.com/AureClai/novatype/releases).
 
 </details>
+
+## VS Code Extension
+
+Get the full NovaType experience in Visual Studio Code:
+
+```
+ext install aureclai.novatype
+```
+
+**Features:**
+- Live PDF preview with auto-refresh
+- IntelliSense for references (`@`) and labels (`<`)
+- Bibliography search via CrossRef API
+- DOI to BibTeX import
+- Syntax highlighting
+
+[![VS Code Extension](https://img.shields.io/visual-studio-marketplace/v/aureclai.novatype?style=for-the-badge&logo=visual-studio-code&label=Install%20Extension)](https://marketplace.visualstudio.com/items?itemName=aureclai.novatype)
 
 ## Usage
 
