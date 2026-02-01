@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Tableaux NovaType - Creez des tableaux professionnels pour vos documents.">
-  <title>Tableaux - NovaType</title>
+  <meta name="description" content="NovaType Tables - Create professional tables for your documents.">
+  <title>Tables - NovaType</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -23,14 +23,14 @@
         NovaType
       </a>
       <ul class="nav-links" id="navLinks">
-        <li><a href="/novatype/index.html">Accueil</a></li>
+        <li><a href="/novatype/index.html">Home</a></li>
         <li><a href="/novatype/demos.html">Demos</a></li>
         <li><a href="/novatype/docs/index.html" class="active">Documentation</a></li>
         <li><a href="/novatype/docs/templates.html">Templates</a></li>
         <li><a href="https://github.com/AureClai/novatype" target="_blank">GitHub</a></li>
       </ul>
       <div class="nav-actions">
-        <a href="/novatype/docs/getting-started.html" class="btn btn-primary">Commencer</a>
+        <a href="/novatype/docs/getting-started.html" class="btn btn-primary">Get Started</a>
       </div>
     </div>
   </nav>
@@ -39,23 +39,23 @@
     <aside class="docs-sidebar">
       <nav class="docs-nav">
         <div class="docs-nav-section">
-          <div class="docs-nav-title">Pour commencer</div>
+          <div class="docs-nav-title">Getting Started</div>
           <a href="/novatype/docs/getting-started.html" class="docs-nav-link">Installation</a>
           <a href="/novatype/docs/index.html" class="docs-nav-link">Introduction</a>
-          <a href="/novatype/docs/quick-start.html" class="docs-nav-link">Demarrage rapide</a>
+          <a href="/novatype/docs/quick-start.html" class="docs-nav-link">Quick Start</a>
         </div>
         <div class="docs-nav-section">
           <div class="docs-nav-title">Guide</div>
-          <a href="/novatype/docs/syntax.html" class="docs-nav-link">Syntaxe de base</a>
-          <a href="/novatype/docs/formatting.html" class="docs-nav-link">Mise en forme</a>
+          <a href="/novatype/docs/syntax.html" class="docs-nav-link">Basic Syntax</a>
+          <a href="/novatype/docs/formatting.html" class="docs-nav-link">Formatting</a>
           <a href="/novatype/docs/math.html" class="docs-nav-link">Equations</a>
-          <a href="/novatype/docs/tables.html" class="docs-nav-link active">Tableaux</a>
+          <a href="/novatype/docs/tables.html" class="docs-nav-link active">Tables</a>
           <a href="/novatype/docs/figures.html" class="docs-nav-link">Figures</a>
         </div>
         <div class="docs-nav-section">
-          <div class="docs-nav-title">Fonctionnalites</div>
+          <div class="docs-nav-title">Features</div>
           <a href="/novatype/docs/citations.html" class="docs-nav-link">Citations</a>
-          <a href="/novatype/docs/plots.html" class="docs-nav-link">Graphiques</a>
+          <a href="/novatype/docs/plots.html" class="docs-nav-link">Charts</a>
           <a href="/novatype/docs/templates.html" class="docs-nav-link">Templates</a>
           <a href="/novatype/docs/schemas.html" class="docs-nav-link">Validation</a>
         </div>
@@ -69,63 +69,63 @@
     </aside>
 
     <main class="docs-content">
-      <h1>Tableaux</h1>
+      <h1>Tables</h1>
 
       <p class="text-secondary" style="font-size: 1.125rem; margin-bottom: var(--space-2xl);">
-        Creez des tableaux professionnels avec une syntaxe simple et flexible.
+        Create professional tables with a simple and flexible syntax.
       </p>
 
-      <h2>Tableau simple</h2>
+      <h2>Simple Table</h2>
 
       <pre><code><span class="token-keyword">#table</span>(
   columns: <span class="token-number">3</span>,
-  [*Nom*], [*Age*], [*Ville*],
+  [*Name*], [*Age*], [*City*],
   [Alice], [<span class="token-number">25</span>], [Paris],
   [Bob], [<span class="token-number">30</span>], [Lyon],
   [Charlie], [<span class="token-number">35</span>], [Marseille],
 )</code></pre>
 
-      <h2>Tableau avec figure et legende</h2>
+      <h2>Table with Figure and Caption</h2>
 
       <pre><code><span class="token-keyword">#figure</span>(
   <span class="token-keyword">table</span>(
     columns: <span class="token-number">3</span>,
-    [*Methode*], [*Precision*], [*Rappel*],
+    [*Method*], [*Precision*], [*Recall*],
     [Baseline], [<span class="token-number">0.72</span>], [<span class="token-number">0.68</span>],
     [Model A], [<span class="token-number">0.85</span>], [<span class="token-number">0.82</span>],
     [NovaType], [<span class="token-number">0.94</span>], [<span class="token-number">0.91</span>],
   ),
-  caption: [Comparaison des performances],
+  caption: [Performance comparison],
 ) <span class="token-operator">&lt;tab:results&gt;</span>
 
-Les resultats du <span class="token-operator">@tab:results</span> montrent...</code></pre>
+The results from <span class="token-operator">@tab:results</span> show...</code></pre>
 
-      <h2>Largeur des colonnes</h2>
+      <h2>Column Width</h2>
 
-      <pre><code><span class="token-comment">// Largeur automatique</span>
+      <pre><code><span class="token-comment">// Automatic width</span>
 <span class="token-keyword">#table</span>(columns: <span class="token-number">3</span>, ...)
 
-<span class="token-comment">// Largeur fixe</span>
+<span class="token-comment">// Fixed width</span>
 <span class="token-keyword">#table</span>(columns: (<span class="token-number">5cm</span>, <span class="token-number">3cm</span>, <span class="token-number">4cm</span>), ...)
 
-<span class="token-comment">// Largeur proportionnelle</span>
+<span class="token-comment">// Proportional width</span>
 <span class="token-keyword">#table</span>(columns: (<span class="token-number">1fr</span>, <span class="token-number">2fr</span>, <span class="token-number">1fr</span>), ...)
 
-<span class="token-comment">// Mixte</span>
+<span class="token-comment">// Mixed</span>
 <span class="token-keyword">#table</span>(columns: (auto, <span class="token-number">1fr</span>, <span class="token-number">2cm</span>), ...)</code></pre>
 
-      <h2>Alignement</h2>
+      <h2>Alignment</h2>
 
       <pre><code><span class="token-keyword">#table</span>(
   columns: <span class="token-number">3</span>,
   align: (left, center, right),
-  [Gauche], [Centre], [Droite],
-  [texte], [texte], [texte],
+  [Left], [Center], [Right],
+  [text], [text], [text],
 )</code></pre>
 
-      <h2>Bordures et espacement</h2>
+      <h2>Borders and Spacing</h2>
 
-      <pre><code><span class="token-comment">// Bordure personnalisee</span>
+      <pre><code><span class="token-comment">// Custom border</span>
 <span class="token-keyword">#table</span>(
   columns: <span class="token-number">3</span>,
   stroke: <span class="token-number">0.5pt</span> + gray,
@@ -133,21 +133,21 @@ Les resultats du <span class="token-operator">@tab:results</span> montrent...</c
   [<span class="token-number">1</span>], [<span class="token-number">2</span>], [<span class="token-number">3</span>],
 )
 
-<span class="token-comment">// Sans bordure</span>
+<span class="token-comment">// No border</span>
 <span class="token-keyword">#table</span>(
   columns: <span class="token-number">3</span>,
   stroke: none,
   [A], [B], [C],
 )
 
-<span class="token-comment">// Espacement interne</span>
+<span class="token-comment">// Internal padding</span>
 <span class="token-keyword">#table</span>(
   columns: <span class="token-number">3</span>,
   inset: <span class="token-number">10pt</span>,
   [A], [B], [C],
 )</code></pre>
 
-      <h2>Couleurs et styles</h2>
+      <h2>Colors and Styles</h2>
 
       <pre><code><span class="token-keyword">#table</span>(
   columns: <span class="token-number">4</span>,
@@ -167,47 +167,47 @@ Les resultats du <span class="token-operator">@tab:results</span> montrent...</c
   [I], [J], [K], [L],
 )</code></pre>
 
-      <h2>Fusion de cellules</h2>
+      <h2>Cell Merging</h2>
 
       <pre><code><span class="token-keyword">#table</span>(
   columns: <span class="token-number">3</span>,
-  <span class="token-comment">// En-tete fusionne</span>
-  <span class="token-keyword">table.cell</span>(colspan: <span class="token-number">3</span>)[*Titre general*],
+  <span class="token-comment">// Merged header</span>
+  <span class="token-keyword">table.cell</span>(colspan: <span class="token-number">3</span>)[*General Title*],
   [Col A], [Col B], [Col C],
   [<span class="token-number">1</span>], [<span class="token-number">2</span>], [<span class="token-number">3</span>],
 
-  <span class="token-comment">// Fusion verticale</span>
+  <span class="token-comment">// Vertical merge</span>
   <span class="token-keyword">table.cell</span>(rowspan: <span class="token-number">2</span>)[Multi], [a], [b],
   [c], [d],
 )</code></pre>
 
-      <h2>En-tetes repetes</h2>
+      <h2>Repeated Headers</h2>
 
       <pre><code><span class="token-keyword">#table</span>(
   columns: <span class="token-number">3</span>,
   <span class="token-keyword">table.header</span>(
-    [*Nom*], [*Valeur*], [*Unite*],
+    [*Name*], [*Value*], [*Unit*],
   ),
-  ..data.map(row => (row.nom, row.valeur, row.unite)).flatten()
+  ..data.map(row => (row.name, row.value, row.unit)).flatten()
 )</code></pre>
 
-      <h2>Tableau de donnees</h2>
+      <h2>Data Table</h2>
 
-      <pre><code><span class="token-comment">// Definir les donnees</span>
+      <pre><code><span class="token-comment">// Define the data</span>
 <span class="token-keyword">#let</span> data = (
-  (<span class="token-string">"Janvier"</span>, <span class="token-number">1200</span>, <span class="token-number">+5%</span>),
-  (<span class="token-string">"Fevrier"</span>, <span class="token-number">1350</span>, <span class="token-number">+12%</span>),
-  (<span class="token-string">"Mars"</span>, <span class="token-number">1100</span>, <span class="token-number">-18%</span>),
+  (<span class="token-string">"January"</span>, <span class="token-number">1200</span>, <span class="token-number">+5%</span>),
+  (<span class="token-string">"February"</span>, <span class="token-number">1350</span>, <span class="token-number">+12%</span>),
+  (<span class="token-string">"March"</span>, <span class="token-number">1100</span>, <span class="token-number">-18%</span>),
 )
 
-<span class="token-comment">// Generer le tableau</span>
+<span class="token-comment">// Generate the table</span>
 <span class="token-keyword">#table</span>(
   columns: <span class="token-number">3</span>,
-  [*Mois*], [*Ventes*], [*Variation*],
+  [*Month*], [*Sales*], [*Change*],
   ..data.flatten()
 )</code></pre>
 
-      <h2>Style academique</h2>
+      <h2>Academic Style</h2>
 
       <pre><code><span class="token-keyword">#figure</span>(
   <span class="token-keyword">table</span>(
@@ -216,19 +216,19 @@ Les resultats du <span class="token-operator">@tab:results</span> montrent...</c
     align: (left, center, center, center),
     inset: (x: <span class="token-number">8pt</span>, y: <span class="token-number">6pt</span>),
 
-    <span class="token-comment">// Ligne superieure</span>
+    <span class="token-comment">// Top line</span>
     <span class="token-keyword">table.hline</span>(stroke: <span class="token-number">1pt</span>),
-    [*Variable*], [*N*], [*Moyenne*], [*ET*],
+    [*Variable*], [*N*], [*Mean*], [*SD*],
     <span class="token-keyword">table.hline</span>(stroke: <span class="token-number">0.5pt</span>),
 
     [Age], [<span class="token-number">150</span>], [<span class="token-number">34.5</span>], [<span class="token-number">12.3</span>],
-    [Taille], [<span class="token-number">150</span>], [<span class="token-number">172.1</span>], [<span class="token-number">8.7</span>],
-    [Poids], [<span class="token-number">148</span>], [<span class="token-number">71.2</span>], [<span class="token-number">14.5</span>],
+    [Height], [<span class="token-number">150</span>], [<span class="token-number">172.1</span>], [<span class="token-number">8.7</span>],
+    [Weight], [<span class="token-number">148</span>], [<span class="token-number">71.2</span>], [<span class="token-number">14.5</span>],
 
-    <span class="token-comment">// Ligne inferieure</span>
+    <span class="token-comment">// Bottom line</span>
     <span class="token-keyword">table.hline</span>(stroke: <span class="token-number">1pt</span>),
   ),
-  caption: [Statistiques descriptives de l'echantillon],
+  caption: [Descriptive statistics of the sample],
 ) <span class="token-operator">&lt;tab:stats&gt;</span></code></pre>
 
       <div class="callout callout-info">
@@ -237,9 +237,9 @@ Les resultats du <span class="token-operator">@tab:results</span> montrent...</c
             <circle cx="12" cy="12" r="10"/>
             <path d="M12 16v-4M12 8h.01"/>
           </svg>
-          Convention academique
+          Academic Convention
         </div>
-        <p style="margin: 0;">Pour les articles scientifiques, utilisez le style "trois lignes" (haut, sous en-tete, bas) sans bordures verticales.</p>
+        <p style="margin: 0;">For scientific articles, use the "three-line" style (top, under header, bottom) without vertical borders.</p>
       </div>
 
     </main>
@@ -248,7 +248,7 @@ Les resultats du <span class="token-operator">@tab:results</span> montrent...</c
   <footer class="footer">
     <div class="container">
       <div class="footer-bottom" style="border-top: none; padding-top: 0;">
-        <p>NovaType - Projet Open Source sous licence MIT</p>
+        <p>NovaType - Open Source Project under MIT License</p>
       </div>
     </div>
   </footer>

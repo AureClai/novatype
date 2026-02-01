@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Mise en forme NovaType - Personnalisez l'apparence de vos documents.">
-  <title>Mise en forme - NovaType</title>
+  <meta name="description" content="NovaType Formatting - Customize the appearance of your documents.">
+  <title>Formatting - NovaType</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -23,14 +23,14 @@
         NovaType
       </a>
       <ul class="nav-links" id="navLinks">
-        <li><a href="/novatype/index.html">Accueil</a></li>
+        <li><a href="/novatype/index.html">Home</a></li>
         <li><a href="/novatype/demos.html">Demos</a></li>
         <li><a href="/novatype/docs/index.html" class="active">Documentation</a></li>
         <li><a href="/novatype/docs/templates.html">Templates</a></li>
         <li><a href="https://github.com/AureClai/novatype" target="_blank">GitHub</a></li>
       </ul>
       <div class="nav-actions">
-        <a href="/novatype/docs/getting-started.html" class="btn btn-primary">Commencer</a>
+        <a href="/novatype/docs/getting-started.html" class="btn btn-primary">Get Started</a>
       </div>
     </div>
   </nav>
@@ -39,23 +39,23 @@
     <aside class="docs-sidebar">
       <nav class="docs-nav">
         <div class="docs-nav-section">
-          <div class="docs-nav-title">Pour commencer</div>
+          <div class="docs-nav-title">Getting Started</div>
           <a href="/novatype/docs/getting-started.html" class="docs-nav-link">Installation</a>
           <a href="/novatype/docs/index.html" class="docs-nav-link">Introduction</a>
-          <a href="/novatype/docs/quick-start.html" class="docs-nav-link">Demarrage rapide</a>
+          <a href="/novatype/docs/quick-start.html" class="docs-nav-link">Quick Start</a>
         </div>
         <div class="docs-nav-section">
           <div class="docs-nav-title">Guide</div>
-          <a href="/novatype/docs/syntax.html" class="docs-nav-link">Syntaxe de base</a>
-          <a href="/novatype/docs/formatting.html" class="docs-nav-link active">Mise en forme</a>
+          <a href="/novatype/docs/syntax.html" class="docs-nav-link">Basic Syntax</a>
+          <a href="/novatype/docs/formatting.html" class="docs-nav-link active">Formatting</a>
           <a href="/novatype/docs/math.html" class="docs-nav-link">Equations</a>
-          <a href="/novatype/docs/tables.html" class="docs-nav-link">Tableaux</a>
+          <a href="/novatype/docs/tables.html" class="docs-nav-link">Tables</a>
           <a href="/novatype/docs/figures.html" class="docs-nav-link">Figures</a>
         </div>
         <div class="docs-nav-section">
-          <div class="docs-nav-title">Fonctionnalites</div>
+          <div class="docs-nav-title">Features</div>
           <a href="/novatype/docs/citations.html" class="docs-nav-link">Citations</a>
-          <a href="/novatype/docs/plots.html" class="docs-nav-link">Graphiques</a>
+          <a href="/novatype/docs/plots.html" class="docs-nav-link">Charts</a>
           <a href="/novatype/docs/templates.html" class="docs-nav-link">Templates</a>
           <a href="/novatype/docs/schemas.html" class="docs-nav-link">Validation</a>
         </div>
@@ -69,13 +69,13 @@
     </aside>
 
     <main class="docs-content">
-      <h1>Mise en forme</h1>
+      <h1>Formatting</h1>
 
       <p class="text-secondary" style="font-size: 1.125rem; margin-bottom: var(--space-2xl);">
-        Personnalisez l'apparence de vos documents avec les regles de style NovaType.
+        Customize the appearance of your documents with NovaType style rules.
       </p>
 
-      <h2>Configuration de la page</h2>
+      <h2>Page Configuration</h2>
 
       <pre><code><span class="token-keyword">#set</span> page(
   paper: <span class="token-string">"a4"</span>,                  <span class="token-comment">// Format: a4, letter, a5...</span>
@@ -86,7 +86,7 @@
     right: <span class="token-number">2cm</span>
   ),
   header: [
-    <span class="token-keyword">#align</span>(right)[Mon Document]
+    <span class="token-keyword">#align</span>(right)[My Document]
     <span class="token-keyword">#line</span>(length: <span class="token-number">100%</span>)
   ],
   footer: [
@@ -94,10 +94,10 @@
       Page <span class="token-keyword">#counter</span>(page).display()
     ]
   ],
-  numbering: <span class="token-string">"1"</span>               <span class="token-comment">// Numerotation des pages</span>
+  numbering: <span class="token-string">"1"</span>               <span class="token-comment">// Page numbering</span>
 )</code></pre>
 
-      <h3>Formats de page disponibles</h3>
+      <h3>Available Page Formats</h3>
 
       <table class="comparison-table">
         <thead>
@@ -108,32 +108,32 @@
           </tr>
         </thead>
         <tbody>
-          <tr><td><code>"a4"</code></td><td>210 x 297 mm</td><td>Standard europeen</td></tr>
-          <tr><td><code>"letter"</code></td><td>8.5 x 11 in</td><td>Standard americain</td></tr>
-          <tr><td><code>"a5"</code></td><td>148 x 210 mm</td><td>Petit format</td></tr>
+          <tr><td><code>"a4"</code></td><td>210 x 297 mm</td><td>European standard</td></tr>
+          <tr><td><code>"letter"</code></td><td>8.5 x 11 in</td><td>American standard</td></tr>
+          <tr><td><code>"a5"</code></td><td>148 x 210 mm</td><td>Small format</td></tr>
           <tr><td><code>"presentation-16-9"</code></td><td>16:9</td><td>Slides</td></tr>
         </tbody>
       </table>
 
-      <h2>Configuration du texte</h2>
+      <h2>Text Configuration</h2>
 
       <pre><code><span class="token-keyword">#set</span> text(
-  font: <span class="token-string">"Arial"</span>,           <span class="token-comment">// Police principale</span>
-  size: <span class="token-number">11pt</span>,              <span class="token-comment">// Taille de base</span>
-  fill: rgb(<span class="token-string">"#333333"</span>),   <span class="token-comment">// Couleur du texte</span>
-  lang: <span class="token-string">"fr"</span>,              <span class="token-comment">// Langue (cesure, guillemets)</span>
-  weight: <span class="token-string">"regular"</span>,       <span class="token-comment">// Graisse: thin, regular, bold</span>
+  font: <span class="token-string">"Arial"</span>,           <span class="token-comment">// Main font</span>
+  size: <span class="token-number">11pt</span>,              <span class="token-comment">// Base size</span>
+  fill: rgb(<span class="token-string">"#333333"</span>),   <span class="token-comment">// Text color</span>
+  lang: <span class="token-string">"en"</span>,              <span class="token-comment">// Language (hyphenation, quotes)</span>
+  weight: <span class="token-string">"regular"</span>,       <span class="token-comment">// Weight: thin, regular, bold</span>
   style: <span class="token-string">"normal"</span>          <span class="token-comment">// Style: normal, italic, oblique</span>
 )</code></pre>
 
-      <h3>Polices populaires</h3>
+      <h3>Popular Fonts</h3>
 
-      <pre><code><span class="token-comment">// Serif (documents formels)</span>
+      <pre><code><span class="token-comment">// Serif (formal documents)</span>
 <span class="token-keyword">#set</span> text(font: <span class="token-string">"Times New Roman"</span>)
 <span class="token-keyword">#set</span> text(font: <span class="token-string">"Georgia"</span>)
 <span class="token-keyword">#set</span> text(font: <span class="token-string">"Garamond"</span>)
 
-<span class="token-comment">// Sans-serif (documents modernes)</span>
+<span class="token-comment">// Sans-serif (modern documents)</span>
 <span class="token-keyword">#set</span> text(font: <span class="token-string">"Arial"</span>)
 <span class="token-keyword">#set</span> text(font: <span class="token-string">"Helvetica"</span>)
 <span class="token-keyword">#set</span> text(font: <span class="token-string">"Calibri"</span>)
@@ -141,21 +141,21 @@
 <span class="token-comment">// Monospace (code)</span>
 <span class="token-keyword">#set</span> raw(font: <span class="token-string">"JetBrains Mono"</span>)</code></pre>
 
-      <h2>Configuration des paragraphes</h2>
+      <h2>Paragraph Configuration</h2>
 
       <pre><code><span class="token-keyword">#set</span> par(
   justify: <span class="token-keyword">true</span>,           <span class="token-comment">// Justification</span>
-  leading: <span class="token-number">0.65em</span>,         <span class="token-comment">// Interligne</span>
-  first-line-indent: <span class="token-number">1em</span>,  <span class="token-comment">// Retrait premiere ligne</span>
-  spacing: <span class="token-number">1.2em</span>           <span class="token-comment">// Espace entre paragraphes</span>
+  leading: <span class="token-number">0.65em</span>,         <span class="token-comment">// Line spacing</span>
+  first-line-indent: <span class="token-number">1em</span>,  <span class="token-comment">// First line indent</span>
+  spacing: <span class="token-number">1.2em</span>           <span class="token-comment">// Space between paragraphs</span>
 )</code></pre>
 
-      <h2>Styles des titres</h2>
+      <h2>Heading Styles</h2>
 
-      <pre><code><span class="token-comment">// Numerotation</span>
+      <pre><code><span class="token-comment">// Numbering</span>
 <span class="token-keyword">#set</span> heading(numbering: <span class="token-string">"1.1"</span>)
 
-<span class="token-comment">// Style personnalise</span>
+<span class="token-comment">// Custom style</span>
 <span class="token-keyword">#show</span> heading.where(level: <span class="token-number">1</span>): it => {
   <span class="token-keyword">set</span> text(size: <span class="token-number">18pt</span>, weight: <span class="token-string">"bold"</span>, fill: rgb(<span class="token-string">"#2563eb"</span>))
   <span class="token-keyword">v</span>(<span class="token-number">1em</span>)
@@ -172,101 +172,101 @@
   <span class="token-keyword">v</span>(<span class="token-number">0.4em</span>)
 }</code></pre>
 
-      <h2>Couleurs</h2>
+      <h2>Colors</h2>
 
-      <pre><code><span class="token-comment">// Definition de couleurs</span>
+      <pre><code><span class="token-comment">// Color definition</span>
 <span class="token-keyword">#let</span> primary = rgb(<span class="token-string">"#2563eb"</span>)
 <span class="token-keyword">#let</span> secondary = rgb(<span class="token-string">"#64748b"</span>)
 <span class="token-keyword">#let</span> accent = rgb(<span class="token-string">"#059669"</span>)
 
-<span class="token-comment">// Utilisation</span>
-<span class="token-keyword">#text</span>(fill: primary)[Texte en bleu]
+<span class="token-comment">// Usage</span>
+<span class="token-keyword">#text</span>(fill: primary)[Blue text]
 
-<span class="token-comment">// Autres formats</span>
+<span class="token-comment">// Other formats</span>
 rgb(<span class="token-number">255</span>, <span class="token-number">0</span>, <span class="token-number">0</span>)          <span class="token-comment">// RGB</span>
 rgb(<span class="token-string">"#ff0000"</span>)          <span class="token-comment">// Hex</span>
 cmyk(<span class="token-number">0%</span>, <span class="token-number">100%</span>, <span class="token-number">100%</span>, <span class="token-number">0%</span>) <span class="token-comment">// CMYK</span>
-luma(<span class="token-number">50%</span>)               <span class="token-comment">// Niveau de gris</span></code></pre>
+luma(<span class="token-number">50%</span>)               <span class="token-comment">// Grayscale</span></code></pre>
 
-      <h2>Blocs et encadres</h2>
+      <h2>Blocks and Boxes</h2>
 
-      <pre><code><span class="token-comment">// Bloc simple</span>
+      <pre><code><span class="token-comment">// Simple block</span>
 <span class="token-keyword">#block</span>(
   fill: rgb(<span class="token-string">"#f1f5f9"</span>),
   inset: <span class="token-number">1em</span>,
   radius: <span class="token-number">4pt</span>,
   width: <span class="token-number">100%</span>
 )[
-  Contenu du bloc avec fond colore et coins arrondis.
+  Block content with colored background and rounded corners.
 ]
 
-<span class="token-comment">// Encadre avec bordure</span>
+<span class="token-comment">// Box with border</span>
 <span class="token-keyword">#block</span>(
   stroke: <span class="token-number">1pt</span> + rgb(<span class="token-string">"#2563eb"</span>),
   inset: <span class="token-number">1em</span>,
   radius: <span class="token-number">4pt</span>
 )[
-  Contenu encadre avec bordure bleue.
+  Boxed content with blue border.
 ]
 
-<span class="token-comment">// Note ou avertissement</span>
+<span class="token-comment">// Note or warning</span>
 <span class="token-keyword">#block</span>(
   fill: rgb(<span class="token-string">"#fef3c7"</span>),
   stroke: (left: <span class="token-number">4pt</span> + rgb(<span class="token-string">"#f59e0b"</span>)),
   inset: <span class="token-number">1em</span>
 )[
-  *Attention :* Ceci est un avertissement important.
+  *Warning:* This is an important warning.
 ]</code></pre>
 
-      <h2>Lignes et separateurs</h2>
+      <h2>Lines and Separators</h2>
 
-      <pre><code><span class="token-comment">// Ligne horizontale</span>
+      <pre><code><span class="token-comment">// Horizontal line</span>
 <span class="token-keyword">#line</span>(length: <span class="token-number">100%</span>)
 
-<span class="token-comment">// Ligne avec style</span>
+<span class="token-comment">// Styled line</span>
 <span class="token-keyword">#line</span>(
   length: <span class="token-number">100%</span>,
   stroke: <span class="token-number">2pt</span> + rgb(<span class="token-string">"#2563eb"</span>)
 )
 
-<span class="token-comment">// Ligne pointillee</span>
+<span class="token-comment">// Dashed line</span>
 <span class="token-keyword">#line</span>(
   length: <span class="token-number">100%</span>,
   stroke: (dash: <span class="token-string">"dashed"</span>)
 )</code></pre>
 
-      <h2>Colonnes</h2>
+      <h2>Columns</h2>
 
-      <pre><code><span class="token-comment">// Document en deux colonnes</span>
+      <pre><code><span class="token-comment">// Two-column document</span>
 <span class="token-keyword">#set</span> page(columns: <span class="token-number">2</span>)
 
-<span class="token-comment">// Section en colonnes</span>
+<span class="token-comment">// Section with columns</span>
 <span class="token-keyword">#columns</span>(<span class="token-number">2</span>, gutter: <span class="token-number">1cm</span>)[
-  Contenu de la premiere colonne...
+  First column content...
 
   <span class="token-keyword">#colbreak</span>()
 
-  Contenu de la seconde colonne...
+  Second column content...
 ]</code></pre>
 
-      <h2>Variables et fonctions personnalisees</h2>
+      <h2>Variables and Custom Functions</h2>
 
       <pre><code><span class="token-comment">// Variables</span>
-<span class="token-keyword">#let</span> titre = <span class="token-string">"Mon Document"</span>
-<span class="token-keyword">#let</span> auteur = <span class="token-string">"Jean Dupont"</span>
+<span class="token-keyword">#let</span> title = <span class="token-string">"My Document"</span>
+<span class="token-keyword">#let</span> author = <span class="token-string">"John Doe"</span>
 
-<span class="token-comment">// Fonction personnalisee</span>
+<span class="token-comment">// Custom function</span>
 <span class="token-keyword">#let</span> note(body) = block(
   fill: rgb(<span class="token-string">"#e0f2fe"</span>),
   inset: <span class="token-number">1em</span>,
   radius: <span class="token-number">4pt</span>,
   width: <span class="token-number">100%</span>
 )[
-  <span class="token-keyword">#text</span>(weight: <span class="token-string">"bold"</span>)[Note :] #body
+  <span class="token-keyword">#text</span>(weight: <span class="token-string">"bold"</span>)[Note:] #body
 ]
 
-<span class="token-comment">// Utilisation</span>
-<span class="token-keyword">#note</span>[Ceci est une note importante.]</code></pre>
+<span class="token-comment">// Usage</span>
+<span class="token-keyword">#note</span>[This is an important note.]</code></pre>
 
       <div class="callout callout-info">
         <div class="callout-title">
@@ -276,7 +276,7 @@ luma(<span class="token-number">50%</span>)               <span class="token-com
           </svg>
           set vs show
         </div>
-        <p style="margin: 0;"><code>#set</code> definit des valeurs par defaut. <code>#show</code> transforme l'apparence des elements existants.</p>
+        <p style="margin: 0;"><code>#set</code> defines default values. <code>#show</code> transforms the appearance of existing elements.</p>
       </div>
 
     </main>
@@ -285,7 +285,7 @@ luma(<span class="token-number">50%</span>)               <span class="token-com
   <footer class="footer">
     <div class="container">
       <div class="footer-bottom" style="border-top: none; padding-top: 0;">
-        <p>NovaType - Projet Open Source sous licence MIT</p>
+        <p>NovaType - Open Source Project under MIT License</p>
       </div>
     </div>
   </footer>

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Playground NovaType - Editeur interactif avec rendu temps reel via WebAssembly.">
+  <meta name="description" content="NovaType Playground - Interactive editor with real-time rendering via WebAssembly.">
   <title>Playground - NovaType</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -486,14 +486,14 @@
         NovaType
       </a>
       <ul class="nav-links" id="navLinks">
-        <li><a href="/novatype/">Accueil</a></li>
+        <li><a href="/novatype/">Home</a></li>
         <li><a href="/novatype/demos.html" class="active">Demos</a></li>
         <li><a href="/novatype/docs/index.html">Documentation</a></li>
         <li><a href="/novatype/docs/templates.html">Templates</a></li>
         <li><a href="https://github.com/AureClai/novatype" target="_blank">GitHub</a></li>
       </ul>
       <div class="nav-actions">
-        <a href="/novatype/docs/getting-started.html" class="btn btn-primary">Commencer</a>
+        <a href="/novatype/docs/getting-started.html" class="btn btn-primary">Get Started</a>
         <button class="nav-toggle" id="navToggle" aria-label="Menu">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M3 12h18M3 6h18M3 18h18"/>
@@ -506,7 +506,7 @@
   <!-- Controls bar -->
   <div class="playground-controls">
     <div class="controls-section">
-      <span class="controls-label">Exemples</span>
+      <span class="controls-label">Examples</span>
       <div class="dropdown" id="examplesDropdown">
         <button class="dropdown-btn" id="examplesBtn">
           <span id="currentExample">Hello World</span>
@@ -515,76 +515,76 @@
           </svg>
         </button>
         <div class="dropdown-menu">
-          <div class="dropdown-header">Commencer</div>
+          <div class="dropdown-header">Get Started</div>
           <button class="dropdown-item active" data-example="hello">
             <div class="dropdown-item-title">Hello World</div>
-            <div class="dropdown-item-desc">Le classique premier document</div>
+            <div class="dropdown-item-desc">The classic first document</div>
           </button>
           <button class="dropdown-item" data-example="scratch">
-            <div class="dropdown-item-title">Page vierge</div>
-            <div class="dropdown-item-desc">Commencer de zero</div>
+            <div class="dropdown-item-title">Blank page</div>
+            <div class="dropdown-item-desc">Start from scratch</div>
           </button>
 
           <div class="dropdown-divider"></div>
-          <div class="dropdown-header">Syntaxe de base</div>
+          <div class="dropdown-header">Basic Syntax</div>
           <button class="dropdown-item" data-example="formatting">
-            <div class="dropdown-item-title">Mise en forme</div>
-            <div class="dropdown-item-desc">Gras, italique, titres, listes</div>
+            <div class="dropdown-item-title">Formatting</div>
+            <div class="dropdown-item-desc">Bold, italic, headings, lists</div>
           </button>
           <button class="dropdown-item" data-example="headings">
             <div class="dropdown-item-title">Structure</div>
-            <div class="dropdown-item-desc">Titres et sections</div>
+            <div class="dropdown-item-desc">Headings and sections</div>
           </button>
 
           <div class="dropdown-divider"></div>
-          <div class="dropdown-header">Mathematiques</div>
+          <div class="dropdown-header">Mathematics</div>
           <button class="dropdown-item" data-example="math-inline">
-            <div class="dropdown-item-title">Equations simples</div>
-            <div class="dropdown-item-desc">Formules en ligne et centrees</div>
+            <div class="dropdown-item-title">Simple Equations</div>
+            <div class="dropdown-item-desc">Inline and centered formulas</div>
           </button>
           <button class="dropdown-item" data-example="math-advanced">
-            <div class="dropdown-item-title">Mathematiques avancees</div>
-            <div class="dropdown-item-desc">Matrices, systemes, integrales</div>
+            <div class="dropdown-item-title">Advanced Mathematics</div>
+            <div class="dropdown-item-desc">Matrices, systems, integrals</div>
           </button>
 
           <div class="dropdown-divider"></div>
-          <div class="dropdown-header">Donnees</div>
+          <div class="dropdown-header">Data</div>
           <button class="dropdown-item" data-example="tables">
-            <div class="dropdown-item-title">Tableaux</div>
-            <div class="dropdown-item-desc">Presentation de donnees</div>
+            <div class="dropdown-item-title">Tables</div>
+            <div class="dropdown-item-desc">Data presentation</div>
           </button>
           <button class="dropdown-item" data-example="figures">
             <div class="dropdown-item-title">Figures</div>
-            <div class="dropdown-item-desc">Images et legendes</div>
+            <div class="dropdown-item-desc">Images and captions</div>
           </button>
 
           <div class="dropdown-divider"></div>
           <div class="dropdown-header">References</div>
           <button class="dropdown-item" data-example="cross-refs">
-            <div class="dropdown-item-title">References croisees</div>
+            <div class="dropdown-item-title">Cross-references</div>
             <div class="dropdown-item-desc">Figures, equations, sections</div>
           </button>
           <button class="dropdown-item" data-example="bibliography">
-            <div class="dropdown-item-title">Bibliographie</div>
-            <div class="dropdown-item-desc">Citations et references</div>
+            <div class="dropdown-item-title">Bibliography</div>
+            <div class="dropdown-item-desc">Citations and references</div>
           </button>
 
           <div class="dropdown-divider"></div>
           <div class="dropdown-header">Code</div>
           <button class="dropdown-item" data-example="code">
-            <div class="dropdown-item-title">Blocs de code</div>
-            <div class="dropdown-item-desc">Syntaxe coloree</div>
+            <div class="dropdown-item-title">Code Blocks</div>
+            <div class="dropdown-item-desc">Syntax highlighting</div>
           </button>
 
           <div class="dropdown-divider"></div>
-          <div class="dropdown-header">Documents complets</div>
+          <div class="dropdown-header">Complete Documents</div>
           <button class="dropdown-item" data-example="article">
-            <div class="dropdown-item-title">Article scientifique</div>
-            <div class="dropdown-item-desc">Document academique complet</div>
+            <div class="dropdown-item-title">Scientific Article</div>
+            <div class="dropdown-item-desc">Complete academic document</div>
           </button>
           <button class="dropdown-item" data-example="letter">
-            <div class="dropdown-item-title">Lettre</div>
-            <div class="dropdown-item-desc">Correspondance formelle</div>
+            <div class="dropdown-item-title">Letter</div>
+            <div class="dropdown-item-desc">Formal correspondence</div>
           </button>
         </div>
       </div>
@@ -592,7 +592,7 @@
 
     <div class="controls-status">
       <span class="status-dot loading" id="statusDot"></span>
-      <span id="statusText">Chargement...</span>
+      <span id="statusText">Loading...</span>
     </div>
   </div>
 
@@ -601,14 +601,14 @@
     <!-- Editor Pane -->
     <div class="editor-pane" id="editorPane">
       <div class="pane-header">
-        <span class="pane-title">Editeur</span>
+        <span class="pane-title">Editor</span>
       </div>
       <div class="example-description" id="exampleDescription">
         <div class="example-description-title" id="exampleTitle"></div>
         <div class="example-description-text" id="exampleText"></div>
       </div>
       <div class="editor-content">
-        <textarea id="editor" spellcheck="false" placeholder="Ecrivez votre code NovaType ici..."></textarea>
+        <textarea id="editor" spellcheck="false" placeholder="Write your NovaType code here..."></textarea>
       </div>
     </div>
 
@@ -618,12 +618,12 @@
     <!-- Preview Pane -->
     <div class="preview-pane" id="previewPane">
       <div class="pane-header">
-        <span class="pane-title">Apercu</span>
+        <span class="pane-title">Preview</span>
       </div>
       <div class="preview-content">
         <div class="preview-loading" id="previewLoading">
           <div class="preview-loading-spinner"></div>
-          <span>Chargement du compilateur...</span>
+          <span>Loading compiler...</span>
         </div>
         <div class="preview-result" id="previewResult" style="display: none;"></div>
         <div class="preview-error" id="previewError"></div>
@@ -639,141 +639,139 @@
     const examples = {
       hello: {
         title: "Hello World",
-        description: "Le premier document NovaType - decouvrez la syntaxe de base avec un exemple simple.",
-        code: `// Mon premier document NovaType
+        description: "The first NovaType document - discover the basic syntax with a simple example.",
+        code: `// My first NovaType document
 
-= Bonjour, NovaType !
+= Hello, NovaType\!
 
-Bienvenue dans le monde de la composition
-typographique moderne.
+Welcome to the world of modern
+typographic composition.
 
-Ceci est un paragraphe avec du *texte en gras*
-et de l'_italique_.
+This is a paragraph with *bold text*
+and _italic_.
 
-== Pourquoi NovaType ?
+== Why NovaType?
 
-- Syntaxe intuitive
-- Rendu de qualite professionnelle
-- Compilation rapide
+- Intuitive syntax
+- Professional quality rendering
+- Fast compilation
 
-Essayez de modifier ce texte !`
+Try modifying this text\!`
       },
       scratch: {
-        title: "Page vierge",
-        description: "Un canvas vide pour vos experiences. Commencez a ecrire !",
-        code: `// Votre document commence ici
+        title: "Blank page",
+        description: "An empty canvas for your experiments. Start writing\!",
+        code: `// Your document starts here
 
 `
       },
       formatting: {
-        title: "Mise en forme",
-        description: "Les bases de la mise en forme : gras, italique, et differentes facons de styliser votre texte.",
-        code: `= Guide de mise en forme
+        title: "Formatting",
+        description: "The basics of formatting: bold, italic, and different ways to style your text.",
+        code: `= Formatting Guide
 
-== Texte simple
+== Plain Text
 
-Ceci est un paragraphe normal.
-Les retours a la ligne simples sont ignores.
+This is a normal paragraph.
+Simple line breaks are ignored.
 
-Une ligne vide cree un nouveau paragraphe.
+An empty line creates a new paragraph.
 
-== Emphase
+== Emphasis
 
-Utilisez *asterisques* pour le *gras*.
-Utilisez _underscores_ pour l'_italique_.
-Combinez les deux : *_gras et italique_*.
+Use *asterisks* for *bold*.
+Use _underscores_ for _italic_.
+Combine both: *_bold and italic_*.
 
-== Listes
+== Lists
 
-Liste a puces :
-- Premier element
-- Deuxieme element
-  - Sous-element
-  - Autre sous-element
-- Troisieme element
+Bullet list:
+- First item
+- Second item
+  - Sub-item
+  - Another sub-item
+- Third item
 
-Liste numerotee :
-+ Premier
-+ Deuxieme
-+ Troisieme
+Numbered list:
++ First
++ Second
++ Third
 
-== Texte special
+== Special Text
 
-Texte #text(fill: blue)[en couleur].
-Texte #text(size: 1.5em)[plus grand].
-Texte en #smallcaps[petites capitales].`
+Text #text(fill: blue)[in color].
+Text #text(size: 1.5em)[larger].
+Text in #smallcaps[small caps].`
       },
       headings: {
         title: "Structure",
-        description: "Organisez votre document avec des titres et des sections hierarchiques.",
-        code: `= Titre principal (niveau 1)
+        description: "Organize your document with headings and hierarchical sections.",
+        code: `= Main heading (level 1)
 
-Introduction de votre document.
+Introduction to your document.
 
-== Section (niveau 2)
+== Section (level 2)
 
-Contenu de la section.
+Section content.
 
-=== Sous-section (niveau 3)
+=== Subsection (level 3)
 
-Contenu plus detaille.
+More detailed content.
 
-==== Sous-sous-section (niveau 4)
+==== Sub-subsection (level 4)
 
-Encore plus de details.
+Even more details.
 
-== Autre section
+== Another section
 
-Retour au niveau 2.
+Back to level 2.
 
 === Details
 
-Quelques informations supplementaires.
+Some additional information.
 
-= Deuxieme partie
+= Second part
 
-Un nouveau chapitre commence ici.`
+A new chapter begins here.`
       },
       "math-inline": {
-        title: "Equations simples",
-        description: "Les bases des mathematiques : equations en ligne et equations centrees.",
-        code: `= Equations mathematiques
+        title: "Simple Equations",
+        description: "The basics of mathematics: inline and centered equations.",
+        code: `= Mathematical Equations
 
-== Equations en ligne
+== Inline Equations
 
-La formule $a^2 + b^2 = c^2$ est le
-theoreme de Pythagore.
+The formula $a^2 + b^2 = c^2$ is the
+Pythagorean theorem.
 
-L'equation $E = m c^2$ d'Einstein.
+The equation $E = m c^2$ by Einstein.
 
-Les racines : $x = (-b plus.minus sqrt(b^2 - 4 a c)) / (2 a)$
+The roots: $x = (-b plus.minus sqrt(b^2 - 4 a c)) / (2 a)$
 
-== Equations centrees
+== Centered Equations
 
-L'integrale definie :
+The definite integral:
 
 $ integral_a^b f(x) dif x $
 
-La somme :
+The sum:
 
 $ sum_(i=1)^n i = (n(n+1))/2 $
 
-La limite :
+The limit:
 
 $ lim_(x -> infinity) (1 + 1/x)^x = e $
 
-== Fractions et exposants
+== Fractions and Exponents
 
 $ (a+b)^2 = a^2 + 2 a b + b^2 $
 
 $ sqrt(x^2 + y^2) $`
       },
       "math-advanced": {
-        title: "Mathematiques avancees",
-        description: "Matrices, systemes d'equations, et notations mathematiques complexes.",
-        code: `= Mathematiques avancees
-
-== Matrices
+        title: "Advanced Mathematics",
+        description: "Matrices, systems of equations, and complex mathematical notations.",
+        code: `= Advanced Mathematicsn== Matrices
 
 $ bold(A) = mat(
   1, 2, 3;
@@ -781,7 +779,7 @@ $ bold(A) = mat(
   7, 8, 9
 ) $
 
-Matrice identite :
+Identity matrix:
 
 $ bold(I) = mat(
   1, 0, 0;
@@ -789,7 +787,7 @@ $ bold(I) = mat(
   0, 0, 1
 ) $
 
-== Systemes d'equations
+== Systems of Equations
 
 $ cases(
   x + y + z = 6,
@@ -797,71 +795,71 @@ $ cases(
   x + 2y - z = 2
 ) $
 
-== Vecteurs et derivees
+== Vectors and Derivatives
 
-Gradient : $ nabla f = (diff f)/(diff x) bold(i) + (diff f)/(diff y) bold(j) $
+Gradient: $ nabla f = (diff f)/(diff x) bold(i) + (diff f)/(diff y) bold(j) $
 
-Divergence : $ nabla dot bold(F) $
+Divergence: $ nabla dot bold(F) $
 
-Rotationnel : $ nabla times bold(F) $
+Curl: $ nabla times bold(F) $
 
-== Integrales multiples
+== Multiple Integrals
 
 $ integral.double_D f(x,y) dif x dif y $
 
 $ integral.triple_V rho dif V = M $
 
-== Produits et sommes
+== Products and Sums
 
 $ product_(i=1)^n a_i = a_1 dot a_2 dot dots dot a_n $`
       },
       tables: {
-        title: "Tableaux",
-        description: "Creez des tableaux pour presenter vos donnees de maniere structuree.",
-        code: `= Tableaux de donnees
+        title: "Tables",
+        description: "Create tables to present your data in a structured way.",
+        code: `= Data Tables
 
-== Tableau simple
+== Simple Table
 
 #table(
   columns: 3,
-  [*Nom*], [*Age*], [*Ville*],
+  [*Name*], [*Age*], [*City*],
   [Alice], [28], [Paris],
   [Bob], [35], [Lyon],
   [Charlie], [42], [Marseille],
 )
 
-== Tableau avec figure
+== Table with Figure
 
 #figure(
   table(
     columns: 4,
     table.header(
-      [*Algorithme*], [*Temps*], [*Memoire*], [*Precision*],
+      [*Algorithm*], [*Time*], [*Memory*], [*Accuracy*],
     ),
-    [Methode A], [1.2s], [256 MB], [92%],
-    [Methode B], [0.8s], [512 MB], [95%],
-    [Methode C], [2.1s], [128 MB], [89%],
+    [Method A], [1.2s], [256 MB], [92%],
+    [Method B], [0.8s], [512 MB], [95%],
+    [Method C], [2.1s], [128 MB], [89%],
     [*NovaType*], [*0.5s*], [*64 MB*], [*98%*],
   ),
-  caption: [Comparaison des performances]
+  caption: [Performance Comparison]
 )
 
-== Colonnes personnalisees
+== Custom Columns
 
 #table(
   columns: (auto, 1fr, 1fr),
   align: (left, center, right),
-  [Gauche], [Centre], [Droite],
+  [Left], [Center], [Right],
   [A], [B], [C],
   [1], [2], [3],
 )`
       },
       figures: {
         title: "Figures",
-        description: "Ajoutez des formes, des graphiques et des illustrations a vos documents.",
-        code: `= Figures et illustrations
+        description: "Add shapes, graphics, and illustrations to your documents.",
+        code: `= Figures and Illustrations
 
-== Formes geometriques
+== Geometric Shapes
 
 #align(center)[
   #box(width: 80pt, height: 80pt, fill: blue.lighten(70%), stroke: blue)[
@@ -873,11 +871,11 @@ $ product_(i=1)^n a_i = a_1 dot a_2 dot dots dot a_n $`
 
 #align(center)[
   #circle(radius: 40pt, fill: green.lighten(70%), stroke: green)[
-    #align(center + horizon)[Cercle]
+    #align(center + horizon)[Circle]
   ]
 ]
 
-== Blocs colores
+== Colored Blocks
 
 #block(
   fill: yellow.lighten(80%),
@@ -885,7 +883,7 @@ $ product_(i=1)^n a_i = a_1 dot a_2 dot dots dot a_n $`
   radius: 4pt,
   width: 100%,
 )[
-  *Attention :* Ceci est un bloc d'avertissement.
+  *Warning:* This is a warning block.
 ]
 
 #block(
@@ -894,43 +892,43 @@ $ product_(i=1)^n a_i = a_1 dot a_2 dot dots dot a_n $`
   radius: 4pt,
   width: 100%,
 )[
-  *Info :* Une note informative pour le lecteur.
+  *Info:* An informative note for the reader.
 ]
 
-== Figure avec legende
+== Figure with Caption
 
 #figure(
   rect(width: 200pt, height: 100pt, fill: gray.lighten(70%))[
     #align(center + horizon)[
-      #text(fill: gray)[Emplacement image]
+      #text(fill: gray)[Image placeholder]
     ]
   ],
-  caption: [Description de la figure]
+  caption: [Figure description]
 )`
       },
       "cross-refs": {
-        title: "References croisees",
-        description: "Creez des liens entre figures, equations et sections. Les references sont cliquables dans le document.",
-        code: `// Activer la numerotation
+        title: "Cross-references",
+        description: "Create links between figures, equations, and sections. References are clickable in the document.",
+        code: `// Enable numbering
 #set heading(numbering: "1.")
 #set math.equation(numbering: "(1)")
 
-= References croisees <sec:intro>
+= Cross-references <sec:intro>
 
-Les references croisees permettent de lier
-differentes parties de votre document.
+Cross-references allow you to link
+different parts of your document.
 
-== Equations numerotees <sec:equations>
+== Numbered Equations <sec:equations>
 
-L'equation d'Einstein :
+Einstein's equation:
 
 $ E = m c^2 $ <eq:einstein>
 
-Le theoreme de Pythagore :
+Le Pythagorean theorem :
 
 $ a^2 + b^2 = c^2 $ <eq:pythagore>
 
-La formule quadratique :
+The quadratic formula:
 
 $ x = (-b plus.minus sqrt(b^2 - 4 a c)) / (2 a) $ <eq:quadratique>
 
@@ -938,19 +936,19 @@ $ x = (-b plus.minus sqrt(b^2 - 4 a c)) / (2 a) $ <eq:quadratique>
 
 #figure(
   rect(width: 150pt, height: 80pt, fill: blue.lighten(80%))[
-    #align(center + horizon)[Graphique A]
+    #align(center + horizon)[Chart A]
   ],
-  caption: [Premier graphique de resultats]
+  caption: [First results chart]
 ) <fig:graphique-a>
 
 #figure(
   rect(width: 150pt, height: 80pt, fill: green.lighten(80%))[
-    #align(center + horizon)[Graphique B]
+    #align(center + horizon)[Chart B]
   ],
-  caption: [Second graphique comparatif]
+  caption: [Comparative chart]
 ) <fig:graphique-b>
 
-== Tableaux <sec:tableaux>
+== Tables <sec:tables>
 
 #figure(
   table(
@@ -959,26 +957,26 @@ $ x = (-b plus.minus sqrt(b^2 - 4 a c)) / (2 a) $ <eq:quadratique>
     [1], [2], [3],
     [4], [5], [6],
   ),
-  caption: [Donnees experimentales]
+  caption: [Experimental data]
 ) <tab:donnees>
 
-== Utilisation des references
+== Using References
 
-Comme montre dans @eq:einstein, l'energie
-et la masse sont equivalentes.
+As shown in @eq:einstein, energy
+and mass are equivalent.
 
-La @fig:graphique-a presente les resultats
-initiaux, tandis que la @fig:graphique-b
-montre la comparaison.
+@fig:chart-a presents the initial results
+while @fig:chart-b
+shows the comparison.
 
-Les donnees du @tab:donnees confirment
-l'hypothese presentee en @sec:equations.
+The data in @tab:data confirms
+the hypothesis presented in @sec:equations.
 
-Voir aussi @eq:pythagore et @eq:quadratique.`
+See also @eq:pythagore et @eq:quadratique.`
       },
       bibliography: {
-        title: "Bibliographie",
-        description: "Citations et references bibliographiques avec fichier BibTeX embarque.",
+        title: "Bibliography",
+        description: "Citations and bibliographic references with embedded BibTeX file.",
         code: `// === refs.bib ===
 // @book{knuth1984,
 //   author = {Donald E. Knuth},
@@ -1011,24 +1009,24 @@ Voir aussi @eq:pythagore et @eq:quadratique.`
 
 = Introduction
 
-La typographie numerique moderne a ete
-fondee par les travaux de @knuth1984 sur
-le systeme TeX. Plus tard, @lamport1994
-a simplifie son usage avec LaTeX.
+Modern digital typography was
+founded by the work of @knuth1984 sur
+the TeX system. Later, @lamport1994
+simplified its usage with LaTeX.
 
-= Systemes de composition
+= Typesetting Systems
 
-== Evolution historique
+== Historical Evolution
 
-L'evolution des systemes de composition :
+The evolution of typesetting systems:
 
-+ *TeX* (1978) : Precision mathematique @knuth1984
-+ *LaTeX* (1984) : Macros simplifiees @lamport1994
-+ *Typst* (2023) : Syntaxe moderne @typst2023
++ *TeX* (1978) : Mathematical precision @knuth1984
++ *LaTeX* (1984) : Simplified macros @lamport1994
++ *Typst* (2023) : Modern syntax @typst2023
 
-== Principes typographiques
+== Typographic Principles
 
-Comme le souligne @bringhurst2004 :
+As @bringhurst2004 :
 
 #block(
   fill: gray.lighten(90%),
@@ -1036,28 +1034,28 @@ Comme le souligne @bringhurst2004 :
   radius: 4pt,
   width: 100%,
 )[
-  _"La typographie existe pour honorer
-  le contenu."_
+  _"Typography exists to honor
+  content."_
 ]
 
 = Conclusion
 
-De TeX @knuth1984 a Typst @typst2023,
-l'objectif reste le meme : produire des
-documents de qualite professionnelle.
+From TeX @knuth1984 a Typst @typst2023,
+the goal remains the same: to produce
+professional quality documents.
 
 #bibliography("refs.bib", style: "ieee")`
       },
       code: {
-        title: "Blocs de code",
-        description: "Integrez du code source avec coloration syntaxique dans vos documents.",
-        code: `= Documentation technique
+        title: "Code Blocks",
+        description: "Integrate source code with syntax highlighting in your documents.",
+        code: `= Technical Documentation
 
 == Code Python
 
 \`\`\`python
 def fibonacci(n):
-    """Calcule le n-ieme nombre de Fibonacci."""
+    """Calculate the n-th Fibonacci number."""
     if n <= 1:
         return n
     return fibonacci(n-1) + fibonacci(n-2)
@@ -1075,71 +1073,71 @@ const fetchData = async (url) => {
     const response = await fetch(url);
     return await response.json();
   } catch (error) {
-    console.error('Erreur:', error);
+    console.error('Error:', error);
   }
 };
 \`\`\`
 
-== Code en ligne
+== Inline Code
 
-Utilisez \`const\` pour les variables constantes
-et \`let\` pour les variables mutables.
+Use \`const\` for constant variables
+et \`let\` for mutable variables.
 
-La fonction \`map()\` transforme chaque element.`
+La fonction \`map()\` transforms each element.`
       },
       article: {
-        title: "Article scientifique",
-        description: "Un modele complet d'article academique avec toutes les sections standards.",
-        code: `// Configuration du document
-#set document(title: "NovaType: Approche Moderne")
+        title: "Scientific Article",
+        description: "A complete academic article template with all standard sections.",
+        code: `// Document configuration
+#set document(title: "NovaType: A Modern Approach")
 #set page(margin: 2cm)
 #set text(font: "New Computer Modern", size: 11pt)
 #set par(justify: true)
 
-// En-tete
+// Header
 #align(center)[
   #text(17pt, weight: "bold")[
-    NovaType: Une Approche Moderne de la
-    Composition Typographique
+    NovaType: A Modern Approach to
+    Typographic Composition
   ]
 
   #v(1em)
 
   #text(11pt)[
-    *Jean Dupont*#super[1] et *Marie Martin*#super[2]
+    *John Smith*#super[1] et *Jane Doe*#super[2]
   ]
 
   #text(9pt, style: "italic")[
-    #super[1]Universite de Paris |
-    #super[2]CNRS
+    #super[1]University of Oxford |
+    #super[2]MIT
   ]
 
   #v(1em)
 ]
 
-// Resume
+// Abstract
 #block(width: 100%, inset: (x: 2em))[
-  *Resume* --- Cet article presente NovaType,
-  un systeme de composition qui allie qualite
-  typographique et simplicite d'utilisation.
+  *Abstract* --- This article presents NovaType,
+  a typesetting system that combines
+  typographic quality with ease of use.
 
-  *Mots-cles :* typographie, documents, LaTeX
+  *Keywords:* typographie, documents, LaTeX
 ]
 
 #v(1em)
 
 = Introduction
 
-La redaction scientifique necessite des outils
-alliant precision et accessibilite.
+Scientific writing requires tools
+combining precision and accessibility.
 
-= Methodologie
+= Methodology
 
-Notre approche repose sur trois piliers :
+Our approach is based on three pillars:
 
-+ *Simplicite syntaxique*
-+ *Compilation rapide*
-+ *Extensibilite*
++ *Syntactic simplicity*
++ *Fast compilation*
++ *Extensibility*
 
 == Resultats
 
@@ -1159,8 +1157,8 @@ Notre approche repose sur trois piliers :
 NovaType represente une evolution majeure.`
       },
       letter: {
-        title: "Lettre",
-        description: "Modele de lettre formelle pour votre correspondance professionnelle.",
+        title: "Letter",
+        description: "Formal letter template for your professional correspondence.",
         code: `// Configuration
 #set page(margin: (top: 3cm, bottom: 2cm, x: 2.5cm))
 #set text(font: "New Computer Modern", size: 11pt)
@@ -1168,7 +1166,7 @@ NovaType represente une evolution majeure.`
 
 // Expediteur
 #align(right)[
-  Jean Dupont \\
+  John Smith \\
   123 Rue de la Science \\
   75001 Paris \\
   jean.dupont\@email.fr
@@ -1218,7 +1216,7 @@ de mes salutations distinguees.
 #v(2em)
 
 #align(right)[
-  Jean Dupont
+  John Smith
 ]`
       }
     };
@@ -1364,7 +1362,7 @@ de mes salutations distinguees.
       lastSource = source;
 
       statusDot.className = 'status-dot compiling';
-      statusText.textContent = 'Compilation...';
+      statusText.textContent = 'Compiling...';
 
       try {
         const result = await compile(source);
@@ -1387,15 +1385,15 @@ de mes salutations distinguees.
 
           statusDot.className = 'status-dot ready';
           statusText.textContent = result.svg_pages.length > 1
-            ? `Pret (${result.svg_pages.length} pages)`
-            : 'Pret';
+            ? `Ready (${result.svg_pages.length} pages)`
+            : 'Ready';
         } else {
           previewError.textContent = result.errors.join('\n');
           previewError.classList.add('visible');
           previewResult.style.display = 'none';
 
           statusDot.className = 'status-dot error';
-          statusText.textContent = 'Erreur';
+          statusText.textContent = 'Error';
         }
       } catch (err) {
         previewError.textContent = err.message || String(err);
@@ -1403,7 +1401,7 @@ de mes salutations distinguees.
         previewResult.style.display = 'none';
 
         statusDot.className = 'status-dot error';
-        statusText.textContent = 'Erreur';
+        statusText.textContent = 'Error';
       }
     }
 
@@ -1459,7 +1457,7 @@ de mes salutations distinguees.
       }
 
       try {
-        statusText.textContent = 'Chargement du compilateur...';
+        statusText.textContent = 'Loading compiler...';
 
         await initNovaCompiler();
 
@@ -1467,21 +1465,21 @@ de mes salutations distinguees.
         previewLoading.style.display = 'none';
 
         statusDot.className = 'status-dot ready';
-        statusText.textContent = 'Pret';
+        statusText.textContent = 'Ready';
 
         // Initial compile
         doCompile(editor.value);
 
       } catch (error) {
         statusDot.className = 'status-dot error';
-        statusText.textContent = 'Erreur de chargement';
+        statusText.textContent = 'Loading error';
 
         previewLoading.innerHTML = `
           <div style="color: #ef4444; text-align: center;">
-            <p style="font-weight: 600;">Impossible de charger le compilateur</p>
+            <p style="font-weight: 600;">Unable to load compiler</p>
             <p style="font-size: 0.85rem; margin-top: 8px;">${error.message}</p>
             <p style="font-size: 0.8rem; margin-top: 16px; color: var(--nova-secondary);">
-              Essayez de recharger la page ou utilisez un navigateur moderne.
+              Try reloading the page or use a modern browser.
             </p>
           </div>
         `;

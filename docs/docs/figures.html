@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Figures NovaType - Integrez images et illustrations dans vos documents.">
+  <meta name="description" content="NovaType Figures - Integrate images and illustrations into your documents.">
   <title>Figures - NovaType</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,14 +23,14 @@
         NovaType
       </a>
       <ul class="nav-links" id="navLinks">
-        <li><a href="/novatype/index.html">Accueil</a></li>
+        <li><a href="/novatype/index.html">Home</a></li>
         <li><a href="/novatype/demos.html">Demos</a></li>
         <li><a href="/novatype/docs/index.html" class="active">Documentation</a></li>
         <li><a href="/novatype/docs/templates.html">Templates</a></li>
         <li><a href="https://github.com/AureClai/novatype" target="_blank">GitHub</a></li>
       </ul>
       <div class="nav-actions">
-        <a href="/novatype/docs/getting-started.html" class="btn btn-primary">Commencer</a>
+        <a href="/novatype/docs/getting-started.html" class="btn btn-primary">Get Started</a>
       </div>
     </div>
   </nav>
@@ -39,115 +39,115 @@
     <aside class="docs-sidebar">
       <nav class="docs-nav">
         <div class="docs-nav-section">
-          <div class="docs-nav-title">Pour commencer</div>
+          <div class="docs-nav-title">Getting Started</div>
           <a href="/novatype/docs/getting-started.html" class="docs-nav-link">Installation</a>
           <a href="/novatype/docs/index.html" class="docs-nav-link">Introduction</a>
-          <a href="/novatype/docs/quick-start.html" class="docs-nav-link">Demarrage rapide</a>
+          <a href="/novatype/docs/quick-start.html" class="docs-nav-link">Quick Start</a>
         </div>
         <div class="docs-nav-section">
           <div class="docs-nav-title">Guide</div>
-          <a href="/novatype/docs/syntax.html" class="docs-nav-link">Syntaxe de base</a>
-          <a href="/novatype/docs/formatting.html" class="docs-nav-link">Mise en forme</a>
+          <a href="/novatype/docs/syntax.html" class="docs-nav-link">Basic Syntax</a>
+          <a href="/novatype/docs/formatting.html" class="docs-nav-link">Formatting</a>
           <a href="/novatype/docs/math.html" class="docs-nav-link">Equations</a>
-          <a href="/novatype/docs/tables.html" class="docs-nav-link">Tableaux</a>
+          <a href="/novatype/docs/tables.html" class="docs-nav-link">Tables</a>
           <a href="/novatype/docs/figures.html" class="docs-nav-link active">Figures</a>
         </div>
         <div class="docs-nav-section">
-          <div class="docs-nav-title">Fonctionnalites</div>
+          <div class="docs-nav-title">Features</div>
           <a href="/novatype/docs/citations.html" class="docs-nav-link">Citations</a>
-          <a href="/novatype/docs/plots.html" class="docs-nav-link">Graphiques</a>
+          <a href="/novatype/docs/plots.html" class="docs-nav-link">Charts</a>
           <a href="/novatype/docs/templates.html" class="docs-nav-link">Templates</a>
           <a href="/novatype/docs/schemas.html" class="docs-nav-link">Validation</a>
         </div>
         <div class="docs-nav-section">
           <div class="docs-nav-title">Reference</div>
           <a href="/novatype/docs/cli.html" class="docs-nav-link">CLI</a>
-          <a href="/novatype/docs/api.html" class="docs-nav-link">API WebAssembly</a>
+          <a href="/novatype/docs/api.html" class="docs-nav-link">WebAssembly API</a>
           <a href="/novatype/docs/config.html" class="docs-nav-link">Configuration</a>
         </div>
       </nav>
     </aside>
 
     <main class="docs-content">
-      <h1>Figures et images</h1>
+      <h1>Figures and images</h1>
 
       <p class="text-secondary" style="font-size: 1.125rem; margin-bottom: var(--space-2xl);">
-        Integrez des images, diagrammes et illustrations dans vos documents NovaType.
+        Integrate images, diagrams, and illustrations into your NovaType documents.
       </p>
 
-      <h2>Image simple</h2>
+      <h2>Simple image</h2>
 
       <pre><code><span class="token-keyword">#image</span>(<span class="token-string">"photo.png"</span>)</code></pre>
 
-      <h2>Image avec taille</h2>
+      <h2>Image with size</h2>
 
-      <pre><code><span class="token-comment">// Largeur fixe</span>
+      <pre><code><span class="token-comment">// Fixed width</span>
 <span class="token-keyword">#image</span>(<span class="token-string">"photo.png"</span>, width: <span class="token-number">10cm</span>)
 
-<span class="token-comment">// Largeur proportionnelle</span>
+<span class="token-comment">// Proportional width</span>
 <span class="token-keyword">#image</span>(<span class="token-string">"photo.png"</span>, width: <span class="token-number">50%</span>)
 
-<span class="token-comment">// Hauteur fixe</span>
+<span class="token-comment">// Fixed height</span>
 <span class="token-keyword">#image</span>(<span class="token-string">"photo.png"</span>, height: <span class="token-number">5cm</span>)
 
-<span class="token-comment">// Les deux (peut deformer)</span>
+<span class="token-comment">// Both (may distort)</span>
 <span class="token-keyword">#image</span>(<span class="token-string">"photo.png"</span>, width: <span class="token-number">10cm</span>, height: <span class="token-number">5cm</span>)</code></pre>
 
-      <h2>Figure avec legende</h2>
+      <h2>Figure with caption</h2>
 
       <pre><code><span class="token-keyword">#figure</span>(
-  <span class="token-keyword">image</span>(<span class="token-string">"resultats.png"</span>, width: <span class="token-number">80%</span>),
-  caption: [Evolution des resultats sur 12 mois],
-) <span class="token-operator">&lt;fig:resultats&gt;</span>
+  <span class="token-keyword">image</span>(<span class="token-string">"results.png"</span>, width: <span class="token-number">80%</span>),
+  caption: [Evolution of results over 12 months],
+) <span class="token-operator">&lt;fig:results&gt;</span>
 
-Comme illustre dans la <span class="token-operator">@fig:resultats</span>, on observe...</code></pre>
+As illustrated in <span class="token-operator">@fig:results</span>, we observe...</code></pre>
 
-      <h2>Placement et alignement</h2>
+      <h2>Placement and alignment</h2>
 
-      <pre><code><span class="token-comment">// Centre (par defaut pour figure)</span>
+      <pre><code><span class="token-comment">// Centered (default for figure)</span>
 <span class="token-keyword">#figure</span>(
   <span class="token-keyword">image</span>(<span class="token-string">"photo.png"</span>, width: <span class="token-number">50%</span>),
-  caption: [Ma photo],
+  caption: [My photo],
 )
 
-<span class="token-comment">// Image flottante a droite</span>
+<span class="token-comment">// Floating image on the right</span>
 <span class="token-keyword">#align</span>(right)[
   <span class="token-keyword">#image</span>(<span class="token-string">"logo.png"</span>, width: <span class="token-number">3cm</span>)
 ]
 
-<span class="token-comment">// Image dans le texte</span>
-Voici un icone <span class="token-keyword">#image</span>(<span class="token-string">"icon.svg"</span>, height: <span class="token-number">1em</span>) dans le texte.</code></pre>
+<span class="token-comment">// Inline image</span>
+Here is an icon <span class="token-keyword">#image</span>(<span class="token-string">"icon.svg"</span>, height: <span class="token-number">1em</span>) in the text.</code></pre>
 
-      <h2>Formats supportes</h2>
+      <h2>Supported formats</h2>
 
       <table class="comparison-table">
         <thead>
           <tr>
             <th>Format</th>
             <th>Extension</th>
-            <th>Recommandation</th>
+            <th>Recommendation</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td>PNG</td>
             <td><code>.png</code></td>
-            <td>Images avec transparence, captures d'ecran</td>
+            <td>Images with transparency, screenshots</td>
           </tr>
           <tr>
             <td>JPEG</td>
             <td><code>.jpg</code>, <code>.jpeg</code></td>
-            <td>Photos, images complexes</td>
+            <td>Photos, complex images</td>
           </tr>
           <tr>
             <td>SVG</td>
             <td><code>.svg</code></td>
-            <td>Graphiques vectoriels, logos, diagrammes</td>
+            <td>Vector graphics, logos, diagrams</td>
           </tr>
           <tr>
             <td>GIF</td>
             <td><code>.gif</code></td>
-            <td>Images simples (premiere frame seulement)</td>
+            <td>Simple images (first frame only)</td>
           </tr>
         </tbody>
       </table>
@@ -158,12 +158,12 @@ Voici un icone <span class="token-keyword">#image</span>(<span class="token-stri
             <circle cx="12" cy="12" r="10"/>
             <path d="M12 16v-4M12 8h.01"/>
           </svg>
-          Recommandation
+          Recommendation
         </div>
-        <p style="margin: 0;">Privilegiez le format SVG pour les graphiques et schemas. Il reste net a toutes les tailles.</p>
+        <p style="margin: 0;">Prefer the SVG format for graphics and diagrams. It stays sharp at all sizes.</p>
       </div>
 
-      <h2>Grille d'images</h2>
+      <h2>Image grid</h2>
 
       <pre><code><span class="token-keyword">#figure</span>(
   <span class="token-keyword">grid</span>(
@@ -174,28 +174,28 @@ Voici un icone <span class="token-keyword">#image</span>(<span class="token-stri
     <span class="token-keyword">image</span>(<span class="token-string">"img3.png"</span>),
     <span class="token-keyword">image</span>(<span class="token-string">"img4.png"</span>),
   ),
-  caption: [Comparaison des quatre methodes],
+  caption: [Comparison of the four methods],
 ) <span class="token-operator">&lt;fig:comparison&gt;</span></code></pre>
 
-      <h2>Sous-figures</h2>
+      <h2>Sub-figures</h2>
 
       <pre><code><span class="token-keyword">#figure</span>(
   <span class="token-keyword">grid</span>(
     columns: <span class="token-number">2</span>,
     gutter: <span class="token-number">1em</span>,
     [
-      <span class="token-keyword">#image</span>(<span class="token-string">"avant.png"</span>)
-      (a) Avant traitement
+      <span class="token-keyword">#image</span>(<span class="token-string">"before.png"</span>)
+      (a) Before processing
     ],
     [
-      <span class="token-keyword">#image</span>(<span class="token-string">"apres.png"</span>)
-      (b) Apres traitement
+      <span class="token-keyword">#image</span>(<span class="token-string">"after.png"</span>)
+      (b) After processing
     ],
   ),
-  caption: [Resultats du traitement d'image],
+  caption: [Image processing results],
 )</code></pre>
 
-      <h2>Image avec cadre</h2>
+      <h2>Image with frame</h2>
 
       <pre><code><span class="token-keyword">#figure</span>(
   <span class="token-keyword">box</span>(
@@ -204,44 +204,44 @@ Voici un icone <span class="token-keyword">#image</span>(<span class="token-stri
     clip: <span class="token-keyword">true</span>,
     <span class="token-keyword">image</span>(<span class="token-string">"screenshot.png"</span>, width: <span class="token-number">100%</span>)
   ),
-  caption: [Capture d'ecran de l'interface],
+  caption: [Screenshot of the interface],
 )</code></pre>
 
-      <h2>Numerotation des figures</h2>
+      <h2>Figure numbering</h2>
 
-      <pre><code><span class="token-comment">// Numerotation par defaut (1, 2, 3...)</span>
+      <pre><code><span class="token-comment">// Default numbering (1, 2, 3...)</span>
 <span class="token-keyword">#set</span> figure(numbering: <span class="token-string">"1"</span>)
 
-<span class="token-comment">// Numerotation par chapitre (1.1, 1.2...)</span>
+<span class="token-comment">// Numbering by chapter (1.1, 1.2...)</span>
 <span class="token-keyword">#set</span> figure(numbering: <span class="token-string">"1.1"</span>)
 
-<span class="token-comment">// Personnaliser le prefixe</span>
+<span class="token-comment">// Customize the prefix</span>
 <span class="token-keyword">#set</span> figure.caption(separator: <span class="token-string">" -- "</span>)</code></pre>
 
-      <h2>Placement automatique</h2>
+      <h2>Automatic placement</h2>
 
-      <pre><code><span class="token-comment">// Figure flottante (placement automatique)</span>
+      <pre><code><span class="token-comment">// Floating figure (automatic placement)</span>
 <span class="token-keyword">#figure</span>(
   <span class="token-keyword">image</span>(<span class="token-string">"graph.png"</span>, width: <span class="token-number">80%</span>),
-  caption: [Graphique des donnees],
-  placement: auto,  <span class="token-comment">// ou top, bottom</span>
+  caption: [Data chart],
+  placement: auto,  <span class="token-comment">// or top, bottom</span>
 )</code></pre>
 
-      <h2>Dessins et formes</h2>
+      <h2>Drawings and shapes</h2>
 
       <pre><code><span class="token-comment">// Rectangle</span>
 <span class="token-keyword">#rect</span>(width: <span class="token-number">2cm</span>, height: <span class="token-number">1cm</span>, fill: blue)
 
-<span class="token-comment">// Cercle</span>
+<span class="token-comment">// Circle</span>
 <span class="token-keyword">#circle</span>(radius: <span class="token-number">1cm</span>, fill: red)
 
 <span class="token-comment">// Ellipse</span>
 <span class="token-keyword">#ellipse</span>(width: <span class="token-number">2cm</span>, height: <span class="token-number">1cm</span>, fill: green)
 
-<span class="token-comment">// Ligne</span>
+<span class="token-comment">// Line</span>
 <span class="token-keyword">#line</span>(start: (<span class="token-number">0pt</span>, <span class="token-number">0pt</span>), end: (<span class="token-number">2cm</span>, <span class="token-number">1cm</span>), stroke: <span class="token-number">2pt</span>)
 
-<span class="token-comment">// Polygone</span>
+<span class="token-comment">// Polygon</span>
 <span class="token-keyword">#polygon</span>(
   fill: orange,
   (<span class="token-number">0pt</span>, <span class="token-number">0pt</span>),
@@ -249,7 +249,7 @@ Voici un icone <span class="token-keyword">#image</span>(<span class="token-stri
   (<span class="token-number">1cm</span>, <span class="token-number">1.5cm</span>),
 )</code></pre>
 
-      <h2>Diagramme simple</h2>
+      <h2>Simple diagram</h2>
 
       <pre><code><span class="token-keyword">#figure</span>(
   <span class="token-keyword">grid</span>(
@@ -257,19 +257,19 @@ Voici un icone <span class="token-keyword">#image</span>(<span class="token-stri
     gutter: <span class="token-number">1em</span>,
     align: center + horizon,
 
-    <span class="token-keyword">rect</span>(fill: rgb(<span class="token-string">"#e0f2fe"</span>), inset: <span class="token-number">1em</span>)[Entree],
-    <span class="token-keyword">text</span>(size: <span class="token-number">24pt</span>)[→],
+    <span class="token-keyword">rect</span>(fill: rgb(<span class="token-string">"#e0f2fe"</span>), inset: <span class="token-number">1em</span>)[Input],
+    <span class="token-keyword">text</span>(size: <span class="token-number">24pt</span>)[->],
     <span class="token-keyword">rect</span>(fill: rgb(<span class="token-string">"#2563eb"</span>), inset: <span class="token-number">1em</span>)[
-      <span class="token-keyword">#text</span>(fill: white)[Traitement]
+      <span class="token-keyword">#text</span>(fill: white)[Processing]
     ],
     [],
-    <span class="token-keyword">text</span>(size: <span class="token-number">24pt</span>)[→],
+    <span class="token-keyword">text</span>(size: <span class="token-number">24pt</span>)[->],
     [],
     [],
-    <span class="token-keyword">rect</span>(fill: rgb(<span class="token-string">"#dcfce7"</span>), inset: <span class="token-number">1em</span>)[Sortie],
+    <span class="token-keyword">rect</span>(fill: rgb(<span class="token-string">"#dcfce7"</span>), inset: <span class="token-number">1em</span>)[Output],
     [],
   ),
-  caption: [Schema du processus],
+  caption: [Process diagram],
 )</code></pre>
 
     </main>
@@ -278,7 +278,7 @@ Voici un icone <span class="token-keyword">#image</span>(<span class="token-stri
   <footer class="footer">
     <div class="container">
       <div class="footer-bottom" style="border-top: none; padding-top: 0;">
-        <p>NovaType - Projet Open Source sous licence MIT</p>
+        <p>NovaType - Open Source Project under MIT License</p>
       </div>
     </div>
   </footer>

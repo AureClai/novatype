@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Validation de schemas NovaType - Validez les metadonnees de vos documents.">
+  <meta name="description" content="NovaType Schema Validation - Validate the metadata of your documents.">
   <title>Validation - NovaType</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,14 +23,14 @@
         NovaType
       </a>
       <ul class="nav-links" id="navLinks">
-        <li><a href="/novatype/index.html">Accueil</a></li>
+        <li><a href="/novatype/index.html">Home</a></li>
         <li><a href="/novatype/demos.html">Demos</a></li>
         <li><a href="/novatype/docs/index.html" class="active">Documentation</a></li>
         <li><a href="/novatype/docs/templates.html">Templates</a></li>
         <li><a href="https://github.com/AureClai/novatype" target="_blank">GitHub</a></li>
       </ul>
       <div class="nav-actions">
-        <a href="/novatype/docs/getting-started.html" class="btn btn-primary">Commencer</a>
+        <a href="/novatype/docs/getting-started.html" class="btn btn-primary">Get Started</a>
       </div>
     </div>
   </nav>
@@ -39,23 +39,23 @@
     <aside class="docs-sidebar">
       <nav class="docs-nav">
         <div class="docs-nav-section">
-          <div class="docs-nav-title">Pour commencer</div>
+          <div class="docs-nav-title">Getting Started</div>
           <a href="/novatype/docs/getting-started.html" class="docs-nav-link">Installation</a>
           <a href="/novatype/docs/index.html" class="docs-nav-link">Introduction</a>
-          <a href="/novatype/docs/quick-start.html" class="docs-nav-link">Demarrage rapide</a>
+          <a href="/novatype/docs/quick-start.html" class="docs-nav-link">Quick Start</a>
         </div>
         <div class="docs-nav-section">
           <div class="docs-nav-title">Guide</div>
-          <a href="/novatype/docs/syntax.html" class="docs-nav-link">Syntaxe de base</a>
-          <a href="/novatype/docs/formatting.html" class="docs-nav-link">Mise en forme</a>
+          <a href="/novatype/docs/syntax.html" class="docs-nav-link">Basic Syntax</a>
+          <a href="/novatype/docs/formatting.html" class="docs-nav-link">Formatting</a>
           <a href="/novatype/docs/math.html" class="docs-nav-link">Equations</a>
-          <a href="/novatype/docs/tables.html" class="docs-nav-link">Tableaux</a>
+          <a href="/novatype/docs/tables.html" class="docs-nav-link">Tables</a>
           <a href="/novatype/docs/figures.html" class="docs-nav-link">Figures</a>
         </div>
         <div class="docs-nav-section">
-          <div class="docs-nav-title">Fonctionnalites</div>
+          <div class="docs-nav-title">Features</div>
           <a href="/novatype/docs/citations.html" class="docs-nav-link">Citations</a>
-          <a href="/novatype/docs/plots.html" class="docs-nav-link">Graphiques</a>
+          <a href="/novatype/docs/plots.html" class="docs-nav-link">Charts</a>
           <a href="/novatype/docs/templates.html" class="docs-nav-link">Templates</a>
           <a href="/novatype/docs/schemas.html" class="docs-nav-link active">Validation</a>
         </div>
@@ -69,24 +69,24 @@
     </aside>
 
     <main class="docs-content">
-      <h1>Validation de schemas</h1>
+      <h1>Schema Validation</h1>
 
       <p class="text-secondary" style="font-size: 1.125rem; margin-bottom: var(--space-2xl);">
-        NovaType utilise JSON Schema pour valider les metadonnees de vos documents, garantissant la coherence et la conformite.
+        NovaType uses JSON Schema to validate the metadata of your documents, ensuring consistency and compliance.
       </p>
 
-      <h2>Frontmatter YAML</h2>
+      <h2>YAML Frontmatter</h2>
 
-      <p>Les metadonnees sont definies en YAML au debut du document, entre <code>---</code> :</p>
+      <p>Metadata is defined in YAML at the beginning of the document, between <code>---</code>:</p>
 
       <pre><code><span class="token-operator">---</span>
-<span class="token-property">title</span>: <span class="token-string">"Mon Article Scientifique"</span>
+<span class="token-property">title</span>: <span class="token-string">"My Scientific Article"</span>
 <span class="token-property">authors</span>:
-  - <span class="token-property">name</span>: <span class="token-string">"Jean Dupont"</span>
-    <span class="token-property">affiliation</span>: <span class="token-string">"Universite de Paris"</span>
-    <span class="token-property">email</span>: <span class="token-string">"jean.dupont@univ-paris.fr"</span>
+  - <span class="token-property">name</span>: <span class="token-string">"John Smith"</span>
+    <span class="token-property">affiliation</span>: <span class="token-string">"University of Paris"</span>
+    <span class="token-property">email</span>: <span class="token-string">"john.smith@univ-paris.fr"</span>
 <span class="token-property">abstract</span>: <span class="token-operator">|</span>
-  Cet article presente une nouvelle approche pour...
+  This article presents a new approach to...
 <span class="token-property">keywords</span>:
   - machine learning
   - data science
@@ -96,29 +96,29 @@
 <span class="token-property">citation_style</span>: <span class="token-string">"ieee"</span>
 <span class="token-operator">---</span>
 
-<span class="token-comment">// Contenu du document...</span>
+<span class="token-comment">// Document content...</span>
 <span class="token-keyword">=</span> Introduction
 
 ...</code></pre>
 
-      <h2>Commande de validation</h2>
+      <h2>Validation Command</h2>
 
-      <pre><code><span class="token-comment"># Valider un document</span>
+      <pre><code><span class="token-comment"># Validate a document</span>
 <span class="token-function">$</span> nova validate main.typ
 <span class="token-keyword">✓</span> Document valid
 
-<span class="token-comment"># Validation stricte (frontmatter requis)</span>
+<span class="token-comment"># Strict validation (frontmatter required)</span>
 <span class="token-function">$</span> nova validate main.typ --strict
 
-<span class="token-comment"># Valider plusieurs fichiers</span>
+<span class="token-comment"># Validate multiple files</span>
 <span class="token-function">$</span> nova validate *.typ
 
-<span class="token-comment"># Utiliser un schema personnalise</span>
+<span class="token-comment"># Use a custom schema</span>
 <span class="token-function">$</span> nova validate main.typ --schema custom-schema.json</code></pre>
 
-      <h2>Schema par defaut</h2>
+      <h2>Default Schema</h2>
 
-      <p>Le schema par defaut pour les articles :</p>
+      <p>The default schema for articles:</p>
 
       <pre><code>{
   <span class="token-property">"$schema"</span>: <span class="token-string">"https://json-schema.org/draft/2020-12/schema"</span>,
@@ -128,7 +128,7 @@
     <span class="token-property">"title"</span>: {
       <span class="token-property">"type"</span>: <span class="token-string">"string"</span>,
       <span class="token-property">"minLength"</span>: <span class="token-number">1</span>,
-      <span class="token-property">"description"</span>: <span class="token-string">"Titre du document"</span>
+      <span class="token-property">"description"</span>: <span class="token-string">"Document title"</span>
     },
     <span class="token-property">"authors"</span>: {
       <span class="token-property">"type"</span>: <span class="token-string">"array"</span>,
@@ -161,35 +161,35 @@
   }
 }</code></pre>
 
-      <h2>Champs disponibles</h2>
+      <h2>Available Fields</h2>
 
       <table class="comparison-table">
         <thead>
           <tr>
-            <th>Champ</th>
+            <th>Field</th>
             <th>Type</th>
-            <th>Requis</th>
+            <th>Required</th>
             <th>Description</th>
           </tr>
         </thead>
         <tbody>
-          <tr><td><code>title</code></td><td>string</td><td>Oui</td><td>Titre du document</td></tr>
-          <tr><td><code>authors</code></td><td>array</td><td>Non</td><td>Liste des auteurs</td></tr>
-          <tr><td><code>date</code></td><td>date</td><td>Non</td><td>Date de publication</td></tr>
-          <tr><td><code>abstract</code></td><td>string</td><td>Non</td><td>Resume du document</td></tr>
-          <tr><td><code>keywords</code></td><td>array</td><td>Non</td><td>Mots-cles</td></tr>
-          <tr><td><code>template</code></td><td>string</td><td>Non</td><td>Template a utiliser</td></tr>
-          <tr><td><code>bibliography</code></td><td>string</td><td>Non</td><td>Chemin vers le fichier .bib</td></tr>
-          <tr><td><code>citation_style</code></td><td>string</td><td>Non</td><td>Style de citation</td></tr>
-          <tr><td><code>language</code></td><td>string</td><td>Non</td><td>Langue du document</td></tr>
+          <tr><td><code>title</code></td><td>string</td><td>Yes</td><td>Document title</td></tr>
+          <tr><td><code>authors</code></td><td>array</td><td>No</td><td>List of authors</td></tr>
+          <tr><td><code>date</code></td><td>date</td><td>No</td><td>Publication date</td></tr>
+          <tr><td><code>abstract</code></td><td>string</td><td>No</td><td>Document abstract</td></tr>
+          <tr><td><code>keywords</code></td><td>array</td><td>No</td><td>Keywords</td></tr>
+          <tr><td><code>template</code></td><td>string</td><td>No</td><td>Template to use</td></tr>
+          <tr><td><code>bibliography</code></td><td>string</td><td>No</td><td>Path to .bib file</td></tr>
+          <tr><td><code>citation_style</code></td><td>string</td><td>No</td><td>Citation style</td></tr>
+          <tr><td><code>language</code></td><td>string</td><td>No</td><td>Document language</td></tr>
         </tbody>
       </table>
 
-      <h2>Schema personnalise</h2>
+      <h2>Custom Schema</h2>
 
-      <p>Creez votre propre schema pour des besoins specifiques :</p>
+      <p>Create your own schema for specific needs:</p>
 
-      <pre><code><span class="token-comment">// schemas/rapport.json</span>
+      <pre><code><span class="token-comment">// schemas/report.json</span>
 {
   <span class="token-property">"$schema"</span>: <span class="token-string">"https://json-schema.org/draft/2020-12/schema"</span>,
   <span class="token-property">"type"</span>: <span class="token-string">"object"</span>,
@@ -213,7 +213,7 @@
   }
 }</code></pre>
 
-      <h2>Erreurs de validation</h2>
+      <h2>Validation Errors</h2>
 
       <pre><code><span class="token-function">$</span> nova validate main.typ
 <span class="token-comment" style="color: #ef4444;">✗ Validation failed:</span>
@@ -221,7 +221,7 @@
   - <span class="token-comment" style="color: #ef4444;">Invalid email format in authors[0].email</span>
   - <span class="token-comment" style="color: #ef4444;">Unknown citation_style: "mla" (expected: apa, ieee, chicago...)</span></code></pre>
 
-      <h2>Integration CI/CD</h2>
+      <h2>CI/CD Integration</h2>
 
       <pre><code><span class="token-comment"># .github/workflows/validate.yml</span>
 <span class="token-property">name</span>: Validate Documents
@@ -246,9 +246,9 @@
             <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
             <path d="M22 4L12 14.01l-3-3"/>
           </svg>
-          Bonne pratique
+          Best Practice
         </div>
-        <p style="margin: 0;">Integrez la validation dans votre pipeline CI/CD pour garantir que tous les documents respectent le schema avant publication.</p>
+        <p style="margin: 0;">Integrate validation into your CI/CD pipeline to ensure that all documents comply with the schema before publication.</p>
       </div>
 
     </main>
@@ -257,7 +257,7 @@
   <footer class="footer">
     <div class="container">
       <div class="footer-bottom" style="border-top: none; padding-top: 0;">
-        <p>NovaType - Projet Open Source sous licence MIT</p>
+        <p>NovaType - Open Source Project under MIT License</p>
       </div>
     </div>
   </footer>

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Gestion des citations NovaType - BibTeX, CrossRef API, Zotero et styles academiques.">
+  <meta name="description" content="NovaType citation management - BibTeX, CrossRef API, Zotero and academic styles.">
   <title>Citations - NovaType</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -24,14 +24,14 @@
         NovaType
       </a>
       <ul class="nav-links" id="navLinks">
-        <li><a href="/novatype/index.html">Accueil</a></li>
+        <li><a href="/novatype/index.html">Home</a></li>
         <li><a href="/novatype/demos.html">Demos</a></li>
         <li><a href="/novatype/docs/index.html" class="active">Documentation</a></li>
         <li><a href="/novatype/docs/templates.html">Templates</a></li>
         <li><a href="https://github.com/AureClai/novatype" target="_blank">GitHub</a></li>
       </ul>
       <div class="nav-actions">
-        <a href="/novatype/docs/getting-started.html" class="btn btn-primary">Commencer</a>
+        <a href="/novatype/docs/getting-started.html" class="btn btn-primary">Get Started</a>
       </div>
     </div>
   </nav>
@@ -42,23 +42,23 @@
     <aside class="docs-sidebar">
       <nav class="docs-nav">
         <div class="docs-nav-section">
-          <div class="docs-nav-title">Pour commencer</div>
+          <div class="docs-nav-title">Getting Started</div>
           <a href="/novatype/docs/getting-started.html" class="docs-nav-link">Installation</a>
           <a href="/novatype/docs/index.html" class="docs-nav-link">Introduction</a>
-          <a href="/novatype/docs/quick-start.html" class="docs-nav-link">Demarrage rapide</a>
+          <a href="/novatype/docs/quick-start.html" class="docs-nav-link">Quick Start</a>
         </div>
         <div class="docs-nav-section">
           <div class="docs-nav-title">Guide</div>
-          <a href="/novatype/docs/syntax.html" class="docs-nav-link">Syntaxe de base</a>
-          <a href="/novatype/docs/formatting.html" class="docs-nav-link">Mise en forme</a>
+          <a href="/novatype/docs/syntax.html" class="docs-nav-link">Basic Syntax</a>
+          <a href="/novatype/docs/formatting.html" class="docs-nav-link">Formatting</a>
           <a href="/novatype/docs/math.html" class="docs-nav-link">Equations</a>
-          <a href="/novatype/docs/tables.html" class="docs-nav-link">Tableaux</a>
+          <a href="/novatype/docs/tables.html" class="docs-nav-link">Tables</a>
           <a href="/novatype/docs/figures.html" class="docs-nav-link">Figures</a>
         </div>
         <div class="docs-nav-section">
-          <div class="docs-nav-title">Fonctionnalites</div>
+          <div class="docs-nav-title">Features</div>
           <a href="/novatype/docs/citations.html" class="docs-nav-link active">Citations</a>
-          <a href="/novatype/docs/plots.html" class="docs-nav-link">Graphiques</a>
+          <a href="/novatype/docs/plots.html" class="docs-nav-link">Charts</a>
           <a href="/novatype/docs/templates.html" class="docs-nav-link">Templates</a>
           <a href="/novatype/docs/schemas.html" class="docs-nav-link">Validation</a>
         </div>
@@ -73,36 +73,36 @@
 
     <!-- Content -->
     <main class="docs-content">
-      <h1>Gestion des Citations</h1>
+      <h1>Citation Management</h1>
 
       <p class="text-secondary" style="font-size: 1.125rem; margin-bottom: var(--space-2xl);">
-        NovaType integre un systeme complet de gestion des citations avec support BibTeX, CrossRef API et Zotero.
+        NovaType integrates a complete citation management system with BibTeX, CrossRef API and Zotero support.
       </p>
 
       <h2>Configuration</h2>
 
-      <p>Configurez vos citations dans le frontmatter YAML :</p>
+      <p>Configure your citations in the YAML frontmatter:</p>
 
       <pre><code><span class="token-operator">---</span>
-<span class="token-property">title</span>: <span class="token-string">"Mon Article"</span>
+<span class="token-property">title</span>: <span class="token-string">"My Article"</span>
 <span class="token-property">bibliography</span>: <span class="token-string">"references.bib"</span>
 <span class="token-property">citation_style</span>: <span class="token-string">"ieee"</span>
 <span class="token-operator">---</span></code></pre>
 
-      <h2>Styles de citation disponibles</h2>
+      <h2>Available citation styles</h2>
 
       <table class="comparison-table">
         <thead>
           <tr>
             <th>Style</th>
             <th>Description</th>
-            <th>Exemple</th>
+            <th>Example</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td><code>ieee</code></td>
-            <td>IEEE (numerique)</td>
+            <td>IEEE (numeric)</td>
             <td>[1], [2], [3]</td>
           </tr>
           <tr>
@@ -133,43 +133,43 @@
         </tbody>
       </table>
 
-      <h2>Syntaxe des citations</h2>
+      <h2>Citation syntax</h2>
 
-      <h3>Citation simple</h3>
+      <h3>Simple citation</h3>
 
-      <pre><code><span class="token-comment">// Citation dans le texte</span>
-Selon les travaux de <span class="token-operator">@knuth1984</span>, la typographie...
+      <pre><code><span class="token-comment">// In-text citation</span>
+According to the work of <span class="token-operator">@knuth1984</span>, typography...
 
-<span class="token-comment">// Rendu IEEE: "Selon les travaux de [1], la typographie..."</span>
-<span class="token-comment">// Rendu APA: "Selon les travaux de (Knuth, 1984), la typographie..."</span></code></pre>
+<span class="token-comment">// IEEE rendering: "According to the work of [1], typography..."</span>
+<span class="token-comment">// APA rendering: "According to the work of (Knuth, 1984), typography..."</span></code></pre>
 
-      <h3>Citation avec page</h3>
+      <h3>Citation with page</h3>
 
-      <pre><code><span class="token-comment">// Specifier une page</span>
-Comme explique dans <span class="token-operator">@lamport1994</span>[p. 42]...
+      <pre><code><span class="token-comment">// Specify a page</span>
+As explained in <span class="token-operator">@lamport1994</span>[p. 42]...
 
-<span class="token-comment">// Rendu: "Comme explique dans [2, p. 42]..."</span></code></pre>
+<span class="token-comment">// Rendering: "As explained in [2, p. 42]..."</span></code></pre>
 
-      <h3>Citations multiples</h3>
+      <h3>Multiple citations</h3>
 
-      <pre><code><span class="token-comment">// Plusieurs citations</span>
-Plusieurs etudes <span class="token-operator">@smith2020</span> <span class="token-operator">@jones2021</span> <span class="token-operator">@martin2022</span> confirment...
+      <pre><code><span class="token-comment">// Multiple citations</span>
+Several studies <span class="token-operator">@smith2020</span> <span class="token-operator">@jones2021</span> <span class="token-operator">@martin2022</span> confirm...
 
-<span class="token-comment">// Rendu IEEE: "Plusieurs etudes [3]-[5] confirment..."</span>
-<span class="token-comment">// Rendu APA: "Plusieurs etudes (Smith, 2020; Jones, 2021; Martin, 2022) confirment..."</span></code></pre>
+<span class="token-comment">// IEEE rendering: "Several studies [3]-[5] confirm..."</span>
+<span class="token-comment">// APA rendering: "Several studies (Smith, 2020; Jones, 2021; Martin, 2022) confirm..."</span></code></pre>
 
-      <h3>Citation avec prefixe/suffixe</h3>
+      <h3>Citation with prefix/suffix</h3>
 
-      <pre><code><span class="token-comment">// Avec prefixe</span>
-<span class="token-operator">@knuth1984</span>[voir][chapitre 3]
+      <pre><code><span class="token-comment">// With prefix</span>
+<span class="token-operator">@knuth1984</span>[see][chapter 3]
 
-<span class="token-comment">// Rendu: "voir [1, chapitre 3]"</span></code></pre>
+<span class="token-comment">// Rendering: "see [1, chapter 3]"</span></code></pre>
 
-      <h2>Fichier BibTeX</h2>
+      <h2>BibTeX file</h2>
 
-      <p>Creez un fichier <code>references.bib</code> avec vos references :</p>
+      <p>Create a <code>references.bib</code> file with your references:</p>
 
-      <pre><code><span class="token-comment">% Article de journal</span>
+      <pre><code><span class="token-comment">% Journal article</span>
 <span class="token-keyword">@article</span>{smith2020,
   <span class="token-property">author</span>  = {Smith, John and Doe, Jane},
   <span class="token-property">title</span>   = {Modern Typesetting Systems},
@@ -181,7 +181,7 @@ Plusieurs etudes <span class="token-operator">@smith2020</span> <span class="tok
   <span class="token-property">doi</span>     = {10.1234/jde.2020.001}
 }
 
-<span class="token-comment">% Livre</span>
+<span class="token-comment">% Book</span>
 <span class="token-keyword">@book</span>{knuth1984,
   <span class="token-property">author</span>    = {Knuth, Donald E.},
   <span class="token-property">title</span>     = {The TeXbook},
@@ -199,7 +199,7 @@ Plusieurs etudes <span class="token-operator">@smith2020</span> <span class="tok
   <span class="token-property">year</span>      = {2021}
 }
 
-<span class="token-comment">% Site web</span>
+<span class="token-comment">% Website</span>
 <span class="token-keyword">@online</span>{typst2023,
   <span class="token-property">author</span>  = {Typst GmbH},
   <span class="token-property">title</span>   = {Typst Documentation},
@@ -208,28 +208,28 @@ Plusieurs etudes <span class="token-operator">@smith2020</span> <span class="tok
   <span class="token-property">urldate</span> = {2024-01-15}
 }</code></pre>
 
-      <h2>Bibliographie automatique</h2>
+      <h2>Automatic bibliography</h2>
 
-      <p>Ajoutez la bibliographie a la fin de votre document :</p>
+      <p>Add the bibliography at the end of your document:</p>
 
-      <pre><code><span class="token-comment">// Bibliographie avec style specifie</span>
+      <pre><code><span class="token-comment">// Bibliography with specified style</span>
 <span class="token-keyword">#bibliography</span>(<span class="token-string">"references.bib"</span>, style: <span class="token-string">"ieee"</span>)
 
-<span class="token-comment">// Ou utiliser le style du frontmatter</span>
+<span class="token-comment">// Or use the frontmatter style</span>
 <span class="token-keyword">#bibliography</span>(<span class="token-string">"references.bib"</span>)</code></pre>
 
-      <h2>Resolution CrossRef</h2>
+      <h2>CrossRef resolution</h2>
 
-      <p>NovaType peut automatiquement recuperer les metadonnees depuis CrossRef :</p>
+      <p>NovaType can automatically retrieve metadata from CrossRef:</p>
 
-      <pre><code><span class="token-comment">// Dans le frontmatter, activez CrossRef</span>
+      <pre><code><span class="token-comment">// In the frontmatter, enable CrossRef</span>
 <span class="token-operator">---</span>
 <span class="token-property">bibliography</span>: <span class="token-string">"references.bib"</span>
 <span class="token-property">crossref_enabled</span>: <span class="token-keyword">true</span>
 <span class="token-operator">---</span>
 
-<span class="token-comment">// Citez par DOI directement</span>
-Selon <span class="token-operator">@doi:10.1234/example.2020</span>...</code></pre>
+<span class="token-comment">// Cite by DOI directly</span>
+According to <span class="token-operator">@doi:10.1234/example.2020</span>...</code></pre>
 
       <div class="callout callout-info">
         <div class="callout-title">
@@ -239,42 +239,42 @@ Selon <span class="token-operator">@doi:10.1234/example.2020</span>...</code></p
           </svg>
           Note
         </div>
-        <p style="margin: 0;">Les metadonnees CrossRef sont mises en cache localement pour accelerer les compilations suivantes.</p>
+        <p style="margin: 0;">CrossRef metadata is cached locally to speed up subsequent compilations.</p>
       </div>
 
-      <h2>Integration Zotero</h2>
+      <h2>Zotero integration</h2>
 
-      <p>Exportez votre bibliotheque Zotero en BibTeX et utilisez-la directement :</p>
+      <p>Export your Zotero library to BibTeX and use it directly:</p>
 
-      <pre><code><span class="token-comment">// 1. Exportez depuis Zotero: Fichier > Exporter la bibliotheque > BibTeX</span>
-<span class="token-comment">// 2. Utilisez le fichier exporte</span>
+      <pre><code><span class="token-comment">// 1. Export from Zotero: File > Export Library > BibTeX</span>
+<span class="token-comment">// 2. Use the exported file</span>
 
 <span class="token-operator">---</span>
 <span class="token-property">bibliography</span>: <span class="token-string">"zotero-export.bib"</span>
 <span class="token-operator">---</span></code></pre>
 
-      <h2>Personnalisation</h2>
+      <h2>Customization</h2>
 
-      <h3>Titre de la bibliographie</h3>
+      <h3>Bibliography title</h3>
 
-      <pre><code><span class="token-comment">// Changer le titre</span>
+      <pre><code><span class="token-comment">// Change the title</span>
 <span class="token-keyword">#bibliography</span>(
   <span class="token-string">"references.bib"</span>,
   title: <span class="token-string">"References"</span>,
   style: <span class="token-string">"ieee"</span>
 )</code></pre>
 
-      <h3>Bibliographie sans titre</h3>
+      <h3>Bibliography without title</h3>
 
-      <pre><code><span class="token-comment">// Sans titre</span>
+      <pre><code><span class="token-comment">// Without title</span>
 <span class="token-keyword">#bibliography</span>(
   <span class="token-string">"references.bib"</span>,
   title: none
 )</code></pre>
 
-      <h3>Bibliographie multi-fichiers</h3>
+      <h3>Multi-file bibliography</h3>
 
-      <pre><code><span class="token-comment">// Plusieurs fichiers .bib</span>
+      <pre><code><span class="token-comment">// Multiple .bib files</span>
 <span class="token-operator">---</span>
 <span class="token-property">bibliography</span>:
   - <span class="token-string">"articles.bib"</span>
@@ -282,10 +282,10 @@ Selon <span class="token-operator">@doi:10.1234/example.2020</span>...</code></p
   - <span class="token-string">"online.bib"</span>
 <span class="token-operator">---</span></code></pre>
 
-      <h2>Exemple complet</h2>
+      <h2>Complete example</h2>
 
       <pre><code><span class="token-operator">---</span>
-<span class="token-property">title</span>: <span class="token-string">"Revue de la litterature"</span>
+<span class="token-property">title</span>: <span class="token-string">"Literature Review"</span>
 <span class="token-property">author</span>: <span class="token-string">"Dr. Martin"</span>
 <span class="token-property">bibliography</span>: <span class="token-string">"references.bib"</span>
 <span class="token-property">citation_style</span>: <span class="token-string">"apa"</span>
@@ -293,21 +293,21 @@ Selon <span class="token-operator">@doi:10.1234/example.2020</span>...</code></p
 
 <span class="token-keyword">=</span> Introduction
 
-La composition typographique a considerablement evolue
-depuis les travaux fondateurs de <span class="token-operator">@knuth1984</span>. LaTeX,
-developpe par <span class="token-operator">@lamport1994</span>, reste la reference dans
-le monde academique.
+Typographic composition has evolved considerably
+since the foundational work of <span class="token-operator">@knuth1984</span>. LaTeX,
+developed by <span class="token-operator">@lamport1994</span>, remains the reference in
+the academic world.
 
-<span class="token-keyword">=</span> Etat de l'art
+<span class="token-keyword">=</span> State of the art
 
-Des approches recentes <span class="token-operator">@smith2020</span> <span class="token-operator">@jones2021</span> proposent
-des alternatives plus modernes. Typst <span class="token-operator">@typst2023</span>
-represente une avancee significative dans ce domaine.
+Recent approaches <span class="token-operator">@smith2020</span> <span class="token-operator">@jones2021</span> propose
+more modern alternatives. Typst <span class="token-operator">@typst2023</span>
+represents a significant advancement in this field.
 
 <span class="token-keyword">=</span> Conclusion
 
-Les nouvelles technologies offrent des perspectives
-prometteuses pour la redaction scientifique.
+New technologies offer promising perspectives
+for scientific writing.
 
 <span class="token-keyword">#bibliography</span>(<span class="token-string">"references.bib"</span>)</code></pre>
 
@@ -317,9 +317,9 @@ prometteuses pour la redaction scientifique.
             <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
             <path d="M22 4L12 14.01l-3-3"/>
           </svg>
-          Conseil
+          Tip
         </div>
-        <p style="margin: 0;">Utilisez des gestionnaires de references comme Zotero ou Mendeley pour maintenir votre bibliotheque, puis exportez en BibTeX pour NovaType.</p>
+        <p style="margin: 0;">Use reference managers like Zotero or Mendeley to maintain your library, then export to BibTeX for NovaType.</p>
       </div>
 
     </main>
@@ -329,7 +329,7 @@ prometteuses pour la redaction scientifique.
   <footer class="footer">
     <div class="container">
       <div class="footer-bottom" style="border-top: none; padding-top: 0;">
-        <p>NovaType - Projet Open Source sous licence MIT</p>
+        <p>NovaType - Open Source Project under MIT License</p>
       </div>
     </div>
   </footer>

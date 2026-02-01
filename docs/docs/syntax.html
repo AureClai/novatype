@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Syntaxe de base NovaType - Guide complet de la syntaxe Typst.">
-  <title>Syntaxe de base - NovaType</title>
+  <meta name="description" content="NovaType Basic Syntax - Complete guide to Typst syntax.">
+  <title>Basic Syntax - NovaType</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -23,14 +23,14 @@
         NovaType
       </a>
       <ul class="nav-links" id="navLinks">
-        <li><a href="/novatype/index.html">Accueil</a></li>
+        <li><a href="/novatype/index.html">Home</a></li>
         <li><a href="/novatype/demos.html">Demos</a></li>
         <li><a href="/novatype/docs/index.html" class="active">Documentation</a></li>
         <li><a href="/novatype/docs/templates.html">Templates</a></li>
         <li><a href="https://github.com/AureClai/novatype" target="_blank">GitHub</a></li>
       </ul>
       <div class="nav-actions">
-        <a href="/novatype/docs/getting-started.html" class="btn btn-primary">Commencer</a>
+        <a href="/novatype/docs/getting-started.html" class="btn btn-primary">Get Started</a>
       </div>
     </div>
   </nav>
@@ -39,23 +39,23 @@
     <aside class="docs-sidebar">
       <nav class="docs-nav">
         <div class="docs-nav-section">
-          <div class="docs-nav-title">Pour commencer</div>
+          <div class="docs-nav-title">Getting Started</div>
           <a href="/novatype/docs/getting-started.html" class="docs-nav-link">Installation</a>
           <a href="/novatype/docs/index.html" class="docs-nav-link">Introduction</a>
-          <a href="/novatype/docs/quick-start.html" class="docs-nav-link">Demarrage rapide</a>
+          <a href="/novatype/docs/quick-start.html" class="docs-nav-link">Quick Start</a>
         </div>
         <div class="docs-nav-section">
           <div class="docs-nav-title">Guide</div>
-          <a href="/novatype/docs/syntax.html" class="docs-nav-link active">Syntaxe de base</a>
-          <a href="/novatype/docs/formatting.html" class="docs-nav-link">Mise en forme</a>
+          <a href="/novatype/docs/syntax.html" class="docs-nav-link active">Basic Syntax</a>
+          <a href="/novatype/docs/formatting.html" class="docs-nav-link">Formatting</a>
           <a href="/novatype/docs/math.html" class="docs-nav-link">Equations</a>
-          <a href="/novatype/docs/tables.html" class="docs-nav-link">Tableaux</a>
+          <a href="/novatype/docs/tables.html" class="docs-nav-link">Tables</a>
           <a href="/novatype/docs/figures.html" class="docs-nav-link">Figures</a>
         </div>
         <div class="docs-nav-section">
-          <div class="docs-nav-title">Fonctionnalites</div>
+          <div class="docs-nav-title">Features</div>
           <a href="/novatype/docs/citations.html" class="docs-nav-link">Citations</a>
-          <a href="/novatype/docs/plots.html" class="docs-nav-link">Graphiques</a>
+          <a href="/novatype/docs/plots.html" class="docs-nav-link">Charts</a>
           <a href="/novatype/docs/templates.html" class="docs-nav-link">Templates</a>
           <a href="/novatype/docs/schemas.html" class="docs-nav-link">Validation</a>
         </div>
@@ -69,189 +69,188 @@
     </aside>
 
     <main class="docs-content">
-      <h1>Syntaxe de base</h1>
+      <h1>Basic Syntax</h1>
 
       <p class="text-secondary" style="font-size: 1.125rem; margin-bottom: var(--space-2xl);">
-        NovaType utilise la syntaxe Typst, un langage de balisage moderne et expressif. Voici les elements fondamentaux.
+        NovaType uses Typst syntax, a modern and expressive markup language. Here are the fundamental elements.
       </p>
 
-      <h2>Modes d'ecriture</h2>
+      <h2>Writing Modes</h2>
 
-      <p>NovaType possede trois modes principaux :</p>
+      <p>NovaType has three main modes:</p>
 
       <table class="comparison-table">
         <thead>
           <tr>
             <th>Mode</th>
             <th>Description</th>
-            <th>Exemple</th>
+            <th>Example</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td><strong>Markup</strong></td>
-            <td>Texte avec mise en forme</td>
-            <td><code>Texte *gras* et _italique_</code></td>
+            <td>Text with formatting</td>
+            <td><code>Text *bold* and _italic_</code></td>
           </tr>
           <tr>
             <td><strong>Code</strong></td>
-            <td>Fonctions et logique</td>
+            <td>Functions and logic</td>
             <td><code>#set text(size: 12pt)</code></td>
           </tr>
           <tr>
             <td><strong>Math</strong></td>
-            <td>Equations mathematiques</td>
+            <td>Mathematical equations</td>
             <td><code>$ x^2 + y^2 = z^2 $</code></td>
           </tr>
         </tbody>
       </table>
 
-      <h2>Texte et paragraphes</h2>
+      <h2>Text and Paragraphs</h2>
 
-      <p>Le texte brut est ecrit directement. Les paragraphes sont separes par une ligne vide.</p>
+      <p>Plain text is written directly. Paragraphs are separated by a blank line.</p>
 
-      <pre><code>Ceci est un premier paragraphe. Il peut s'etendre
-sur plusieurs lignes dans le code source.
+      <pre><code>This is a first paragraph. It can extend
+across multiple lines in the source code.
 
-Ceci est un second paragraphe, separe du premier
-par une ligne vide.</code></pre>
+This is a second paragraph, separated from the first
+by a blank line.</code></pre>
 
-      <h2>Mise en forme du texte</h2>
+      <h2>Text Formatting</h2>
 
       <table class="comparison-table">
         <thead>
           <tr>
-            <th>Syntaxe</th>
-            <th>Resultat</th>
+            <th>Syntax</th>
+            <th>Result</th>
             <th>Description</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td><code>*gras*</code></td>
-            <td><strong>gras</strong></td>
-            <td>Texte en gras</td>
+            <td><code>*bold*</code></td>
+            <td><strong>bold</strong></td>
+            <td>Bold text</td>
           </tr>
           <tr>
-            <td><code>_italique_</code></td>
-            <td><em>italique</em></td>
-            <td>Texte en italique</td>
+            <td><code>_italic_</code></td>
+            <td><em>italic</em></td>
+            <td>Italic text</td>
           </tr>
           <tr>
             <td><code>`code`</code></td>
             <td><code>code</code></td>
-            <td>Code en ligne</td>
+            <td>Inline code</td>
           </tr>
           <tr>
-            <td><code>*_gras italique_*</code></td>
-            <td><strong><em>gras italique</em></strong></td>
-            <td>Combinaison</td>
+            <td><code>*_bold italic_*</code></td>
+            <td><strong><em>bold italic</em></strong></td>
+            <td>Combination</td>
           </tr>
           <tr>
-            <td><code>~indice~</code></td>
+            <td><code>~subscript~</code></td>
             <td>H<sub>2</sub>O</td>
-            <td>Indice (subscript)</td>
+            <td>Subscript</td>
           </tr>
           <tr>
-            <td><code>^exposant^</code></td>
+            <td><code>^superscript^</code></td>
             <td>x<sup>2</sup></td>
-            <td>Exposant (superscript)</td>
+            <td>Superscript</td>
           </tr>
         </tbody>
       </table>
 
-      <h2>Titres et sections</h2>
+      <h2>Headings and Sections</h2>
 
-      <p>Les titres utilisent le signe <code>=</code>. Le nombre de <code>=</code> determine le niveau :</p>
+      <p>Headings use the <code>=</code> sign. The number of <code>=</code> determines the level:</p>
 
-      <pre><code><span class="token-keyword">=</span> Titre de niveau 1
+      <pre><code><span class="token-keyword">=</span> Level 1 Heading
 
-<span class="token-keyword">==</span> Titre de niveau 2
+<span class="token-keyword">==</span> Level 2 Heading
 
-<span class="token-keyword">===</span> Titre de niveau 3
+<span class="token-keyword">===</span> Level 3 Heading
 
-<span class="token-keyword">====</span> Titre de niveau 4</code></pre>
+<span class="token-keyword">====</span> Level 4 Heading</code></pre>
 
-      <p>Pour activer la numerotation automatique :</p>
+      <p>To enable automatic numbering:</p>
 
       <pre><code><span class="token-keyword">#set</span> heading(numbering: <span class="token-string">"1.1"</span>)   <span class="token-comment">// 1, 1.1, 1.1.1</span>
 <span class="token-keyword">#set</span> heading(numbering: <span class="token-string">"I.A.1"</span>) <span class="token-comment">// I, I.A, I.A.1</span>
 <span class="token-keyword">#set</span> heading(numbering: <span class="token-string">"1."</span>)   <span class="token-comment">// 1., 1.1., 1.1.1.</span></code></pre>
 
-      <h2>Listes</h2>
+      <h2>Lists</h2>
 
-      <h3>Listes a puces</h3>
+      <h3>Bullet Lists</h3>
 
-      <pre><code>- Premier element
-- Deuxieme element
-  - Sous-element
-  - Autre sous-element
-- Troisieme element</code></pre>
+      <pre><code>- First item
+- Second item
+  - Sub-item
+  - Another sub-item
+- Third item</code></pre>
 
-      <h3>Listes numerotees</h3>
+      <h3>Numbered Lists</h3>
 
-      <pre><code>+ Premiere etape
-+ Deuxieme etape
-  + Sous-etape A
-  + Sous-etape B
-+ Troisieme etape</code></pre>
+      <pre><code>+ First step
++ Second step
+  + Sub-step A
+  + Sub-step B
++ Third step</code></pre>
 
-      <h3>Listes de termes</h3>
+      <h3>Term Lists</h3>
 
-      <pre><code>/ NovaType: Systeme de composition moderne
-/ Typst: Moteur de rendu sous-jacent
-/ LaTeX: Systeme traditionnel de composition</code></pre>
+      <pre><code>/ NovaType: Modern document composition system
+/ Typst: Underlying rendering engine
+/ LaTeX: Traditional typesetting system</code></pre>
 
-      <h2>Liens et references</h2>
+      <h2>Links and References</h2>
 
-      <h3>Liens externes</h3>
+      <h3>External Links</h3>
 
-      <pre><code><span class="token-comment">// Lien simple</span>
+      <pre><code><span class="token-comment">// Simple link</span>
 https://novatype.dev
 
-<span class="token-comment">// Lien avec texte</span>
-<span class="token-keyword">#link</span>(<span class="token-string">"https://novatype.dev"</span>)[Site officiel]</code></pre>
+<span class="token-comment">// Link with text</span>
+<span class="token-keyword">#link</span>(<span class="token-string">"https://novatype.dev"</span>)[Official website]</code></pre>
 
-      <h3>Labels et references internes</h3>
+      <h3>Labels and Internal References</h3>
 
-      <pre><code><span class="token-comment">// Creer un label</span>
+      <pre><code><span class="token-comment">// Create a label</span>
 <span class="token-keyword">=</span> Introduction <span class="token-operator">&lt;intro&gt;</span>
 
-<span class="token-comment">// Referencer le label</span>
-Voir la section <span class="token-operator">@intro</span> pour plus de details.</code></pre>
+<span class="token-comment">// Reference the label</span>
+See section <span class="token-operator">@intro</span> for more details.</code></pre>
 
-      <h2>Commentaires</h2>
+      <h2>Comments</h2>
 
-      <pre><code><span class="token-comment">// Commentaire sur une ligne</span>
+      <pre><code><span class="token-comment">// Single line comment</span>
 
-<span class="token-comment">/* Commentaire
-   sur plusieurs
-   lignes */</span></code></pre>
+<span class="token-comment">/* Multi-line
+   comment */</span></code></pre>
 
-      <h2>Blocs de code</h2>
+      <h2>Code Blocks</h2>
 
-      <pre><code><span class="token-comment">// Code en ligne</span>
-La fonction `print()` affiche du texte.
+      <pre><code><span class="token-comment">// Inline code</span>
+The `print()` function displays text.
 
-<span class="token-comment">// Bloc de code</span>
+<span class="token-comment">// Code block</span>
 ```python
 def hello():
     print("Hello, World!")
 ```
 
-<span class="token-comment">// Bloc de code avec typst</span>
+<span class="token-comment">// Code block with typst</span>
 <span class="token-keyword">#raw</span>(lang: <span class="token-string">"python"</span>, block: <span class="token-keyword">true</span>, <span class="token-string">`
 def hello():
     print("Hello!")
 `</span>)</code></pre>
 
-      <h2>Caracteres speciaux</h2>
+      <h2>Special Characters</h2>
 
       <table class="comparison-table">
         <thead>
           <tr>
-            <th>Syntaxe</th>
-            <th>Resultat</th>
+            <th>Syntax</th>
+            <th>Result</th>
             <th>Description</th>
           </tr>
         </thead>
@@ -259,57 +258,57 @@ def hello():
           <tr>
             <td><code>\*</code></td>
             <td>*</td>
-            <td>Asterisque literal</td>
+            <td>Literal asterisk</td>
           </tr>
           <tr>
             <td><code>\_</code></td>
             <td>_</td>
-            <td>Underscore literal</td>
+            <td>Literal underscore</td>
           </tr>
           <tr>
             <td><code>\#</code></td>
             <td>#</td>
-            <td>Diese literal</td>
+            <td>Literal hash</td>
           </tr>
           <tr>
             <td><code>---</code></td>
             <td>—</td>
-            <td>Tiret cadratin</td>
+            <td>Em dash</td>
           </tr>
           <tr>
             <td><code>--</code></td>
             <td>–</td>
-            <td>Tiret demi-cadratin</td>
+            <td>En dash</td>
           </tr>
           <tr>
             <td><code>...</code></td>
             <td>…</td>
-            <td>Points de suspension</td>
+            <td>Ellipsis</td>
           </tr>
         </tbody>
       </table>
 
-      <h2>Fonctions de base</h2>
+      <h2>Basic Functions</h2>
 
-      <p>Les fonctions commencent par <code>#</code> :</p>
+      <p>Functions start with <code>#</code>:</p>
 
-      <pre><code><span class="token-comment">// Espacement vertical</span>
-<span class="token-keyword">#v</span>(<span class="token-number">1cm</span>)        <span class="token-comment">// 1 centimetre</span>
-<span class="token-keyword">#v</span>(<span class="token-number">1em</span>)        <span class="token-comment">// 1 taille de police</span>
+      <pre><code><span class="token-comment">// Vertical spacing</span>
+<span class="token-keyword">#v</span>(<span class="token-number">1cm</span>)        <span class="token-comment">// 1 centimeter</span>
+<span class="token-keyword">#v</span>(<span class="token-number">1em</span>)        <span class="token-comment">// 1 font size</span>
 
-<span class="token-comment">// Espacement horizontal</span>
+<span class="token-comment">// Horizontal spacing</span>
 <span class="token-keyword">#h</span>(<span class="token-number">1cm</span>)
 
-<span class="token-comment">// Saut de page</span>
+<span class="token-comment">// Page break</span>
 <span class="token-keyword">#pagebreak</span>()
 
-<span class="token-comment">// Alignement</span>
-<span class="token-keyword">#align</span>(center)[Texte centre]
-<span class="token-keyword">#align</span>(right)[Texte a droite]
+<span class="token-comment">// Alignment</span>
+<span class="token-keyword">#align</span>(center)[Centered text]
+<span class="token-keyword">#align</span>(right)[Right-aligned text]
 
-<span class="token-comment">// Bloc avec style</span>
+<span class="token-comment">// Block with style</span>
 <span class="token-keyword">#block</span>(fill: rgb(<span class="token-string">"#f0f0f0"</span>), inset: <span class="token-number">1em</span>)[
-  Contenu du bloc
+  Block content
 ]</code></pre>
 
       <div class="callout callout-info">
@@ -318,21 +317,21 @@ def hello():
             <circle cx="12" cy="12" r="10"/>
             <path d="M12 16v-4M12 8h.01"/>
           </svg>
-          Astuce
+          Tip
         </div>
-        <p style="margin: 0;">Les crochets <code>[]</code> contiennent du contenu markup, tandis que les parentheses <code>()</code> contiennent des arguments de fonction.</p>
+        <p style="margin: 0;">Square brackets <code>[]</code> contain markup content, while parentheses <code>()</code> contain function arguments.</p>
       </div>
 
-      <h2>Prochaines etapes</h2>
+      <h2>Next Steps</h2>
 
       <div class="grid grid-2" style="margin-top: var(--space-xl);">
         <a href="/novatype/docs/formatting.html" class="card" style="text-decoration: none;">
-          <h4 style="color: var(--nova-primary);">Mise en forme</h4>
-          <p class="text-muted" style="margin: 0;">Personnalisez l'apparence de vos documents.</p>
+          <h4 style="color: var(--nova-primary);">Formatting</h4>
+          <p class="text-muted" style="margin: 0;">Customize the appearance of your documents.</p>
         </a>
         <a href="/novatype/docs/math.html" class="card" style="text-decoration: none;">
           <h4 style="color: var(--nova-primary);">Equations</h4>
-          <p class="text-muted" style="margin: 0;">Ecrivez des formules mathematiques.</p>
+          <p class="text-muted" style="margin: 0;">Write mathematical formulas.</p>
         </a>
       </div>
 
@@ -342,7 +341,7 @@ def hello():
   <footer class="footer">
     <div class="container">
       <div class="footer-bottom" style="border-top: none; padding-top: 0;">
-        <p>NovaType - Projet Open Source sous licence MIT</p>
+        <p>NovaType - Open Source Project under MIT License</p>
       </div>
     </div>
   </footer>

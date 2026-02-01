@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Templates NovaType - Modeles professionnels avec apercu en temps reel.">
+  <meta name="description" content="NovaType Templates - Professional templates with real-time preview.">
   <title>Templates - NovaType</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -231,14 +231,14 @@
         NovaType
       </a>
       <ul class="nav-links" id="navLinks">
-        <li><a href="/novatype/index.html">Accueil</a></li>
+        <li><a href="/novatype/index.html">Home</a></li>
         <li><a href="/novatype/demos.html">Demos</a></li>
         <li><a href="/novatype/docs/index.html">Documentation</a></li>
         <li><a href="/novatype/docs/templates.html" class="active">Templates</a></li>
         <li><a href="https://github.com/AureClai/novatype" target="_blank">GitHub</a></li>
       </ul>
       <div class="nav-actions">
-        <a href="/novatype/docs/getting-started.html" class="btn btn-primary">Commencer</a>
+        <a href="/novatype/docs/getting-started.html" class="btn btn-primary">Get Started</a>
         <button class="nav-toggle" id="navToggle" aria-label="Menu">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M3 12h18M3 6h18M3 18h18"/>
@@ -252,13 +252,13 @@
   <section class="templates-hero">
     <div class="container">
       <h1>Templates</h1>
-      <p>Modeles professionnels prets a l'emploi avec apercu en temps reel. Choisissez un template et commencez a rediger immediatement.</p>
+      <p>Ready-to-use professional templates with real-time preview. Choose a template and start writing immediately.</p>
 
       <div class="templates-filter">
-        <button class="filter-btn active" data-filter="all">Tous</button>
-        <button class="filter-btn" data-filter="academic">Academique</button>
-        <button class="filter-btn" data-filter="professional">Professionnel</button>
-        <button class="filter-btn" data-filter="personal">Personnel</button>
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="academic">Academic</button>
+        <button class="filter-btn" data-filter="professional">Professional</button>
+        <button class="filter-btn" data-filter="personal">Personal</button>
       </div>
     </div>
   </section>
@@ -274,7 +274,7 @@
   <footer class="footer">
     <div class="container">
       <div class="footer-bottom" style="border-top: none; padding-top: 0;">
-        <p>NovaType - Projet Open Source sous licence MIT</p>
+        <p>NovaType - Open Source Project under MIT License</p>
       </div>
     </div>
   </footer>
@@ -287,12 +287,12 @@
     const templates = [
       {
         id: 'article',
-        name: 'Article Simple',
+        name: 'Simple Article',
         category: 'academic',
         icon: 'document',
         color: '#2563eb',
-        description: 'Article academique de base avec structure classique. Ideal pour les travaux universitaires et publications.',
-        tags: ['academique', 'publication', 'recherche'],
+        description: 'Basic academic article with classic structure. Ideal for university work and publications.',
+        tags: ['academic', 'publication', 'research'],
         code: `#set document(title: "Mon Article")
 #set page(margin: 2cm)
 #set text(font: "New Computer Modern", size: 11pt)
@@ -474,7 +474,7 @@ pour son soutien financier et technique.`
         category: 'academic',
         icon: 'conference',
         color: '#059669',
-        description: 'Format officiel IEEE pour conferences et journaux scientifiques internationaux.',
+        description: 'Official IEEE format for international scientific conferences and journals.',
         tags: ['IEEE', 'conference', 'international'],
         code: `#set page(
   paper: "us-letter",
@@ -545,12 +545,12 @@ document preparation technology.`
       },
       {
         id: 'report',
-        name: 'Rapport Technique',
+        name: 'Technical Report',
         category: 'professional',
         icon: 'report',
         color: '#f59e0b',
-        description: 'Rapport professionnel avec page de garde, table des matieres et mise en page soignee.',
-        tags: ['entreprise', 'rapport', 'technique'],
+        description: 'Professional report with cover page, table of contents, and polished layout.',
+        tags: ['business', 'report', 'technical'],
         code: `#set document(title: "Rapport Technique")
 #set page(margin: 2.5cm)
 #set text(font: "New Computer Modern", size: 11pt)
@@ -617,12 +617,12 @@ notable des performances globales.`
       },
       {
         id: 'letter',
-        name: 'Lettre Formelle',
+        name: 'Formal Letter',
         category: 'professional',
         icon: 'letter',
         color: '#8b5cf6',
-        description: 'Lettre professionnelle avec mise en page formelle pour correspondance officielle.',
-        tags: ['lettre', 'formel', 'correspondance'],
+        description: 'Professional letter with formal layout for official correspondence.',
+        tags: ['letter', 'formal', 'correspondence'],
         code: `#set page(margin: (top: 3cm, bottom: 2cm, x: 2.5cm))
 #set text(font: "New Computer Modern", size: 11pt)
 #set par(justify: true)
@@ -687,12 +687,12 @@ l'expression de mes salutations distinguees.
       },
       {
         id: 'cv',
-        name: 'CV Moderne',
+        name: 'Modern CV',
         category: 'personal',
         icon: 'cv',
         color: '#14b8a6',
-        description: 'Curriculum vitae elegant avec mise en page moderne et sections bien organisees.',
-        tags: ['CV', 'emploi', 'carriere'],
+        description: 'Elegant curriculum vitae with modern layout and well-organized sections.',
+        tags: ['CV', 'employment', 'career'],
         code: `#set page(margin: 1.5cm)
 #set text(font: "New Computer Modern", size: 10pt)
 
@@ -788,7 +788,7 @@ l'expression de mes salutations distinguees.
         category: 'professional',
         icon: 'presentation',
         color: '#ec4899',
-        description: 'Presentation avec slides numerotes et mise en page claire pour conferences.',
+        description: 'Presentation with numbered slides and clear layout for conferences.',
         tags: ['presentation', 'slides', 'conference'],
         code: `#set page(
   paper: "presentation-16-9",
@@ -915,7 +915,7 @@ l'expression de mes salutations distinguees.
           <div class="template-preview" id="preview-${template.id}">
             <div class="template-preview-loading">
               <div class="template-preview-spinner"></div>
-              <span>Chargement...</span>
+              <span>Loading...</span>
             </div>
           </div>
           <div class="template-info">
@@ -934,10 +934,10 @@ l'expression de mes salutations distinguees.
             </div>
             <div class="template-actions">
               <button class="btn btn-outline btn-sm" onclick="tryTemplate('${template.id}')">
-                Essayer
+                Try
               </button>
               <button class="btn btn-primary btn-sm" onclick="copyTemplate('${template.id}')">
-                Copier
+                Copy
               </button>
             </div>
           </div>
@@ -977,7 +977,7 @@ l'expression de mes salutations distinguees.
       if (container && svg) {
         container.innerHTML = `<div class="template-preview-page">${svg}</div>`;
       } else if (container) {
-        container.innerHTML = `<div class="template-preview-loading"><span style="color: var(--nova-secondary)">Apercu non disponible</span></div>`;
+        container.innerHTML = `<div class="template-preview-loading"><span style="color: var(--nova-secondary)">Preview not available</span></div>`;
       }
     }
 
@@ -997,7 +997,7 @@ l'expression de mes salutations distinguees.
         navigator.clipboard.writeText(template.code).then(() => {
           const btn = event.target;
           const originalText = btn.textContent;
-          btn.textContent = 'Copie !';
+          btn.textContent = 'Copied!';
           setTimeout(() => btn.textContent = originalText, 1500);
         });
       }
@@ -1044,7 +1044,7 @@ l'expression de mes salutations distinguees.
         templates.forEach(t => {
           const container = document.getElementById(`preview-${t.id}`);
           if (container) {
-            container.innerHTML = `<div class="template-preview-loading"><span style="color: var(--nova-secondary)">Apercu non disponible</span></div>`;
+            container.innerHTML = `<div class="template-preview-loading"><span style="color: var(--nova-secondary)">Preview not available</span></div>`;
           }
         });
       }
