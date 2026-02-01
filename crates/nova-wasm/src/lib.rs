@@ -189,11 +189,7 @@ fn compile_to_svg(source: &str) -> Result<Vec<String>, Vec<String>> {
     match result.output {
         Ok(document) => {
             // Render each page to SVG
-            let svg_pages: Vec<String> = document
-                .pages
-                .iter()
-                .map(typst_svg::svg)
-                .collect();
+            let svg_pages: Vec<String> = document.pages.iter().map(typst_svg::svg).collect();
 
             Ok(svg_pages)
         }

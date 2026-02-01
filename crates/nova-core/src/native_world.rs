@@ -238,17 +238,17 @@ pub fn compile_pdf(world: &NativeWorld) -> Result<Vec<u8>, Vec<String>> {
     match result.output {
         Ok(document) => {
             let options = typst_pdf::PdfOptions::default();
-            let pdf = typst_pdf::pdf(&document, &options)
-                .map_err(|errors| {
-                    errors.iter().map(|e| format!("{}", e.message)).collect::<Vec<_>>()
-                })?;
+            let pdf = typst_pdf::pdf(&document, &options).map_err(|errors| {
+                errors
+                    .iter()
+                    .map(|e| format!("{}", e.message))
+                    .collect::<Vec<_>>()
+            })?;
             Ok(pdf)
         }
         Err(errors) => {
-            let error_messages: Vec<String> = errors
-                .iter()
-                .map(|e| format!("{}", e.message))
-                .collect();
+            let error_messages: Vec<String> =
+                errors.iter().map(|e| format!("{}", e.message)).collect();
             Err(error_messages)
         }
     }
@@ -265,18 +265,12 @@ pub fn compile_svg(world: &NativeWorld) -> Result<Vec<String>, Vec<String>> {
 
     match result.output {
         Ok(document) => {
-            let svg_pages: Vec<String> = document
-                .pages
-                .iter()
-                .map(typst_svg::svg)
-                .collect();
+            let svg_pages: Vec<String> = document.pages.iter().map(typst_svg::svg).collect();
             Ok(svg_pages)
         }
         Err(errors) => {
-            let error_messages: Vec<String> = errors
-                .iter()
-                .map(|e| format!("{}", e.message))
-                .collect();
+            let error_messages: Vec<String> =
+                errors.iter().map(|e| format!("{}", e.message)).collect();
             Err(error_messages)
         }
     }

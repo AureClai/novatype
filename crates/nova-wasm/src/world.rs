@@ -256,7 +256,10 @@ mod tests {
     fn fonts_loaded() {
         let world = WasmWorld::new("");
         // Check that we can get a font (index 0 should exist)
-        assert!(world.font(0).is_some(), "Should have at least one font loaded");
+        assert!(
+            world.font(0).is_some(),
+            "Should have at least one font loaded"
+        );
     }
 
     #[test]

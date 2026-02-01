@@ -3,8 +3,8 @@
 use crate::OutputFormat;
 use anyhow::{Context, Result};
 use clap::Args;
-use novatype_core::{compile_pdf, compile_svg, NativeWorld};
 use nova_schema::FrontmatterParser;
+use novatype_core::{compile_pdf, compile_svg, NativeWorld};
 use std::path::{Path, PathBuf};
 use tracing::{debug, info};
 
@@ -84,17 +84,15 @@ pub async fn compile(args: CompileArgs) -> Result<()> {
     info!("Compiling document...");
     match args.format {
         OutputFormat::Pdf => {
-            let pdf = compile_pdf(&world).map_err(|errors| {
-                anyhow::anyhow!("Compilation failed:\n{}", errors.join("\n"))
-            })?;
+            let pdf = compile_pdf(&world)
+                .map_err(|errors| anyhow::anyhow!("Compilation failed:\n{}", errors.join("\n")))?;
 
             std::fs::write(&output_path, &pdf)
                 .with_context(|| format!("Failed to write {:?}", output_path))?;
         }
         OutputFormat::Svg => {
-            let pages = compile_svg(&world).map_err(|errors| {
-                anyhow::anyhow!("Compilation failed:\n{}", errors.join("\n"))
-            })?;
+            let pages = compile_svg(&world)
+                .map_err(|errors| anyhow::anyhow!("Compilation failed:\n{}", errors.join("\n")))?;
 
             if pages.len() == 1 {
                 // Single page, write directly
@@ -102,7 +100,10 @@ pub async fn compile(args: CompileArgs) -> Result<()> {
                     .with_context(|| format!("Failed to write {:?}", output_path))?;
             } else {
                 // Multiple pages, write numbered files
-                let stem = output_path.file_stem().unwrap_or_default().to_string_lossy();
+                let stem = output_path
+                    .file_stem()
+                    .unwrap_or_default()
+                    .to_string_lossy();
                 let parent = output_path.parent().unwrap_or(Path::new("."));
                 for (i, page) in pages.iter().enumerate() {
                     let page_path = parent.join(format!("{}-{}.svg", stem, i + 1));
@@ -114,9 +115,8 @@ pub async fn compile(args: CompileArgs) -> Result<()> {
         OutputFormat::Png => {
             // PNG output: compile to SVG first, then convert
             // For now, just produce SVG and warn
-            let pages = compile_svg(&world).map_err(|errors| {
-                anyhow::anyhow!("Compilation failed:\n{}", errors.join("\n"))
-            })?;
+            let pages = compile_svg(&world)
+                .map_err(|errors| anyhow::anyhow!("Compilation failed:\n{}", errors.join("\n")))?;
 
             let svg_path = output_path.with_extension("svg");
             if pages.len() == 1 {
@@ -131,9 +131,7 @@ pub async fn compile(args: CompileArgs) -> Result<()> {
                         .with_context(|| format!("Failed to write {:?}", page_path))?;
                 }
             }
-            eprintln!(
-                "Note: PNG output is not yet implemented. SVG file(s) created instead."
-            );
+            eprintln!("Note: PNG output is not yet implemented. SVG file(s) created instead.");
         }
     }
 
