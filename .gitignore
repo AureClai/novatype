@@ -37,3 +37,6 @@ test-*.typ
 
 # Generated PDFs
 *.pdf
+
+# Local testing structure (mirrors GitHub Pages)
+.local-serve/

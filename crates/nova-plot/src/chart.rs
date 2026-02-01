@@ -177,6 +177,7 @@ impl Default for Chart {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::str::FromStr;
 
     #[test]
     fn chart_builder_pattern() {

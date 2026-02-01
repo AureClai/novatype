@@ -163,7 +163,7 @@ impl World for WasmWorld {
         } else {
             // Check virtual files for .typ files
             let path = id.vpath().as_rootless_path().to_string_lossy();
-            if let Some(content) = self.get_virtual_file(&path.to_string()) {
+            if let Some(content) = self.get_virtual_file(path.as_ref()) {
                 let source = Source::new(id, content.clone());
                 Ok(source)
             } else {
@@ -179,7 +179,7 @@ impl World for WasmWorld {
         } else {
             // Check virtual files
             let path = id.vpath().as_rootless_path().to_string_lossy();
-            if let Some(content) = self.get_virtual_file(&path.to_string()) {
+            if let Some(content) = self.get_virtual_file(path.as_ref()) {
                 Ok(Bytes::new(content.as_bytes().to_vec()))
             } else {
                 Err(FileError::NotFound(id.vpath().as_rootless_path().into()))
@@ -248,18 +248,15 @@ mod tests {
     #[test]
     fn create_world() {
         let world = WasmWorld::new("Hello, world!");
-        assert_eq!(
-            world.source(world.main()).unwrap().text().as_str(),
-            "Hello, world!"
-        );
+        let source = world.source(world.main()).unwrap();
+        assert_eq!(source.text(), "Hello, world!");
     }
 
     #[test]
     fn fonts_loaded() {
         let world = WasmWorld::new("");
-        let book = world.book();
-        // Should have some fonts loaded
-        assert!(!book.is_empty());
+        // Check that we can get a font (index 0 should exist)
+        assert!(world.font(0).is_some(), "Should have at least one font loaded");
     }
 
     #[test]

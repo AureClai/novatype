@@ -8,10 +8,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="/novatype/assets/css/style.css">
   <style>
     :root {
-      --navbar-height: 64px;
+      --navbar-height: 80px;
       --controls-height: 48px;
     }
 
@@ -379,22 +379,36 @@
     }
 
     /* Clickable references in SVG */
-    .svg-ref {
-      cursor: pointer;
-      transition: opacity 0.15s;
+    .preview-page svg a {
+      cursor: pointer !important;
     }
 
-    .svg-ref:hover {
+    .preview-page svg a:hover {
       opacity: 0.7;
     }
 
-    .svg-ref-highlight {
-      animation: refHighlight 1.5s ease-out;
+    .preview-page svg a text,
+    .preview-page svg a use,
+    .preview-page svg a path {
+      cursor: pointer !important;
+    }
+
+    /* Highlight animation for targets */
+    .ref-highlight {
+      animation: refHighlight 2s ease-out;
     }
 
     @keyframes refHighlight {
-      0% { filter: drop-shadow(0 0 8px #2563eb) drop-shadow(0 0 16px #2563eb); }
-      100% { filter: none; }
+      0%, 20% {
+        outline: 3px solid #2563eb;
+        outline-offset: 4px;
+        background: rgba(37, 99, 235, 0.1);
+      }
+      100% {
+        outline: 3px solid transparent;
+        outline-offset: 4px;
+        background: transparent;
+      }
     }
 
     .preview-error {
@@ -462,7 +476,7 @@
   <!-- Navigation (same as other pages) -->
   <nav class="navbar" id="navbar">
     <div class="container">
-      <a href="index.html" class="nav-logo">
+      <a href="/novatype/" class="nav-logo">
         <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
           <rect width="32" height="32" rx="8" fill="#2563eb"/>
           <path d="M8 10h4l4 12h-4L8 10z" fill="white"/>
@@ -472,14 +486,14 @@
         NovaType
       </a>
       <ul class="nav-links" id="navLinks">
-        <li><a href="index.html">Accueil</a></li>
-        <li><a href="demos.html" class="active">Demos</a></li>
-        <li><a href="docs/index.html">Documentation</a></li>
-        <li><a href="docs/templates.html">Templates</a></li>
+        <li><a href="/novatype/">Accueil</a></li>
+        <li><a href="/novatype/demos.html" class="active">Demos</a></li>
+        <li><a href="/novatype/docs/index.html">Documentation</a></li>
+        <li><a href="/novatype/docs/templates.html">Templates</a></li>
         <li><a href="https://github.com/AureClai/novatype" target="_blank">GitHub</a></li>
       </ul>
       <div class="nav-actions">
-        <a href="docs/getting-started.html" class="btn btn-primary">Commencer</a>
+        <a href="/novatype/docs/getting-started.html" class="btn btn-primary">Commencer</a>
         <button class="nav-toggle" id="navToggle" aria-label="Menu">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M3 12h18M3 6h18M3 18h18"/>
@@ -617,9 +631,9 @@
     </div>
   </div>
 
-  <script src="assets/js/main.js"></script>
+  <script src="/novatype/assets/js/main.js"></script>
   <script type="module">
-    import { initNovaCompiler, compile } from './assets/js/nova-compiler.js';
+    import { initNovaCompiler, compile } from '/novatype/assets/js/nova-compiler.js';
 
     // Examples database
     const examples = {
@@ -1262,96 +1276,83 @@ de mes salutations distinguees.
 
     // Make references clickable in SVG
     function makeReferencesClickable(container) {
-      const svgs = container.querySelectorAll('svg');
+      const pages = container.querySelectorAll('.preview-page');
 
-      svgs.forEach((svg, pageIndex) => {
-        const textElements = svg.querySelectorAll('text');
+      pages.forEach((page, pageIndex) => {
+        const svg = page.querySelector('svg');
+        if (!svg) return;
 
-        // Build a map of targets (equations, figures, tables, sections)
-        const targets = new Map();
+        // Add page index as data attribute for cross-page navigation
+        page.dataset.pageIndex = pageIndex;
 
-        textElements.forEach(el => {
-          const text = el.textContent || '';
+        // Find all links in the SVG (Typst generates <a> elements with href or xlink:href)
+        const links = svg.querySelectorAll('a');
 
-          // Match equation numbers like "(1)", "(2)", etc.
-          const eqMatch = text.match(/^\((\d+)\)$/);
-          if (eqMatch) {
-            targets.set(`eq-${eqMatch[1]}`, el);
-          }
+        links.forEach(link => {
+          // Get href from either href or xlink:href
+          let href = link.getAttribute('href') || link.getAttributeNS('http://www.w3.org/1999/xlink', 'href');
 
-          // Match figure captions like "Figure 1:", "Fig. 1"
-          const figMatch = text.match(/^(?:Figure|Fig\.?)\s*(\d+)/i);
-          if (figMatch) {
-            targets.set(`fig-${figMatch[1]}`, el);
-          }
+          if (!href) return;
 
-          // Match table captions like "Table 1:", "Tab. 1"
-          const tabMatch = text.match(/^(?:Table|Tab\.?)\s*(\d+)/i);
-          if (tabMatch) {
-            targets.set(`tab-${tabMatch[1]}`, el);
-          }
+          // Style the link
+          link.style.cursor = 'pointer';
 
-          // Match section headings like "1.", "1.1", "2.3.1"
-          const secMatch = text.match(/^(\d+(?:\.\d+)*)\s+\S/);
-          if (secMatch) {
-            targets.set(`sec-${secMatch[1]}`, el);
+          // Handle internal references (start with #)
+          if (href.startsWith('#')) {
+            link.addEventListener('click', (e) => {
+              e.preventDefault();
+              e.stopPropagation();
+
+              const targetId = href.substring(1); // Remove #
+
+              // Find the target element across all pages
+              // Typst uses IDs like the label name
+              let targetElement = null;
+              let targetPage = null;
+
+              pages.forEach((p, idx) => {
+                const svgEl = p.querySelector('svg');
+                if (!svgEl) return;
+
+                // Try to find by ID
+                let target = svgEl.getElementById(targetId);
+
+                // Also try finding by data-label or similar attributes
+                if (!target) {
+                  target = svgEl.querySelector(`[id*="${targetId}"]`);
+                }
+
+                if (target) {
+                  targetElement = target;
+                  targetPage = p;
+                }
+              });
+
+              if (targetPage) {
+                // Scroll the page into view
+                targetPage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+                // Add highlight effect
+                targetPage.classList.add('ref-highlight');
+                setTimeout(() => targetPage.classList.remove('ref-highlight'), 2000);
+              } else {
+                // Target not found - might be same page, just log
+                console.log('Reference target not found:', targetId);
+              }
+            });
           }
         });
 
-        // Now find references and make them clickable
-        textElements.forEach(el => {
-          const text = el.textContent || '';
-
-          // References patterns
-          const refPatterns = [
-            // Equation references: "Eq. (1)", "Equation (1)", "Eq. 1", "(1)" in context
-            { pattern: /(?:Eq(?:uation)?\.?\s*)?\((\d+)\)/gi, type: 'eq' },
-            // Figure references: "Fig. 1", "Figure 1"
-            { pattern: /(?:Fig(?:ure)?\.?\s*)(\d+)/gi, type: 'fig' },
-            // Table references: "Tab. 1", "Table 1"
-            { pattern: /(?:Tab(?:le)?\.?\s*)(\d+)/gi, type: 'tab' },
-            // Section references: "Section 1.2", "Sec. 1"
-            { pattern: /(?:Sec(?:tion)?\.?\s*)(\d+(?:\.\d+)*)/gi, type: 'sec' },
-          ];
-
-          let isReference = false;
-          let targetKey = null;
-
-          for (const { pattern, type } of refPatterns) {
-            const match = pattern.exec(text);
-            if (match) {
-              targetKey = `${type}-${match[1]}`;
-              if (targets.has(targetKey)) {
-                isReference = true;
-                break;
-              }
-            }
-            pattern.lastIndex = 0; // Reset regex
-          }
-
-          if (isReference && targetKey) {
-            el.classList.add('svg-ref');
-            el.style.cursor = 'pointer';
-
-            el.addEventListener('click', () => {
-              const target = targets.get(targetKey);
-              if (target) {
-                // Find which page contains the target
-                const targetSvg = target.closest('svg');
-                const targetPage = targetSvg?.closest('.preview-page');
-
-                if (targetPage) {
-                  // Scroll to the page
-                  targetPage.scrollIntoView({ behavior: 'smooth', block: 'center' });
-
-                  // Highlight the target
-                  target.classList.add('svg-ref-highlight');
-                  setTimeout(() => {
-                    target.classList.remove('svg-ref-highlight');
-                  }, 1500);
-                }
-              }
-            });
+        // Also handle elements that look like references but aren't wrapped in <a>
+        // (Sometimes Typst renders them as colored text groups)
+        const groups = svg.querySelectorAll('g[fill]');
+        groups.forEach(g => {
+          const fill = g.getAttribute('fill');
+          // Check if it's a link-colored element (typically blue)
+          if (fill && (fill.includes('2563eb') || fill.includes('rgb(37, 99, 235)') || fill === '#0000ff' || fill.includes('blue'))) {
+            g.style.cursor = 'pointer';
+            g.addEventListener('mouseenter', () => g.style.opacity = '0.7');
+            g.addEventListener('mouseleave', () => g.style.opacity = '1');
           }
         });
       });
@@ -1416,10 +1417,46 @@ de mes salutations distinguees.
       }, 400);
     }
 
+    // Load template from localStorage (from Templates page)
+    function loadTemplateFromStorage() {
+      const stored = localStorage.getItem('novatype_template');
+      if (stored) {
+        try {
+          const template = JSON.parse(stored);
+          // Clear storage so it doesn't reload on refresh
+          localStorage.removeItem('novatype_template');
+
+          // Load the template
+          editor.value = template.code;
+          currentExampleSpan.textContent = template.name;
+
+          // Update description
+          exampleTitle.textContent = template.name;
+          exampleText.textContent = template.description;
+          exampleDescription.classList.add('visible');
+
+          // Clear active state from dropdown items
+          document.querySelectorAll('.dropdown-item').forEach(item => {
+            item.classList.remove('active');
+          });
+
+          return true;
+        } catch (e) {
+          console.error('Failed to load template from storage:', e);
+        }
+      }
+      return false;
+    }
+
     // Initialize
     async function init() {
-      // Load initial example
-      loadExample('hello');
+      // Check for template from Templates page first
+      const hasStoredTemplate = loadTemplateFromStorage();
+
+      // If no stored template, load default example
+      if (!hasStoredTemplate) {
+        loadExample('hello');
+      }
 
       try {
         statusText.textContent = 'Chargement du compilateur...';

@@ -237,8 +237,9 @@ mod tests {
     #[tokio::test]
     async fn compile_creates_output() {
         // Skip test if typst binary not available
-        if find_typst_binary().is_err() {
-            eprintln!("Skipping test: typst binary not found");
+        let typst_name = if cfg!(windows) { "typst.exe" } else { "typst" };
+        if which::which(typst_name).is_err() {
+            eprintln!("Skipping test: typst binary not found in PATH");
             return;
         }
 

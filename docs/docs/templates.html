@@ -3,18 +3,225 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Templates NovaType - Modeles professionnels pour documents scientifiques, rapports et presentations.">
+  <meta name="description" content="Templates NovaType - Modeles professionnels avec apercu en temps reel.">
   <title>Templates - NovaType</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../assets/css/style.css">
+  <link rel="stylesheet" href="/novatype/assets/css/style.css">
+  <style>
+    .templates-hero {
+      padding: 8rem 0 4rem;
+      background: linear-gradient(135deg, var(--nova-darker) 0%, var(--nova-dark) 100%);
+      color: white;
+    }
+
+    .templates-hero h1 {
+      color: white;
+      font-size: 2.5rem;
+      margin-bottom: var(--space-md);
+    }
+
+    .templates-hero p {
+      color: var(--nova-light);
+      font-size: 1.125rem;
+      max-width: 600px;
+    }
+
+    .templates-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+      gap: var(--space-xl);
+      padding: var(--space-3xl) 0;
+    }
+
+    .template-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .template-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-xl);
+    }
+
+    .template-preview {
+      background: #f1f5f9;
+      height: 280px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .template-preview-loading {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-sm);
+      color: var(--nova-secondary);
+    }
+
+    .template-preview-spinner {
+      width: 32px;
+      height: 32px;
+      border: 3px solid var(--nova-light);
+      border-top-color: var(--nova-primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .template-preview svg {
+      max-width: 100%;
+      max-height: 100%;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      background: white;
+    }
+
+    .template-preview-page {
+      background: white;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+      max-height: 260px;
+      overflow: hidden;
+    }
+
+    .template-preview-page svg {
+      display: block;
+      width: auto;
+      height: 260px;
+    }
+
+    .template-info {
+      padding: var(--space-lg);
+    }
+
+    .template-header {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      margin-bottom: var(--space-md);
+    }
+
+    .template-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .template-icon svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    .template-name {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--nova-darker);
+      margin: 0;
+    }
+
+    .template-category {
+      font-size: 0.75rem;
+      color: var(--nova-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .template-description {
+      color: var(--nova-gray);
+      margin-bottom: var(--space-md);
+      line-height: 1.6;
+    }
+
+    .template-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-lg);
+    }
+
+    .template-tag {
+      background: var(--nova-lighter);
+      color: var(--nova-gray);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+    }
+
+    .template-actions {
+      display: flex;
+      gap: var(--space-sm);
+    }
+
+    .template-actions .btn {
+      flex: 1;
+      justify-content: center;
+    }
+
+    .btn-sm {
+      padding: 8px 16px;
+      font-size: 0.875rem;
+    }
+
+    /* Filter tabs */
+    .templates-filter {
+      display: flex;
+      gap: var(--space-sm);
+      flex-wrap: wrap;
+      margin-top: var(--space-xl);
+    }
+
+    .filter-btn {
+      padding: 8px 20px;
+      border: 1px solid rgba(255,255,255,0.3);
+      background: transparent;
+      color: rgba(255,255,255,0.8);
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 0.875rem;
+    }
+
+    .filter-btn:hover {
+      background: rgba(255,255,255,0.1);
+      border-color: rgba(255,255,255,0.5);
+    }
+
+    .filter-btn.active {
+      background: white;
+      color: var(--nova-darker);
+      border-color: white;
+    }
+
+    @media (max-width: 768px) {
+      .templates-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .templates-hero h1 {
+        font-size: 2rem;
+      }
+    }
+  </style>
 </head>
 <body>
   <!-- Navigation -->
   <nav class="navbar" id="navbar">
     <div class="container">
-      <a href="../index.html" class="nav-logo">
+      <a href="/novatype/index.html" class="nav-logo">
         <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
           <rect width="32" height="32" rx="8" fill="#2563eb"/>
           <path d="M8 10h4l4 12h-4L8 10z" fill="white"/>
@@ -24,317 +231,44 @@
         NovaType
       </a>
       <ul class="nav-links" id="navLinks">
-        <li><a href="../index.html">Accueil</a></li>
-        <li><a href="../demos.html">Demos</a></li>
-        <li><a href="index.html" class="active">Documentation</a></li>
-        <li><a href="templates.html">Templates</a></li>
+        <li><a href="/novatype/index.html">Accueil</a></li>
+        <li><a href="/novatype/demos.html">Demos</a></li>
+        <li><a href="/novatype/docs/index.html">Documentation</a></li>
+        <li><a href="/novatype/docs/templates.html" class="active">Templates</a></li>
         <li><a href="https://github.com/AureClai/novatype" target="_blank">GitHub</a></li>
       </ul>
       <div class="nav-actions">
-        <a href="getting-started.html" class="btn btn-primary">Commencer</a>
+        <a href="/novatype/docs/getting-started.html" class="btn btn-primary">Commencer</a>
+        <button class="nav-toggle" id="navToggle" aria-label="Menu">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 12h18M3 6h18M3 18h18"/>
+          </svg>
+        </button>
       </div>
     </div>
   </nav>
 
-  <!-- Documentation Layout -->
-  <div class="container docs-layout" style="padding-top: 6rem;">
-    <!-- Sidebar -->
-    <aside class="docs-sidebar">
-      <nav class="docs-nav">
-        <div class="docs-nav-section">
-          <div class="docs-nav-title">Pour commencer</div>
-          <a href="getting-started.html" class="docs-nav-link">Installation</a>
-          <a href="index.html" class="docs-nav-link">Introduction</a>
-          <a href="quick-start.html" class="docs-nav-link">Demarrage rapide</a>
-        </div>
-        <div class="docs-nav-section">
-          <div class="docs-nav-title">Guide</div>
-          <a href="syntax.html" class="docs-nav-link">Syntaxe de base</a>
-          <a href="formatting.html" class="docs-nav-link">Mise en forme</a>
-          <a href="math.html" class="docs-nav-link">Equations</a>
-          <a href="tables.html" class="docs-nav-link">Tableaux</a>
-          <a href="figures.html" class="docs-nav-link">Figures</a>
-        </div>
-        <div class="docs-nav-section">
-          <div class="docs-nav-title">Fonctionnalites</div>
-          <a href="citations.html" class="docs-nav-link">Citations</a>
-          <a href="plots.html" class="docs-nav-link">Graphiques</a>
-          <a href="templates.html" class="docs-nav-link active">Templates</a>
-          <a href="schemas.html" class="docs-nav-link">Validation</a>
-        </div>
-        <div class="docs-nav-section">
-          <div class="docs-nav-title">Reference</div>
-          <a href="cli.html" class="docs-nav-link">CLI</a>
-          <a href="api.html" class="docs-nav-link">API WebAssembly</a>
-          <a href="config.html" class="docs-nav-link">Configuration</a>
-        </div>
-      </nav>
-    </aside>
-
-    <!-- Content -->
-    <main class="docs-content">
+  <!-- Hero -->
+  <section class="templates-hero">
+    <div class="container">
       <h1>Templates</h1>
+      <p>Modeles professionnels prets a l'emploi avec apercu en temps reel. Choisissez un template et commencez a rediger immediatement.</p>
 
-      <p class="text-secondary" style="font-size: 1.125rem; margin-bottom: var(--space-2xl);">
-        NovaType inclut des templates professionnels pour differents types de documents. Utilisez-les comme point de depart ou creez vos propres modeles.
-      </p>
-
-      <h2>Templates disponibles</h2>
-
-      <div class="grid grid-2" style="margin: var(--space-xl) 0;">
-
-        <!-- Article -->
-        <div class="card">
-          <div class="card-header">
-            <div class="card-icon">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
-                <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/>
-              </svg>
-            </div>
-            <h4>article</h4>
-          </div>
-          <p class="text-muted">Article simple pour documents generaux. Ideal pour commencer.</p>
-          <pre style="margin: var(--space-md) 0 0;"><code>nova init mon-doc -t article</code></pre>
-          <p style="margin-top: var(--space-md); font-size: 0.875rem;"><strong>Champs requis:</strong> title<br><strong>Champs optionnels:</strong> author, date, abstract</p>
-        </div>
-
-        <!-- IEEE -->
-        <div class="card">
-          <div class="card-header">
-            <div class="card-icon" style="background: var(--nova-accent);">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="12" cy="12" r="10"/>
-                <path d="M12 6v6l4 2"/>
-              </svg>
-            </div>
-            <h4>ieee-article</h4>
-          </div>
-          <p class="text-muted">Format officiel IEEE pour conferences et journaux scientifiques.</p>
-          <pre style="margin: var(--space-md) 0 0;"><code>nova init paper -t ieee-article</code></pre>
-          <p style="margin-top: var(--space-md); font-size: 0.875rem;"><strong>Champs requis:</strong> title, authors<br><strong>Champs optionnels:</strong> abstract, keywords, bibliography</p>
-        </div>
-
-        <!-- Nature -->
-        <div class="card">
-          <div class="card-header">
-            <div class="card-icon" style="background: var(--nova-warning);">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/>
-                <path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/>
-              </svg>
-            </div>
-            <h4>nature-article</h4>
-          </div>
-          <p class="text-muted">Style Nature pour publications dans les journaux Nature.</p>
-          <pre style="margin: var(--space-md) 0 0;"><code>nova init research -t nature-article</code></pre>
-          <p style="margin-top: var(--space-md); font-size: 0.875rem;"><strong>Champs requis:</strong> title, authors<br><strong>Champs optionnels:</strong> abstract, keywords, affiliations</p>
-        </div>
-
-        <!-- Report -->
-        <div class="card">
-          <div class="card-header">
-            <div class="card-icon">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                <path d="M22 6l-10 7L2 6"/>
-              </svg>
-            </div>
-            <h4>report</h4>
-          </div>
-          <p class="text-muted">Rapports techniques et business avec table des matieres.</p>
-          <pre style="margin: var(--space-md) 0 0;"><code>nova init rapport -t report</code></pre>
-          <p style="margin-top: var(--space-md); font-size: 0.875rem;"><strong>Champs requis:</strong> title<br><strong>Champs optionnels:</strong> author, date, organization, version</p>
-        </div>
-
-        <!-- Book -->
-        <div class="card">
-          <div class="card-header">
-            <div class="card-icon" style="background: #8b5cf6;">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M4 19.5A2.5 2.5 0 016.5 17H20"/>
-                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/>
-              </svg>
-            </div>
-            <h4>book</h4>
-          </div>
-          <p class="text-muted">Livres et documents longs avec support de chapitres.</p>
-          <pre style="margin: var(--space-md) 0 0;"><code>nova init livre -t book</code></pre>
-          <p style="margin-top: var(--space-md); font-size: 0.875rem;"><strong>Champs requis:</strong> title, author<br><strong>Champs optionnels:</strong> publisher, year, isbn</p>
-        </div>
-
-        <!-- Presentation -->
-        <div class="card">
-          <div class="card-header">
-            <div class="card-icon" style="background: #ec4899;">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
-                <path d="M8 21h8M12 17v4"/>
-              </svg>
-            </div>
-            <h4>presentation</h4>
-          </div>
-          <p class="text-muted">Slides et presentations professionnelles.</p>
-          <pre style="margin: var(--space-md) 0 0;"><code>nova init slides -t presentation</code></pre>
-          <p style="margin-top: var(--space-md); font-size: 0.875rem;"><strong>Champs requis:</strong> title<br><strong>Champs optionnels:</strong> author, date, event</p>
-        </div>
-
-        <!-- CV -->
-        <div class="card">
-          <div class="card-header">
-            <div class="card-icon" style="background: #14b8a6;">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
-                <circle cx="12" cy="7" r="4"/>
-              </svg>
-            </div>
-            <h4>cv</h4>
-          </div>
-          <p class="text-muted">Curriculum vitae et resumes elegants.</p>
-          <pre style="margin: var(--space-md) 0 0;"><code>nova init mon-cv -t cv</code></pre>
-          <p style="margin-top: var(--space-md); font-size: 0.875rem;"><strong>Champs requis:</strong> name<br><strong>Champs optionnels:</strong> email, phone, address, linkedin</p>
-        </div>
-
+      <div class="templates-filter">
+        <button class="filter-btn active" data-filter="all">Tous</button>
+        <button class="filter-btn" data-filter="academic">Academique</button>
+        <button class="filter-btn" data-filter="professional">Professionnel</button>
+        <button class="filter-btn" data-filter="personal">Personnel</button>
       </div>
+    </div>
+  </section>
 
-      <h2>Utiliser un template</h2>
-
-      <h3>Initialisation</h3>
-
-      <pre><code><span class="token-comment"># Creer un projet avec un template</span>
-<span class="token-function">$</span> nova init mon-article --template ieee-article
-
-<span class="token-comment"># Se deplacer dans le projet</span>
-<span class="token-function">$</span> cd mon-article
-
-<span class="token-comment"># Editer le fichier principal</span>
-<span class="token-function">$</span> code main.typ</code></pre>
-
-      <h3>Structure d'un projet</h3>
-
-      <pre><code>mon-article/
-├── main.typ          <span class="token-comment"># Document principal avec frontmatter</span>
-├── nova.toml         <span class="token-comment"># Configuration du projet</span>
-├── references.bib    <span class="token-comment"># Bibliographie BibTeX</span>
-└── .gitignore</code></pre>
-
-      <h3>Exemple de document IEEE</h3>
-
-      <pre><code><span class="token-comment">// Frontmatter YAML</span>
-<span class="token-operator">---</span>
-<span class="token-property">title</span>: <span class="token-string">"NovaType: A Modern Approach to Scientific Document Composition"</span>
-<span class="token-property">authors</span>:
-  - <span class="token-property">name</span>: <span class="token-string">"Jean Dupont"</span>
-    <span class="token-property">affiliation</span>: <span class="token-string">"Universite de Paris"</span>
-    <span class="token-property">email</span>: <span class="token-string">"jean.dupont@univ-paris.fr"</span>
-  - <span class="token-property">name</span>: <span class="token-string">"Marie Martin"</span>
-    <span class="token-property">affiliation</span>: <span class="token-string">"CNRS"</span>
-<span class="token-property">abstract</span>: <span class="token-operator">|</span>
-  This paper presents NovaType, a modern document
-  composition system combining LaTeX quality with
-  intuitive syntax and instant compilation.
-<span class="token-property">keywords</span>:
-  - typesetting
-  - scientific writing
-  - Typst
-<span class="token-property">template</span>: <span class="token-string">ieee-article</span>
-<span class="token-property">bibliography</span>: <span class="token-string">"references.bib"</span>
-<span class="token-property">citation_style</span>: <span class="token-string">"ieee"</span>
-<span class="token-operator">---</span>
-
-<span class="token-keyword">=</span> Introduction
-
-NovaType addresses the limitations of existing
-document preparation systems...
-
-<span class="token-keyword">=</span> Methodology
-
-<span class="token-keyword">==</span> System Architecture
-
-The core architecture consists of several modules...
-
-<span class="token-keyword">=</span> Results
-
-Our evaluation demonstrates significant improvements...
-
-<span class="token-keyword">=</span> Conclusion
-
-NovaType represents a viable alternative for
-scientific document preparation.</code></pre>
-
-      <h2>Creer un template personnalise</h2>
-
-      <h3>Structure d'un template</h3>
-
-      <pre><code>mon-template/
-├── template.toml     <span class="token-comment"># Metadonnees et schema</span>
-├── main.typ          <span class="token-comment"># Code Typst du template</span>
-└── schema.json       <span class="token-comment"># Schema JSON (optionnel)</span></code></pre>
-
-      <h3>template.toml</h3>
-
-      <pre><code><span class="token-property">[template]</span>
-<span class="token-property">name</span> = <span class="token-string">"mon-template"</span>
-<span class="token-property">description</span> = <span class="token-string">"Mon template personnalise"</span>
-<span class="token-property">version</span> = <span class="token-string">"1.0.0"</span>
-<span class="token-property">author</span> = <span class="token-string">"Votre Nom"</span>
-
-<span class="token-property">[schema]</span>
-<span class="token-property">required</span> = [<span class="token-string">"title"</span>, <span class="token-string">"author"</span>]
-<span class="token-property">optional</span> = [<span class="token-string">"date"</span>, <span class="token-string">"abstract"</span>, <span class="token-string">"keywords"</span>]</code></pre>
-
-      <h3>Commandes de gestion</h3>
-
-      <pre><code><span class="token-comment"># Creer un nouveau template</span>
-<span class="token-function">$</span> nova template new mon-template
-
-<span class="token-comment"># Lister les templates installes</span>
-<span class="token-function">$</span> nova template list
-
-<span class="token-comment"># Informations sur un template</span>
-<span class="token-function">$</span> nova template info ieee-article
-
-<span class="token-comment"># Installer un template externe</span>
-<span class="token-function">$</span> nova template install ./chemin/vers/template</code></pre>
-
-      <h2>Personnalisation</h2>
-
-      <h3>Modifier les couleurs</h3>
-
-      <pre><code><span class="token-comment">// Definir vos couleurs personnalisees</span>
-<span class="token-keyword">#let</span> primary = rgb(<span class="token-string">"#your-color"</span>)
-<span class="token-keyword">#let</span> secondary = rgb(<span class="token-string">"#your-color"</span>)
-<span class="token-keyword">#let</span> accent = rgb(<span class="token-string">"#your-color"</span>)</code></pre>
-
-      <h3>Modifier les polices</h3>
-
-      <pre><code><span class="token-comment">// Police principale</span>
-<span class="token-keyword">#set</span> text(font: <span class="token-string">"Georgia"</span>, size: <span class="token-number">11pt</span>)
-
-<span class="token-comment">// Police pour les titres</span>
-<span class="token-keyword">#show</span> heading: set text(font: <span class="token-string">"Helvetica"</span>)</code></pre>
-
-      <h3>Modifier les marges</h3>
-
-      <pre><code><span class="token-comment">// Marges personnalisees</span>
-<span class="token-keyword">#set</span> page(
-  paper: <span class="token-string">"a4"</span>,
-  margin: (top: <span class="token-number">3cm</span>, bottom: <span class="token-number">2cm</span>, left: <span class="token-number">2.5cm</span>, right: <span class="token-number">2.5cm</span>)
-)</code></pre>
-
-      <div class="callout callout-success">
-        <div class="callout-title">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
-            <path d="M22 4L12 14.01l-3-3"/>
-          </svg>
-          Conseil
-        </div>
-        <p style="margin: 0;">Les templates NovaType sont entierement personnalisables. N'hesitez pas a les modifier selon vos besoins ou a creer les votres.</p>
-      </div>
-
-    </main>
-  </div>
+  <!-- Templates Grid -->
+  <section class="container">
+    <div class="templates-grid" id="templatesGrid">
+      <!-- Templates will be rendered here by JavaScript -->
+    </div>
+  </section>
 
   <!-- Footer -->
   <footer class="footer">
@@ -345,6 +279,784 @@ scientific document preparation.</code></pre>
     </div>
   </footer>
 
-  <script src="../assets/js/main.js"></script>
+  <script src="/novatype/assets/js/main.js"></script>
+  <script type="module">
+    import { initNovaCompiler, compile } from '../assets/js/nova-compiler.js';
+
+    // Templates database
+    const templates = [
+      {
+        id: 'article',
+        name: 'Article Simple',
+        category: 'academic',
+        icon: 'document',
+        color: '#2563eb',
+        description: 'Article academique de base avec structure classique. Ideal pour les travaux universitaires et publications.',
+        tags: ['academique', 'publication', 'recherche'],
+        code: `#set document(title: "Mon Article")
+#set page(margin: 2cm)
+#set text(font: "New Computer Modern", size: 11pt)
+#set par(justify: true)
+#set heading(numbering: "1.")
+#set math.equation(numbering: "(1)")
+
+#align(center)[
+  #text(18pt, weight: "bold")[
+    Analyse des Performances des Systemes
+    de Composition Typographique Modernes
+  ]
+  #v(0.5em)
+  #text(11pt)[Jean Dupont#super[1], Marie Martin#super[2]]
+  #v(0.3em)
+  #text(9pt, style: "italic")[
+    #super[1]Universite de Paris, France --
+    #super[2]CNRS, Lyon
+  ]
+  #v(1em)
+]
+
+#block(width: 100%, inset: (x: 2em))[
+  *Resume* --- Cet article presente une analyse
+  comparative des systemes de composition
+  typographique modernes. Nous evaluons les
+  performances, la qualite de rendu et
+  l'experience utilisateur de plusieurs outils.
+  Les resultats montrent des differences
+  significatives en termes de temps de compilation
+  et de qualite typographique.
+
+  *Mots-cles :* typographie, composition, LaTeX, Typst
+]
+
+#v(1em)
+
+= Introduction
+
+La redaction de documents scientifiques
+necessite des outils capables de produire
+une sortie de haute qualite typographique
+tout en offrant une syntaxe accessible.
+Historiquement, LaTeX a domine ce domaine
+depuis les annees 1980.
+
+Cependant, de nouveaux systemes comme Typst
+proposent une approche moderne avec une
+compilation incrementale et une syntaxe
+simplifiee. Cette etude vise a comparer
+objectivement ces differentes solutions.
+
+== Contexte
+
+Les systemes de composition typographique
+ont evolue considerablement au cours des
+dernieres decennies. Du simple traitement
+de texte aux systemes de balisage avances,
+les outils disponibles offrent aujourd'hui
+des capacites remarquables.
+
+== Objectifs
+
+Notre etude poursuit trois objectifs principaux :
++ Evaluer les performances de compilation
++ Comparer la qualite typographique
++ Analyser l'experience utilisateur
+
+= Methodologie
+
+Notre approche experimentale repose sur
+un protocole rigoureux et reproductible.
+
+== Corpus de test
+
+Nous avons constitue un corpus de 50 documents
+representatifs couvrant differents domaines :
+- Articles scientifiques (20 documents)
+- Rapports techniques (15 documents)
+- Theses et memoires (10 documents)
+- Presentations (5 documents)
+
+== Metriques
+
+Les metriques suivantes ont ete mesurees
+pour chaque systeme evalue :
+
+#figure(
+  table(
+    columns: 3,
+    table.header([*Metrique*], [*Unite*], [*Description*]),
+    [Temps compilation], [secondes], [Duree totale],
+    [Memoire], [Mo], [Pic d'utilisation],
+    [Qualite], [score], [Evaluation experte],
+  ),
+  caption: [Metriques d'evaluation]
+) <tab:metriques>
+
+== Modele mathematique
+
+La qualite globale $Q$ est calculee selon
+l'equation suivante :
+
+$ Q = sum_(i=1)^n w_i dot q_i $ <eq:qualite>
+
+ou $w_i$ represente le poids de chaque critere
+et $q_i$ le score obtenu pour ce critere.
+
+= Resultats
+
+Les resultats de notre evaluation sont
+presentes dans cette section.
+
+== Performances
+
+Les temps de compilation moyens sont
+presentes dans le @tab:resultats ci-dessous.
+
+#figure(
+  table(
+    columns: 4,
+    table.header([*Systeme*], [*Temps (s)*], [*Memoire (Mo)*], [*Score*]),
+    [LaTeX], [4.2], [256], [8.5],
+    [Typst], [0.3], [64], [8.8],
+    [Word], [1.1], [512], [6.2],
+  ),
+  caption: [Resultats comparatifs]
+) <tab:resultats>
+
+Comme le montre l'@eq:qualite, le score
+de qualite integre plusieurs dimensions.
+Les resultats du @tab:resultats confirment
+l'avantage des systemes modernes.
+
+== Analyse statistique
+
+L'analyse de variance (ANOVA) revele des
+differences significatives entre les
+systemes ($p < 0.001$). Le test post-hoc
+de Tukey confirme que Typst surpasse
+significativement les autres solutions
+pour le critere de temps de compilation.
+
+La distribution des scores suit une loi
+normale, validant nos hypotheses :
+
+$ f(x) = 1/(sigma sqrt(2 pi)) e^(-1/2 ((x-mu)/sigma)^2) $ <eq:normale>
+
+== Discussion
+
+Ces resultats suggerent que les systemes
+modernes offrent un meilleur compromis
+entre performance et qualite. Cependant,
+la courbe d'apprentissage et l'ecosysteme
+existant restent des facteurs importants.
+
+= Conclusion
+
+Cette etude demontre que les systemes de
+composition modernes comme Typst offrent
+des avantages significatifs en termes de
+performance tout en maintenant une qualite
+typographique comparable a LaTeX.
+
+== Travaux futurs
+
+Nous envisageons d'etendre cette analyse
+aux aspects collaboratifs et a l'integration
+avec les outils de gestion bibliographique.
+
+== Remerciements
+
+Les auteurs remercient le laboratoire XYZ
+pour son soutien financier et technique.`
+      },
+      {
+        id: 'ieee',
+        name: 'IEEE Conference',
+        category: 'academic',
+        icon: 'conference',
+        color: '#059669',
+        description: 'Format officiel IEEE pour conferences et journaux scientifiques internationaux.',
+        tags: ['IEEE', 'conference', 'international'],
+        code: `#set page(
+  paper: "us-letter",
+  margin: (x: 0.75in, y: 1in),
+  columns: 2,
+)
+#set text(font: "New Computer Modern", size: 10pt)
+#set par(justify: true, leading: 0.5em)
+#set heading(numbering: "I.")
+
+#place(top + center, float: true, scope: "parent")[
+  #block(width: 100%)[
+    #align(center)[
+      #text(24pt, weight: "bold")[
+        NovaType: Modern Document Composition
+      ]
+      #v(1em)
+      #text(11pt)[
+        Jean Dupont#super[1], Marie Martin#super[2]
+      ]
+      #v(0.5em)
+      #text(9pt, style: "italic")[
+        #super[1]University of Paris, France \\
+        #super[2]MIT, Cambridge, USA
+      ]
+    ]
+  ]
+]
+
+#v(2em)
+
+#block(inset: (x: 0.5em))[
+  #text(9pt)[
+    *Abstract*---This paper presents NovaType,
+    a modern document composition system that
+    combines the typographic quality of LaTeX
+    with an intuitive syntax. We demonstrate
+    significant improvements in productivity.
+
+    *Keywords*---typesetting, documents, Typst
+  ]
+]
+
+= Introduction
+
+Document preparation systems have evolved
+significantly over the past decades.
+
+= Related Work
+
+Previous approaches include LaTeX and
+various WYSIWYG editors.
+
+= Methodology
+
+Our system uses a novel compilation
+approach based on Typst.
+
+= Results
+
+Performance metrics show improvements
+across all tested scenarios.
+
+= Conclusion
+
+NovaType represents an advancement in
+document preparation technology.`
+      },
+      {
+        id: 'report',
+        name: 'Rapport Technique',
+        category: 'professional',
+        icon: 'report',
+        color: '#f59e0b',
+        description: 'Rapport professionnel avec page de garde, table des matieres et mise en page soignee.',
+        tags: ['entreprise', 'rapport', 'technique'],
+        code: `#set document(title: "Rapport Technique")
+#set page(margin: 2.5cm)
+#set text(font: "New Computer Modern", size: 11pt)
+#set par(justify: true)
+#set heading(numbering: "1.")
+
+// Page de garde
+#align(center + horizon)[
+  #block(width: 80%)[
+    #text(12pt, fill: gray)[RAPPORT TECHNIQUE]
+    #v(2em)
+    #text(24pt, weight: "bold")[
+      Analyse de Performance\\
+      du Systeme NovaType
+    ]
+    #v(3em)
+    #line(length: 40%, stroke: 2pt + blue)
+    #v(2em)
+    #text(14pt)[
+      *Auteur :* Jean Dupont\\
+      *Date :* Janvier 2024\\
+      *Version :* 1.0
+    ]
+    #v(4em)
+    #text(11pt, fill: gray)[
+      Document Confidentiel
+    ]
+  ]
+]
+
+#pagebreak()
+
+// Contenu
+#outline(title: "Table des matieres", indent: 1.5em)
+
+#pagebreak()
+
+= Resume Executif
+
+Ce rapport presente les resultats de
+l'analyse de performance du systeme.
+
+= Contexte
+
+Le projet a ete initie pour repondre
+aux besoins croissants de performance.
+
+= Methodologie
+
+L'analyse a ete conduite selon les
+standards de l'industrie.
+
+== Metriques
+
+Les metriques suivantes ont ete mesurees:
+- Temps de reponse
+- Utilisation memoire
+- Debit
+
+= Conclusions
+
+Les resultats demontrent une amelioration
+notable des performances globales.`
+      },
+      {
+        id: 'letter',
+        name: 'Lettre Formelle',
+        category: 'professional',
+        icon: 'letter',
+        color: '#8b5cf6',
+        description: 'Lettre professionnelle avec mise en page formelle pour correspondance officielle.',
+        tags: ['lettre', 'formel', 'correspondance'],
+        code: `#set page(margin: (top: 3cm, bottom: 2cm, x: 2.5cm))
+#set text(font: "New Computer Modern", size: 11pt)
+#set par(justify: true)
+
+// Expediteur
+#align(right)[
+  *Jean Dupont* \\
+  123 Rue de la Science \\
+  75001 Paris \\
+  jean.dupont\@email.fr \\
+  +33 1 23 45 67 89
+]
+
+#v(2em)
+
+// Date
+#align(right)[
+  Paris, le 15 janvier 2024
+]
+
+#v(2em)
+
+// Destinataire
+Madame la Directrice \\
+Direction des Ressources Humaines \\
+Entreprise ABC \\
+456 Avenue de l'Innovation \\
+69000 Lyon
+
+#v(2em)
+
+*Objet :* Candidature au poste d'Ingenieur
+
+#v(1em)
+
+Madame la Directrice,
+
+#v(0.5em)
+
+Suite a votre annonce parue le 10 janvier
+dernier, j'ai l'honneur de vous presenter
+ma candidature au poste d'Ingenieur au
+sein de votre entreprise.
+
+Titulaire d'un diplome d'ingenieur et fort
+de cinq annees d'experience dans le domaine,
+je suis convaincu que mon profil correspond
+aux attentes du poste propose.
+
+Je me tiens a votre disposition pour tout
+entretien a votre convenance.
+
+Dans l'attente de votre reponse, je vous
+prie d'agreer, Madame la Directrice,
+l'expression de mes salutations distinguees.
+
+#v(3em)
+
+#align(right)[
+  Jean Dupont
+]`
+      },
+      {
+        id: 'cv',
+        name: 'CV Moderne',
+        category: 'personal',
+        icon: 'cv',
+        color: '#14b8a6',
+        description: 'Curriculum vitae elegant avec mise en page moderne et sections bien organisees.',
+        tags: ['CV', 'emploi', 'carriere'],
+        code: `#set page(margin: 1.5cm)
+#set text(font: "New Computer Modern", size: 10pt)
+
+// En-tete
+#block(fill: rgb("#2563eb"), width: 100%, inset: 1.5em, radius: 4pt)[
+  #text(fill: white)[
+    #text(24pt, weight: "bold")[Jean Dupont]
+    #v(0.3em)
+    #text(12pt)[Ingenieur Logiciel Senior]
+    #v(0.5em)
+    #text(10pt)[
+      Paris, France |
+      jean.dupont\@email.fr |
+      +33 6 12 34 56 78
+    ]
+  ]
+]
+
+#v(1em)
+
+// Deux colonnes
+#grid(
+  columns: (1fr, 2fr),
+  gutter: 1.5em,
+  [
+    // Colonne gauche
+    #block(fill: rgb("#f1f5f9"), inset: 1em, radius: 4pt)[
+      #text(weight: "bold", fill: rgb("#2563eb"))[COMPETENCES]
+      #v(0.5em)
+      *Langages*
+      - Python, JavaScript
+      - Rust, Go
+      - TypeScript
+
+      #v(0.5em)
+      *Frameworks*
+      - React, Vue.js
+      - Django, FastAPI
+
+      #v(0.5em)
+      *Outils*
+      - Git, Docker
+      - AWS, GCP
+    ]
+
+    #v(1em)
+
+    #block(fill: rgb("#f1f5f9"), inset: 1em, radius: 4pt)[
+      #text(weight: "bold", fill: rgb("#2563eb"))[LANGUES]
+      #v(0.5em)
+      - Francais (natif)
+      - Anglais (courant)
+      - Espagnol (intermediaire)
+    ]
+  ],
+  [
+    // Colonne droite
+    #text(weight: "bold", fill: rgb("#2563eb"))[EXPERIENCE]
+    #v(0.5em)
+
+    *Senior Developer* | TechCorp
+    #text(fill: gray)[2020 - Present]
+    - Direction technique de projets majeurs
+    - Mentorat de l'equipe de developpement
+    - Architecture microservices
+
+    #v(0.8em)
+
+    *Developer* | StartupXYZ
+    #text(fill: gray)[2017 - 2020]
+    - Developpement full-stack
+    - Integration continue
+    - Tests automatises
+
+    #v(1em)
+
+    #text(weight: "bold", fill: rgb("#2563eb"))[FORMATION]
+    #v(0.5em)
+
+    *Master Informatique*
+    #text(fill: gray)[Universite de Paris | 2017]
+
+    #v(0.5em)
+
+    *Licence Informatique*
+    #text(fill: gray)[Universite de Lyon | 2015]
+  ]
+)`
+      },
+      {
+        id: 'presentation',
+        name: 'Slides',
+        category: 'professional',
+        icon: 'presentation',
+        color: '#ec4899',
+        description: 'Presentation avec slides numerotes et mise en page claire pour conferences.',
+        tags: ['presentation', 'slides', 'conference'],
+        code: `#set page(
+  paper: "presentation-16-9",
+  margin: 1.5cm,
+)
+#set text(font: "New Computer Modern", size: 20pt)
+
+// Slide 1 - Titre
+#align(center + horizon)[
+  #block(width: 80%)[
+    #text(40pt, weight: "bold", fill: rgb("#2563eb"))[
+      NovaType
+    ]
+    #v(0.5em)
+    #text(24pt)[
+      La composition typographique moderne
+    ]
+    #v(2em)
+    #text(16pt, fill: gray)[
+      Jean Dupont | Janvier 2024
+    ]
+  ]
+]
+
+#pagebreak()
+
+// Slide 2 - Introduction
+#text(28pt, weight: "bold", fill: rgb("#2563eb"))[Introduction]
+
+#v(1em)
+
+#text(18pt)[
+  *NovaType* est un systeme de composition moderne:
+
+  #v(0.5em)
+
+  - Syntaxe intuitive et lisible
+  - Compilation instantanee
+  - Qualite typographique professionnelle
+  - Support mathematique complet
+]
+
+#align(bottom + right)[
+  #text(12pt, fill: gray)[2 / 4]
+]
+
+#pagebreak()
+
+// Slide 3 - Fonctionnalites
+#text(28pt, weight: "bold", fill: rgb("#2563eb"))[Fonctionnalites]
+
+#v(1em)
+
+#grid(
+  columns: (1fr, 1fr),
+  gutter: 2em,
+  [
+    #block(fill: rgb("#f1f5f9"), inset: 1em, radius: 8pt)[
+      *Redaction*
+      - Markdown-like
+      - LaTeX math
+      - References
+    ]
+  ],
+  [
+    #block(fill: rgb("#f1f5f9"), inset: 1em, radius: 8pt)[
+      *Export*
+      - PDF haute qualite
+      - SVG vectoriel
+      - PNG images
+    ]
+  ]
+)
+
+#align(bottom + right)[
+  #text(12pt, fill: gray)[3 / 4]
+]
+
+#pagebreak()
+
+// Slide 4 - Conclusion
+#align(center + horizon)[
+  #text(32pt, weight: "bold", fill: rgb("#2563eb"))[
+    Merci !
+  ]
+  #v(1em)
+  #text(18pt)[
+    Questions ?
+  ]
+  #v(2em)
+  #text(14pt, fill: gray)[
+    github.com/AureClai/novatype
+  ]
+]
+
+#align(bottom + right)[
+  #text(12pt, fill: gray)[4 / 4]
+]`
+      }
+    ];
+
+    // Icon SVGs
+    const icons = {
+      document: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>',
+      conference: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>',
+      report: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 17H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><path d="M15 3h4a2 2 0 012 2v10a2 2 0 01-2 2h-4"/><path d="M12 17v4M8 21h8"/></svg>',
+      letter: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><path d="M22 6l-10 7L2 6"/></svg>',
+      cv: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
+      presentation: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><path d="M8 21h8M12 17v4"/></svg>'
+    };
+
+    // State
+    let compilerReady = false;
+    let currentFilter = 'all';
+    const previewCache = new Map();
+
+    // DOM
+    const grid = document.getElementById('templatesGrid');
+
+    // Render template card
+    function renderTemplateCard(template) {
+      return `
+        <div class="template-card" data-category="${template.category}" data-id="${template.id}">
+          <div class="template-preview" id="preview-${template.id}">
+            <div class="template-preview-loading">
+              <div class="template-preview-spinner"></div>
+              <span>Chargement...</span>
+            </div>
+          </div>
+          <div class="template-info">
+            <div class="template-header">
+              <div class="template-icon" style="background: ${template.color}">
+                ${icons[template.icon]}
+              </div>
+              <div>
+                <h3 class="template-name">${template.name}</h3>
+                <span class="template-category">${template.category}</span>
+              </div>
+            </div>
+            <p class="template-description">${template.description}</p>
+            <div class="template-meta">
+              ${template.tags.map(tag => `<span class="template-tag">${tag}</span>`).join('')}
+            </div>
+            <div class="template-actions">
+              <button class="btn btn-outline btn-sm" onclick="tryTemplate('${template.id}')">
+                Essayer
+              </button>
+              <button class="btn btn-primary btn-sm" onclick="copyTemplate('${template.id}')">
+                Copier
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // Render all cards
+    function renderGrid() {
+      grid.innerHTML = templates
+        .filter(t => currentFilter === 'all' || t.category === currentFilter)
+        .map(renderTemplateCard)
+        .join('');
+    }
+
+    // Compile preview for a template
+    async function compilePreview(template) {
+      if (previewCache.has(template.id)) {
+        return previewCache.get(template.id);
+      }
+
+      try {
+        const result = await compile(template.code);
+        if (result.success && result.svg_pages.length > 0) {
+          previewCache.set(template.id, result.svg_pages[0]);
+          return result.svg_pages[0];
+        }
+      } catch (e) {
+        console.error('Preview error:', template.id, e);
+      }
+      return null;
+    }
+
+    // Update preview
+    function updatePreview(templateId, svg) {
+      const container = document.getElementById(`preview-${templateId}`);
+      if (container && svg) {
+        container.innerHTML = `<div class="template-preview-page">${svg}</div>`;
+      } else if (container) {
+        container.innerHTML = `<div class="template-preview-loading"><span style="color: var(--nova-secondary)">Apercu non disponible</span></div>`;
+      }
+    }
+
+    // Load all previews
+    async function loadPreviews() {
+      for (const template of templates) {
+        if (currentFilter !== 'all' && template.category !== currentFilter) continue;
+        const svg = await compilePreview(template);
+        updatePreview(template.id, svg);
+      }
+    }
+
+    // Copy template code
+    window.copyTemplate = function(templateId) {
+      const template = templates.find(t => t.id === templateId);
+      if (template) {
+        navigator.clipboard.writeText(template.code).then(() => {
+          const btn = event.target;
+          const originalText = btn.textContent;
+          btn.textContent = 'Copie !';
+          setTimeout(() => btn.textContent = originalText, 1500);
+        });
+      }
+    };
+
+    // Try template in demos page
+    window.tryTemplate = function(templateId) {
+      const template = templates.find(t => t.id === templateId);
+      if (template) {
+        // Store template data in localStorage
+        localStorage.setItem('novatype_template', JSON.stringify({
+          id: template.id,
+          name: template.name,
+          description: template.description,
+          code: template.code
+        }));
+        // Navigate to demos page
+        window.location.href = '../demos.html';
+      }
+    };
+
+    // Filter handlers
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentFilter = btn.dataset.filter;
+        renderGrid();
+        if (compilerReady) loadPreviews();
+      });
+    });
+
+    // Initialize
+    async function init() {
+      renderGrid();
+
+      try {
+        await initNovaCompiler();
+        compilerReady = true;
+        loadPreviews();
+      } catch (e) {
+        console.error('Compiler init error:', e);
+        // Show fallback message in previews
+        templates.forEach(t => {
+          const container = document.getElementById(`preview-${t.id}`);
+          if (container) {
+            container.innerHTML = `<div class="template-preview-loading"><span style="color: var(--nova-secondary)">Apercu non disponible</span></div>`;
+          }
+        });
+      }
+    }
+
+    init();
+
+    // Make template codes available for demos page
+    window.templateCodes = templates.reduce((acc, t) => {
+      acc[t.id] = t.code;
+      return acc;
+    }, {});
+  </script>
 </body>
 </html>
