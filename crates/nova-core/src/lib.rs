@@ -26,9 +26,11 @@
 pub mod compiler;
 pub mod document;
 pub mod error;
+pub mod native_world;
 pub mod traits;
 
 pub use compiler::{Compiler, CompilerConfig};
 pub use document::Document;
 pub use error::{Error, Result};
+pub use native_world::{compile_pdf, compile_svg, NativeWorld};
 pub use traits::*;

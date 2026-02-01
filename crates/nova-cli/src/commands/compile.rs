@@ -3,9 +3,9 @@
 use crate::OutputFormat;
 use anyhow::{Context, Result};
 use clap::Args;
+use nova_core::{compile_pdf, compile_svg, NativeWorld};
 use nova_schema::FrontmatterParser;
 use std::path::{Path, PathBuf};
-use std::process::Command;
 use tracing::{debug, info};
 
 /// Arguments for the compile command.
@@ -66,56 +66,75 @@ pub async fn compile(args: CompileArgs) -> Result<()> {
         .with_context(|| format!("Failed to read {:?}", args.input))?;
 
     // Check for frontmatter and preprocess if needed
-    let (_processed_content, temp_file) = preprocess_content(&content, &args.input)?;
-    let compile_input = temp_file.as_ref().unwrap_or(&args.input);
+    let processed_content = preprocess_content(&content)?;
 
-    // Find typst binary (same directory as nova binary, or in PATH)
-    let typst_path = find_typst_binary()?;
-    debug!("Using typst binary: {:?}", typst_path);
+    // Determine root directory
+    let root = args.root.unwrap_or_else(|| {
+        args.input
+            .parent()
+            .map(|p| p.to_path_buf())
+            .unwrap_or_else(|| PathBuf::from("."))
+    });
 
-    // Build typst compile command
-    let mut cmd = Command::new(&typst_path);
-    cmd.arg("compile");
-    cmd.arg(compile_input);
-    cmd.arg(&output_path);
+    // Create the native world
+    debug!("Creating native world with root: {:?}", root);
+    let world = NativeWorld::from_source(&processed_content, &root);
 
-    // Add format flag
+    // Compile based on output format
+    info!("Compiling document...");
     match args.format {
-        OutputFormat::Pdf => {} // Default
+        OutputFormat::Pdf => {
+            let pdf = compile_pdf(&world).map_err(|errors| {
+                anyhow::anyhow!("Compilation failed:\n{}", errors.join("\n"))
+            })?;
+
+            std::fs::write(&output_path, &pdf)
+                .with_context(|| format!("Failed to write {:?}", output_path))?;
+        }
         OutputFormat::Svg => {
-            cmd.arg("--format").arg("svg");
+            let pages = compile_svg(&world).map_err(|errors| {
+                anyhow::anyhow!("Compilation failed:\n{}", errors.join("\n"))
+            })?;
+
+            if pages.len() == 1 {
+                // Single page, write directly
+                std::fs::write(&output_path, &pages[0])
+                    .with_context(|| format!("Failed to write {:?}", output_path))?;
+            } else {
+                // Multiple pages, write numbered files
+                let stem = output_path.file_stem().unwrap_or_default().to_string_lossy();
+                let parent = output_path.parent().unwrap_or(Path::new("."));
+                for (i, page) in pages.iter().enumerate() {
+                    let page_path = parent.join(format!("{}-{}.svg", stem, i + 1));
+                    std::fs::write(&page_path, page)
+                        .with_context(|| format!("Failed to write {:?}", page_path))?;
+                }
+            }
         }
         OutputFormat::Png => {
-            cmd.arg("--format").arg("png");
+            // PNG output: compile to SVG first, then convert
+            // For now, just produce SVG and warn
+            let pages = compile_svg(&world).map_err(|errors| {
+                anyhow::anyhow!("Compilation failed:\n{}", errors.join("\n"))
+            })?;
+
+            let svg_path = output_path.with_extension("svg");
+            if pages.len() == 1 {
+                std::fs::write(&svg_path, &pages[0])
+                    .with_context(|| format!("Failed to write {:?}", svg_path))?;
+            } else {
+                let stem = svg_path.file_stem().unwrap_or_default().to_string_lossy();
+                let parent = svg_path.parent().unwrap_or(Path::new("."));
+                for (i, page) in pages.iter().enumerate() {
+                    let page_path = parent.join(format!("{}-{}.svg", stem, i + 1));
+                    std::fs::write(&page_path, page)
+                        .with_context(|| format!("Failed to write {:?}", page_path))?;
+                }
+            }
+            eprintln!(
+                "Note: PNG output is not yet implemented. SVG file(s) created instead."
+            );
         }
-    }
-
-    // Add root directory if specified
-    if let Some(root) = &args.root {
-        cmd.arg("--root").arg(root);
-    }
-
-    // Add font paths
-    for font_path in &args.font_paths {
-        cmd.arg("--font-path").arg(font_path);
-    }
-
-    // Execute compilation
-    info!("Running typst compile...");
-    let output = cmd
-        .output()
-        .with_context(|| format!("Failed to execute typst binary at {:?}", typst_path))?;
-
-    // Clean up temp file if created
-    if let Some(temp) = temp_file {
-        let _ = std::fs::remove_file(&temp);
-    }
-
-    // Check result
-    if !output.status.success() {
-        let stderr = String::from_utf8_lossy(&output.stderr);
-        let stdout = String::from_utf8_lossy(&output.stdout);
-        anyhow::bail!("Typst compilation failed:\n{}\n{}", stderr, stdout);
     }
 
     println!("Compiled: {:?} -> {:?}", args.input, output_path);
@@ -130,9 +149,8 @@ pub async fn compile(args: CompileArgs) -> Result<()> {
 
 /// Preprocess content to handle NovaType frontmatter.
 ///
-/// If the content has YAML/TOML frontmatter, strip it and create a temp file.
-/// Returns the processed content and optional temp file path.
-fn preprocess_content(content: &str, input: &Path) -> Result<(String, Option<PathBuf>)> {
+/// If the content has YAML/TOML frontmatter, strip it.
+fn preprocess_content(content: &str) -> Result<String> {
     let parser = FrontmatterParser::new();
 
     // Try to extract frontmatter
@@ -140,7 +158,8 @@ fn preprocess_content(content: &str, input: &Path) -> Result<(String, Option<Pat
         debug!("Found frontmatter, preprocessing...");
 
         // Parse to get remaining content
-        let result: Result<(Option<serde_json::Value>, &str), _> = parser.parse(content);
+        let result: std::result::Result<(Option<serde_json::Value>, &str), _> =
+            parser.parse(content);
 
         if let Ok((metadata, remaining)) = result {
             // Log metadata if present
@@ -150,39 +169,12 @@ fn preprocess_content(content: &str, input: &Path) -> Result<(String, Option<Pat
                 }
             }
 
-            // Create temp file with processed content
-            let temp_path = input.with_extension("nova-temp.typ");
-            std::fs::write(&temp_path, remaining)
-                .with_context(|| "Failed to write temporary file")?;
-
-            return Ok((remaining.to_string(), Some(temp_path)));
+            return Ok(remaining.to_string());
         }
     }
 
     // No frontmatter or parsing failed, use original content
-    Ok((content.to_string(), None))
-}
-
-/// Find the typst binary.
-fn find_typst_binary() -> Result<PathBuf> {
-    // First, try same directory as current executable
-    if let Ok(current_exe) = std::env::current_exe() {
-        if let Some(exe_dir) = current_exe.parent() {
-            let typst_in_dir = exe_dir.join(if cfg!(windows) { "typst.exe" } else { "typst" });
-            if typst_in_dir.exists() {
-                return Ok(typst_in_dir);
-            }
-        }
-    }
-
-    // Try PATH
-    let typst_name = if cfg!(windows) { "typst.exe" } else { "typst" };
-    if let Ok(path) = which::which(typst_name) {
-        return Ok(path);
-    }
-
-    // Fallback: assume it's in PATH
-    Ok(PathBuf::from(typst_name))
+    Ok(content.to_string())
 }
 
 /// Open a file with the system's default application.
@@ -236,13 +228,6 @@ mod tests {
 
     #[tokio::test]
     async fn compile_creates_output() {
-        // Skip test if typst binary not available
-        let typst_name = if cfg!(windows) { "typst.exe" } else { "typst" };
-        if which::which(typst_name).is_err() {
-            eprintln!("Skipping test: typst binary not found in PATH");
-            return;
-        }
-
         let temp_dir = TempDir::new().unwrap();
         let input_path = temp_dir.path().join("test.typ");
         let output_path = temp_dir.path().join("test.pdf");
@@ -262,6 +247,10 @@ mod tests {
         let result = compile(args).await;
         assert!(result.is_ok(), "Compilation failed: {:?}", result);
         assert!(output_path.exists(), "Output file not created");
+
+        // Verify PDF magic bytes
+        let content = std::fs::read(&output_path).unwrap();
+        assert_eq!(&content[0..5], b"%PDF-", "Not a valid PDF");
     }
 
     #[test]
@@ -271,30 +260,41 @@ title: Test
 ---
 Hello content"#;
 
-        let temp_dir = TempDir::new().unwrap();
-        let input = temp_dir.path().join("test.typ");
-        std::fs::write(&input, content).unwrap();
-
-        let (processed, temp_file) = preprocess_content(content, &input).unwrap();
+        let processed = preprocess_content(content).unwrap();
 
         assert!(!processed.contains("---"));
         assert!(processed.contains("Hello content"));
-        assert!(temp_file.is_some());
-
-        // Clean up
-        if let Some(temp) = temp_file {
-            let _ = std::fs::remove_file(temp);
-        }
     }
 
     #[test]
     fn preprocess_no_frontmatter() {
         let content = "Just regular content";
-        let input = PathBuf::from("test.typ");
-
-        let (processed, temp_file) = preprocess_content(content, &input).unwrap();
-
+        let processed = preprocess_content(content).unwrap();
         assert_eq!(processed, content);
-        assert!(temp_file.is_none());
+    }
+
+    #[tokio::test]
+    async fn compile_to_svg() {
+        let temp_dir = TempDir::new().unwrap();
+        let input_path = temp_dir.path().join("test.typ");
+        let output_path = temp_dir.path().join("test.svg");
+
+        std::fs::write(&input_path, "Hello SVG!").unwrap();
+
+        let args = CompileArgs {
+            input: input_path,
+            output: Some(output_path.clone()),
+            format: OutputFormat::Svg,
+            root: None,
+            open: false,
+            font_paths: vec![],
+        };
+
+        let result = compile(args).await;
+        assert!(result.is_ok(), "Compilation failed: {:?}", result);
+        assert!(output_path.exists(), "Output file not created");
+
+        let content = std::fs::read_to_string(&output_path).unwrap();
+        assert!(content.contains("<svg"), "Not a valid SVG");
     }
 }

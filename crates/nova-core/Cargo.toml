@@ -19,8 +19,13 @@ typst.workspace = true
 typst-pdf.workspace = true
 typst-svg.workspace = true
 typst-syntax.workspace = true
+typst-assets = { workspace = true, features = ["fonts"] }
 ecow.workspace = true
 comemo.workspace = true
+fontdb = { workspace = true, default-features = false }
+chrono = { workspace = true }
+parking_lot.workspace = true
+once_cell.workspace = true
 
 serde.workspace = true
 serde_json.workspace = true
