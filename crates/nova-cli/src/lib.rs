@@ -88,7 +88,7 @@ pub enum OutputFormat {
     Png,
 }
 
-impl From<OutputFormat> for nova_core::compiler::OutputFormat {
+impl From<OutputFormat> for novatype_core::compiler::OutputFormat {
     fn from(format: OutputFormat) -> Self {
         match format {
             OutputFormat::Pdf => Self::Pdf,

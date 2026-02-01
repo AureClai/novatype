@@ -16,11 +16,11 @@ keywords = ["typst", "novatype", "documents", "typesetting"]
 
 [workspace.dependencies]
 # NovaType crates
-nova-core = { path = "crates/nova-core", version = "0.1.0" }
+novatype-core = { path = "crates/nova-core", version = "0.1.0" }
 nova-schema = { path = "crates/nova-schema", version = "0.1.0", default-features = false }
 nova-cite = { path = "crates/nova-cite", version = "0.1.0" }
 nova-plot = { path = "crates/nova-plot", version = "0.1.0" }
-nova-cli = { path = "crates/nova-cli", version = "0.1.0" }
+novatype-cli = { path = "crates/nova-cli", version = "0.1.0" }
 nova-wasm = { path = "crates/nova-wasm", version = "0.1.0" }
 
 # Typst from crates.io

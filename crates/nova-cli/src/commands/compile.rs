@@ -3,7 +3,7 @@
 use crate::OutputFormat;
 use anyhow::{Context, Result};
 use clap::Args;
-use nova_core::{compile_pdf, compile_svg, NativeWorld};
+use novatype_core::{compile_pdf, compile_svg, NativeWorld};
 use nova_schema::FrontmatterParser;
 use std::path::{Path, PathBuf};
 use tracing::{debug, info};

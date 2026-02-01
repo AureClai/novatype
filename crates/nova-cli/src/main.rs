@@ -4,7 +4,7 @@
 
 use anyhow::Result;
 use clap::Parser;
-use nova_cli::{run, Cli};
+use novatype_cli::{run, Cli};
 
 #[tokio::main]
 async fn main() -> Result<()> {

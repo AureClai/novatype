@@ -1,5 +1,5 @@
 [package]
-name = "nova-core"
+name = "novatype-core"
 version = "0.1.0"
 description = "Core orchestration engine for NovaType document composition"
 edition.workspace = true

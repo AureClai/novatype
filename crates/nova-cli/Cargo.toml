@@ -1,5 +1,5 @@
 [package]
-name = "nova-cli"
+name = "novatype-cli"
 version = "0.1.0"
 description = "Command-line interface for NovaType"
 edition.workspace = true
@@ -14,7 +14,7 @@ name = "nova"
 path = "src/main.rs"
 
 [dependencies]
-nova-core.workspace = true
+novatype-core.workspace = true
 nova-schema = { workspace = true, features = ["validation"] }
 
 clap.workspace = true
