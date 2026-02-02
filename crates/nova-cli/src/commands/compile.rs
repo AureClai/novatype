@@ -3,10 +3,121 @@
 use crate::OutputFormat;
 use anyhow::{Context, Result};
 use clap::Args;
+use nova_font::FontCache;
 use nova_schema::FrontmatterParser;
 use novatype_core::{compile_pdf, compile_svg, set_font_paths, NativeWorld};
+use serde::Deserialize;
 use std::path::{Path, PathBuf};
-use tracing::{debug, info};
+use tracing::{debug, info, warn};
+
+/// Single font specification - can be a simple string or full spec.
+#[derive(Debug, Clone, Deserialize)]
+#[serde(untagged)]
+pub enum FontSpec {
+    /// Simple font family name.
+    Simple(String),
+    /// Full font specification with size, weight, etc.
+    Full {
+        family: String,
+        #[serde(default)]
+        size: Option<String>,
+        #[serde(default)]
+        weight: Option<String>,
+        #[serde(default)]
+        style: Option<String>,
+    },
+}
+
+impl FontSpec {
+    /// Get the font family name.
+    pub fn family(&self) -> &str {
+        match self {
+            FontSpec::Simple(f) => f,
+            FontSpec::Full { family, .. } => family,
+        }
+    }
+
+    /// Generate Typst arguments for this font spec.
+    pub fn to_typst_args(&self) -> String {
+        match self {
+            FontSpec::Simple(family) => format!("font: \"{}\"", family),
+            FontSpec::Full { family, size, weight, style } => {
+                let mut args = vec![format!("font: \"{}\"", family)];
+                if let Some(s) = size {
+                    args.push(format!("size: {}", s));
+                }
+                if let Some(w) = weight {
+                    args.push(format!("weight: \"{}\"", w));
+                }
+                if let Some(st) = style {
+                    args.push(format!("style: \"{}\"", st));
+                }
+                args.join(", ")
+            }
+        }
+    }
+}
+
+/// Font configuration from frontmatter.
+#[derive(Debug, Clone, Default, Deserialize)]
+pub struct FontConfig {
+    /// Main body font.
+    pub main: Option<FontSpec>,
+    /// Font for headings.
+    pub heading: Option<FontSpec>,
+    /// Monospace font for code.
+    pub mono: Option<FontSpec>,
+    /// Font for math expressions.
+    pub math: Option<FontSpec>,
+}
+
+impl FontConfig {
+    /// Check if any font is configured.
+    pub fn has_fonts(&self) -> bool {
+        self.main.is_some() || self.heading.is_some() || self.mono.is_some() || self.math.is_some()
+    }
+
+    /// Generate Typst code to set fonts.
+    pub fn to_typst_code(&self) -> String {
+        let mut code = String::new();
+
+        if let Some(ref main) = self.main {
+            code.push_str(&format!("#set text({})\n", main.to_typst_args()));
+        }
+
+        if let Some(ref mono) = self.mono {
+            code.push_str(&format!("#show raw: set text({})\n", mono.to_typst_args()));
+        }
+
+        if let Some(ref heading) = self.heading {
+            code.push_str(&format!(
+                "#show heading: set text({})\n",
+                heading.to_typst_args()
+            ));
+        }
+
+        // Math font
+        if let Some(ref math) = self.math {
+            code.push_str(&format!(
+                "#show math.equation: set text({})\n",
+                math.to_typst_args()
+            ));
+        }
+
+        if !code.is_empty() {
+            code.push('\n');
+        }
+
+        code
+    }
+}
+
+/// Document metadata from frontmatter (partial, for font extraction).
+#[derive(Debug, Clone, Default, Deserialize)]
+struct DocumentMetadata {
+    #[serde(default)]
+    fonts: Option<FontConfig>,
+}
 
 /// Arguments for the compile command.
 #[derive(Args, Debug)]
@@ -76,10 +187,27 @@ pub async fn compile(args: CompileArgs) -> Result<()> {
             .unwrap_or_else(|| PathBuf::from("."))
     });
 
-    // Set custom font paths if provided
-    if !args.font_paths.is_empty() {
-        debug!("Setting font paths: {:?}", args.font_paths);
-        set_font_paths(args.font_paths.clone());
+    // Collect font paths: user-provided + nova-font cache
+    let mut all_font_paths = args.font_paths.clone();
+
+    // Add fonts from nova-font cache
+    match FontCache::new() {
+        Ok(cache) => {
+            let cached_paths = cache.typst_font_paths();
+            if !cached_paths.is_empty() {
+                debug!("Adding {} font paths from nova-font cache", cached_paths.len());
+                all_font_paths.extend(cached_paths);
+            }
+        }
+        Err(e) => {
+            warn!("Could not load nova-font cache: {}", e);
+        }
+    }
+
+    // Set font paths if any are available
+    if !all_font_paths.is_empty() {
+        debug!("Setting font paths: {:?}", all_font_paths);
+        set_font_paths(all_font_paths);
     }
 
     // Create the native world
@@ -153,7 +281,7 @@ pub async fn compile(args: CompileArgs) -> Result<()> {
 
 /// Preprocess content to handle NovaType frontmatter.
 ///
-/// If the content has YAML/TOML frontmatter, strip it.
+/// If the content has YAML/TOML frontmatter, strip it and inject font settings.
 fn preprocess_content(content: &str) -> Result<String> {
     let parser = FrontmatterParser::new();
 
@@ -161,19 +289,54 @@ fn preprocess_content(content: &str) -> Result<String> {
     if let Some((_raw_frontmatter, _format)) = parser.extract_raw(content) {
         debug!("Found frontmatter, preprocessing...");
 
-        // Parse to get remaining content
+        // Parse to get metadata and remaining content
+        let result: std::result::Result<(Option<DocumentMetadata>, &str), _> =
+            parser.parse(content);
+
+        if let Ok((metadata, remaining)) = result {
+            let mut output = String::new();
+
+            // Extract and apply font configuration
+            if let Some(ref meta) = metadata {
+                if let Some(ref fonts) = meta.fonts {
+                    if fonts.has_fonts() {
+                        debug!("Applying font configuration: {:?}", fonts);
+                        output.push_str(&fonts.to_typst_code());
+                    }
+                }
+            }
+
+            output.push_str(remaining);
+            return Ok(output);
+        }
+
+        // Fallback: parse as generic JSON value if typed parsing fails
         let result: std::result::Result<(Option<serde_json::Value>, &str), _> =
             parser.parse(content);
 
         if let Ok((metadata, remaining)) = result {
-            // Log metadata if present
-            if let Some(meta) = &metadata {
+            let mut output = String::new();
+
+            // Try to extract fonts from JSON value
+            if let Some(ref meta) = metadata {
                 if let Some(title) = meta.get("title") {
                     debug!("Document title: {}", title);
                 }
+
+                if let Some(fonts_value) = meta.get("fonts") {
+                    if let Ok(fonts) =
+                        serde_json::from_value::<FontConfig>(fonts_value.clone())
+                    {
+                        if fonts.has_fonts() {
+                            debug!("Applying font configuration: {:?}", fonts);
+                            output.push_str(&fonts.to_typst_code());
+                        }
+                    }
+                }
             }
 
-            return Ok(remaining.to_string());
+            output.push_str(remaining);
+            return Ok(output);
         }
     }
 
@@ -275,6 +438,109 @@ Hello content"#;
         let content = "Just regular content";
         let processed = preprocess_content(content).unwrap();
         assert_eq!(processed, content);
+    }
+
+    #[test]
+    fn preprocess_with_fonts_simple() {
+        let content = r#"---
+title: Test
+fonts:
+  main: "Inter"
+  mono: "JetBrains Mono"
+---
+Hello content"#;
+
+        let processed = preprocess_content(content).unwrap();
+
+        assert!(!processed.contains("---"));
+        assert!(processed.contains("#set text(font: \"Inter\")"));
+        assert!(processed.contains("#show raw: set text(font: \"JetBrains Mono\")"));
+        assert!(processed.contains("Hello content"));
+    }
+
+    #[test]
+    fn preprocess_with_fonts_full() {
+        let content = r#"---
+title: Test
+fonts:
+  main:
+    family: "Inter"
+    size: "11pt"
+  heading:
+    family: "Open Sans"
+    size: "14pt"
+    weight: "bold"
+---
+Hello content"#;
+
+        let processed = preprocess_content(content).unwrap();
+
+        assert!(!processed.contains("---"));
+        assert!(processed.contains("#set text(font: \"Inter\", size: 11pt)"));
+        assert!(processed.contains("#show heading: set text(font: \"Open Sans\", size: 14pt, weight: \"bold\")"));
+        assert!(processed.contains("Hello content"));
+    }
+
+    #[test]
+    fn font_config_simple_to_typst() {
+        let config = FontConfig {
+            main: Some(FontSpec::Simple("Inter".to_string())),
+            heading: Some(FontSpec::Simple("Open Sans".to_string())),
+            mono: Some(FontSpec::Simple("Fira Code".to_string())),
+            math: None,
+        };
+
+        let code = config.to_typst_code();
+
+        assert!(code.contains("#set text(font: \"Inter\")"));
+        assert!(code.contains("#show heading: set text(font: \"Open Sans\")"));
+        assert!(code.contains("#show raw: set text(font: \"Fira Code\")"));
+    }
+
+    #[test]
+    fn font_config_full_to_typst() {
+        let config = FontConfig {
+            main: Some(FontSpec::Full {
+                family: "Inter".to_string(),
+                size: Some("11pt".to_string()),
+                weight: None,
+                style: None,
+            }),
+            heading: Some(FontSpec::Full {
+                family: "Open Sans".to_string(),
+                size: Some("14pt".to_string()),
+                weight: Some("bold".to_string()),
+                style: None,
+            }),
+            mono: None,
+            math: None,
+        };
+
+        let code = config.to_typst_code();
+
+        assert!(code.contains("#set text(font: \"Inter\", size: 11pt)"));
+        assert!(code.contains("#show heading: set text(font: \"Open Sans\", size: 14pt, weight: \"bold\")"));
+    }
+
+    #[test]
+    fn font_config_empty() {
+        let config = FontConfig::default();
+        assert!(!config.has_fonts());
+        assert!(config.to_typst_code().is_empty());
+    }
+
+    #[test]
+    fn font_spec_family() {
+        let simple = FontSpec::Simple("Inter".to_string());
+        assert_eq!(simple.family(), "Inter");
+
+        let full = FontSpec::Full {
+            family: "Open Sans".to_string(),
+            size: Some("12pt".to_string()),
+            weight: None,
+            style: None,
+        };
+        assert_eq!(full.family(), "Open Sans");
     }
 
     #[tokio::test]
