@@ -4,7 +4,7 @@ use crate::OutputFormat;
 use anyhow::{Context, Result};
 use clap::Args;
 use nova_schema::FrontmatterParser;
-use novatype_core::{compile_pdf, compile_svg, NativeWorld};
+use novatype_core::{compile_pdf, compile_svg, set_font_paths, NativeWorld};
 use std::path::{Path, PathBuf};
 use tracing::{debug, info};
 
@@ -75,6 +75,12 @@ pub async fn compile(args: CompileArgs) -> Result<()> {
             .map(|p| p.to_path_buf())
             .unwrap_or_else(|| PathBuf::from("."))
     });
+
+    // Set custom font paths if provided
+    if !args.font_paths.is_empty() {
+        debug!("Setting font paths: {:?}", args.font_paths);
+        set_font_paths(args.font_paths.clone());
+    }
 
     // Create the native world
     debug!("Creating native world with root: {:?}", root);

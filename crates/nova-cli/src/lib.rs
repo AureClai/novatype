@@ -16,6 +16,12 @@
 //!
 //! # Validate document metadata
 //! nova validate document.typ
+//!
+//! # Font management
+//! nova font search "mono"
+//! nova font install "JetBrains Mono"
+//! nova font list
+//! nova font bundle minimal
 //! ```
 
 pub mod commands;
@@ -59,6 +65,9 @@ pub enum Commands {
 
     /// Manage templates.
     Template(commands::TemplateArgs),
+
+    /// Manage fonts (search, install, list).
+    Font(commands::FontArgs),
 }
 
 /// Run the CLI with the given arguments.
@@ -73,6 +82,7 @@ pub async fn run(cli: Cli) -> Result<()> {
         Commands::Validate(args) => commands::validate(args).await,
         Commands::Watch(args) => commands::watch(args).await,
         Commands::Template(args) => commands::template(args).await,
+        Commands::Font(args) => commands::font(args).await,
     }
 }
 

@@ -17,7 +17,34 @@ use typst::utils::LazyHash;
 use typst::{Library, World};
 
 /// Global font cache for native compilation.
-static NATIVE_FONTS: OnceLock<NativeFonts> = OnceLock::new();
+static NATIVE_FONTS: OnceLock<RwLock<Option<NativeFonts>>> = OnceLock::new();
+
+/// Custom font paths to load.
+static CUSTOM_FONT_PATHS: OnceLock<RwLock<Vec<PathBuf>>> = OnceLock::new();
+
+/// Set custom font paths for compilation.
+/// This will cause fonts to be reloaded on the next compilation.
+pub fn set_font_paths(paths: Vec<PathBuf>) {
+    let paths_lock = CUSTOM_FONT_PATHS.get_or_init(|| RwLock::new(Vec::new()));
+    *paths_lock.write() = paths;
+
+    // Clear cached fonts so they'll be reloaded
+    let fonts_lock = NATIVE_FONTS.get_or_init(|| RwLock::new(None));
+    *fonts_lock.write() = None;
+}
+
+/// Get or initialize the native fonts.
+fn get_native_fonts() -> &'static RwLock<Option<NativeFonts>> {
+    let lock = NATIVE_FONTS.get_or_init(|| RwLock::new(None));
+
+    // Initialize if needed
+    if lock.read().is_none() {
+        let fonts = NativeFonts::new();
+        *lock.write() = Some(fonts);
+    }
+
+    lock
+}
 
 /// A World implementation for native compilation.
 ///
@@ -65,7 +92,7 @@ impl NativeWorld {
         let source = Source::new(main, content);
 
         // Initialize fonts
-        let _ = NATIVE_FONTS.get_or_init(NativeFonts::new);
+        let _ = get_native_fonts();
 
         // Create the library
         let library = Library::builder().build();
@@ -93,7 +120,7 @@ impl NativeWorld {
         let source = Source::new(main, source.to_string());
 
         // Initialize fonts
-        let _ = NATIVE_FONTS.get_or_init(NativeFonts::new);
+        let _ = get_native_fonts();
 
         // Create the library
         let library = Library::builder().build();
@@ -123,8 +150,13 @@ impl World for NativeWorld {
     }
 
     fn book(&self) -> &LazyHash<FontBook> {
-        let fonts = NATIVE_FONTS.get_or_init(NativeFonts::new);
-        &fonts.book
+        let fonts_lock = get_native_fonts();
+        let guard = fonts_lock.read();
+        // SAFETY: We know the fonts are initialized because get_native_fonts() ensures it
+        let fonts = guard.as_ref().unwrap();
+        // We need to return a reference with 'static lifetime
+        // This is safe because the fonts are stored in a static
+        unsafe { &*(&fonts.book as *const _) }
     }
 
     fn main(&self) -> FileId {
@@ -170,8 +202,9 @@ impl World for NativeWorld {
     }
 
     fn font(&self, index: usize) -> Option<Font> {
-        let fonts = NATIVE_FONTS.get_or_init(NativeFonts::new);
-        fonts.fonts.get(index).cloned()
+        let fonts_lock = get_native_fonts();
+        let guard = fonts_lock.read();
+        guard.as_ref().and_then(|fonts| fonts.fonts.get(index).cloned())
     }
 
     fn today(&self, offset: Option<i64>) -> Option<Datetime> {
@@ -202,7 +235,7 @@ struct NativeFonts {
 }
 
 impl NativeFonts {
-    /// Initialize fonts from typst-assets and system fonts.
+    /// Initialize fonts from typst-assets and custom font paths.
     fn new() -> Self {
         let mut book = FontBook::new();
         let mut fonts = Vec::new();
@@ -216,12 +249,53 @@ impl NativeFonts {
             }
         }
 
-        // Optionally load system fonts
-        // This can be extended to scan system font directories
+        // Load fonts from custom paths
+        if let Some(paths_lock) = CUSTOM_FONT_PATHS.get() {
+            let paths = paths_lock.read();
+            for path in paths.iter() {
+                Self::load_fonts_from_path(&mut book, &mut fonts, path);
+            }
+        }
 
         Self {
             book: LazyHash::new(book),
             fonts,
+        }
+    }
+
+    /// Load fonts from a directory path.
+    fn load_fonts_from_path(book: &mut FontBook, fonts: &mut Vec<Font>, path: &Path) {
+        if path.is_file() {
+            Self::load_font_file(book, fonts, path);
+        } else if path.is_dir() {
+            if let Ok(entries) = std::fs::read_dir(path) {
+                for entry in entries.flatten() {
+                    let entry_path = entry.path();
+                    if entry_path.is_file() {
+                        Self::load_font_file(book, fonts, &entry_path);
+                    } else if entry_path.is_dir() {
+                        // Recurse into subdirectories
+                        Self::load_fonts_from_path(book, fonts, &entry_path);
+                    }
+                }
+            }
+        }
+    }
+
+    /// Load a single font file.
+    fn load_font_file(book: &mut FontBook, fonts: &mut Vec<Font>, path: &Path) {
+        let ext = path.extension().and_then(|e| e.to_str()).unwrap_or("");
+        if !matches!(ext.to_lowercase().as_str(), "ttf" | "otf" | "ttc" | "woff" | "woff2") {
+            return;
+        }
+
+        if let Ok(data) = std::fs::read(path) {
+            let buffer = Bytes::new(data);
+            for font in Font::iter(buffer) {
+                tracing::debug!("Loaded font: {} from {:?}", font.info().family, path);
+                book.push(font.info().clone());
+                fonts.push(font);
+            }
         }
     }
 }

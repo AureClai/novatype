@@ -15,6 +15,7 @@ novatype/
 │   │   ├── nova-cite/        # Citation management
 │   │   ├── nova-plot/        # Data visualization
 │   │   ├── nova-cli/         # Command-line interface
+│   │   ├── nova-font/        # Font management (Google Fonts)
 │   │   └── nova-wasm/        # WebAssembly build
 │   └── target/
 │       └── release/
@@ -43,6 +44,13 @@ nova validate main.typ
 
 # List templates
 nova template list
+
+# Font management
+nova font search "mono"           # Search Google Fonts
+nova font install "JetBrains Mono" # Install a font
+nova font list                     # List installed fonts
+nova font bundle minimal           # Install a bundle
+nova font cache info               # Show cache info
 ```
 
 ## Key Features
@@ -52,6 +60,7 @@ nova template list
 3. **Modern CLI**: Unified tool for init/compile/validate/watch
 4. **Citation Support**: BibTeX + CrossRef API integration (nova-cite)
 5. **Data Visualization**: CSV/JSON to charts (nova-plot)
+6. **Font Management**: Google Fonts integration with local caching (nova-font)
 
 ## Development
 
@@ -63,7 +72,7 @@ cargo build --package nova-cli --release
 # Run tests
 cargo test --package nova-core nova-schema nova-cite nova-plot nova-cli
 
-# 94 tests total across all crates
+# 120 tests total across all crates
 ```
 
 ## Typst Syntax Quick Reference
