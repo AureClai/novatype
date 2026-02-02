@@ -99,11 +99,13 @@ impl FontCache {
 
     /// Get all installed font paths for a family.
     pub fn font_files(&self, family_name: &str) -> Result<Vec<PathBuf>> {
-        let entry = self.metadata.fonts.get(family_name).ok_or_else(|| {
-            Error::FontNotFound {
+        let entry = self
+            .metadata
+            .fonts
+            .get(family_name)
+            .ok_or_else(|| Error::FontNotFound {
                 name: family_name.to_string(),
-            }
-        })?;
+            })?;
 
         Ok(entry.files.iter().map(|f| f.path.clone()).collect())
     }
@@ -141,7 +143,12 @@ impl FontCache {
             .and_then(|url| url.rsplit('.').next())
             .unwrap_or("ttf");
 
-        let filename = format!("{}-{}.{}", sanitize_filename(&family.family), variant, extension);
+        let filename = format!(
+            "{}-{}.{}",
+            sanitize_filename(&family.family),
+            variant,
+            extension
+        );
         let file_path = font_dir.join(&filename);
 
         // Calculate checksum
@@ -349,7 +356,10 @@ mod tests {
             subsets: vec!["latin".to_string()],
             version: Some("v1".to_string()),
             last_modified: None,
-            files: HashMap::from([("regular".to_string(), "http://example.com/font.ttf".to_string())]),
+            files: HashMap::from([(
+                "regular".to_string(),
+                "http://example.com/font.ttf".to_string(),
+            )]),
         };
 
         let data = b"fake font data";

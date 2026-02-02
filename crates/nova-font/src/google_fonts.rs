@@ -116,12 +116,14 @@ impl GoogleFontsClient {
             }
 
             // Extract weight
-            let weight = self.extract_css_value(block, "font-weight")
+            let weight = self
+                .extract_css_value(block, "font-weight")
                 .and_then(|w| w.parse::<u16>().ok())
                 .unwrap_or(400);
 
             // Extract style
-            let is_italic = self.extract_css_value(block, "font-style")
+            let is_italic = self
+                .extract_css_value(block, "font-style")
                 .map(|s| s == "italic")
                 .unwrap_or(false);
 
@@ -185,7 +187,10 @@ impl GoogleFontsClient {
         let url_rest = &src_block[url_start + 4..];
         let url_end = url_rest.find(')')?;
 
-        let url = url_rest[..url_end].trim().trim_matches('"').trim_matches('\'');
+        let url = url_rest[..url_end]
+            .trim()
+            .trim_matches('"')
+            .trim_matches('\'');
         Some(url.to_string())
     }
 
@@ -307,7 +312,7 @@ impl FontFamily {
     /// Get the category as an enum.
     #[must_use]
     pub fn category_enum(&self) -> Option<FontCategory> {
-        self.category.as_deref().and_then(FontCategory::from_str)
+        self.category.as_deref().and_then(|s| s.parse().ok())
     }
 
     /// Check if the font has a specific variant.
@@ -389,15 +394,15 @@ impl FontVariant {
 
         Some(Self { weight, italic })
     }
+}
 
-    /// Convert to a variant string.
-    #[must_use]
-    pub fn to_string(&self) -> String {
+impl std::fmt::Display for FontVariant {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match (self.weight, self.italic) {
-            (400, false) => "regular".to_string(),
-            (400, true) => "italic".to_string(),
-            (w, false) => w.to_string(),
-            (w, true) => format!("{}italic", w),
+            (400, false) => write!(f, "regular"),
+            (400, true) => write!(f, "italic"),
+            (w, false) => write!(f, "{}", w),
+            (w, true) => write!(f, "{}italic", w),
         }
     }
 }
@@ -425,7 +430,6 @@ const POPULAR_FONTS: &[(&str, &str)] = &[
     ("Outfit", "sans-serif"),
     ("Plus Jakarta Sans", "sans-serif"),
     ("Space Grotesk", "sans-serif"),
-
     // Serif
     ("Playfair Display", "serif"),
     ("Merriweather", "serif"),
@@ -442,7 +446,6 @@ const POPULAR_FONTS: &[(&str, &str)] = &[
     ("Vollkorn", "serif"),
     ("Spectral", "serif"),
     ("Newsreader", "serif"),
-
     // Monospace
     ("JetBrains Mono", "monospace"),
     ("Fira Code", "monospace"),
@@ -456,7 +459,6 @@ const POPULAR_FONTS: &[(&str, &str)] = &[
     ("Anonymous Pro", "monospace"),
     ("PT Mono", "monospace"),
     ("DM Mono", "monospace"),
-
     // Display
     ("Bebas Neue", "display"),
     ("Oswald", "display"),
@@ -468,7 +470,6 @@ const POPULAR_FONTS: &[(&str, &str)] = &[
     ("Bungee", "display"),
     ("Lobster", "display"),
     ("Pacifico", "display"),
-
     // Handwriting
     ("Dancing Script", "handwriting"),
     ("Pacifico", "handwriting"),

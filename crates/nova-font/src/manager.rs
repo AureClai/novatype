@@ -83,7 +83,10 @@ impl FontManager {
     ///
     /// Returns an error if the API request fails.
     #[instrument(skip(self))]
-    pub async fn search_by_category(&self, category: FontCategory) -> Result<Vec<FontSearchResult>> {
+    pub async fn search_by_category(
+        &self,
+        category: FontCategory,
+    ) -> Result<Vec<FontSearchResult>> {
         let fonts = self.client.search_by_category(category).await?;
 
         Ok(fonts
@@ -273,12 +276,7 @@ pub mod bundles {
     ];
 
     /// Modern fonts bundle.
-    pub const MODERN: &[&str] = &[
-        "Inter",
-        "Roboto",
-        "Open Sans",
-        "Lato",
-    ];
+    pub const MODERN: &[&str] = &["Inter", "Roboto", "Open Sans", "Lato"];
 
     /// Monospace fonts bundle.
     pub const MONOSPACE: &[&str] = &[
@@ -289,19 +287,10 @@ pub mod bundles {
     ];
 
     /// Classic fonts bundle.
-    pub const CLASSIC: &[&str] = &[
-        "Playfair Display",
-        "Merriweather",
-        "Lora",
-        "PT Serif",
-    ];
+    pub const CLASSIC: &[&str] = &["Playfair Display", "Merriweather", "Lora", "PT Serif"];
 
     /// Minimal bundle (one sans, one serif, one mono).
-    pub const MINIMAL: &[&str] = &[
-        "Inter",
-        "Source Serif Pro",
-        "JetBrains Mono",
-    ];
+    pub const MINIMAL: &[&str] = &["Inter", "Source Serif Pro", "JetBrains Mono"];
 }
 
 #[cfg(test)]

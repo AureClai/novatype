@@ -153,19 +153,18 @@ async fn search(args: SearchArgs) -> Result<()> {
 
     for result in results.iter().take(args.limit) {
         let installed = if result.installed { " [installed]" } else { "" };
-        let category = result
-            .family
-            .category
-            .as_deref()
-            .unwrap_or("unknown");
+        let category = result.family.category.as_deref().unwrap_or("unknown");
 
-        println!(
-            "  {} ({}){}",
-            result.family.family, category, installed
-        );
+        println!("  {} ({}){}", result.family.family, category, installed);
 
         // Show variants
-        let variants: Vec<&str> = result.family.variants.iter().take(5).map(String::as_str).collect();
+        let variants: Vec<&str> = result
+            .family
+            .variants
+            .iter()
+            .take(5)
+            .map(String::as_str)
+            .collect();
         let more = if result.family.variants.len() > 5 {
             format!(" +{} more", result.family.variants.len() - 5)
         } else {
@@ -271,7 +270,14 @@ async fn font_info(args: InfoArgs) -> Result<()> {
     println!("  Variants: {}", info.family.variants.join(", "));
 
     println!();
-    println!("  Status: {}", if info.installed { "Installed" } else { "Not installed" });
+    println!(
+        "  Status: {}",
+        if info.installed {
+            "Installed"
+        } else {
+            "Not installed"
+        }
+    );
 
     if let Some(files) = &info.local_files {
         println!();
@@ -291,11 +297,26 @@ async fn bundle(args: BundleArgs) -> Result<()> {
     match args.bundle {
         BundleName::List => {
             println!("Available font bundles:\n");
-            println!("  academic   - Academic fonts: {}", bundles::ACADEMIC.join(", "));
-            println!("  modern     - Modern fonts: {}", bundles::MODERN.join(", "));
-            println!("  monospace  - Monospace fonts: {}", bundles::MONOSPACE.join(", "));
-            println!("  classic    - Classic fonts: {}", bundles::CLASSIC.join(", "));
-            println!("  minimal    - Minimal bundle: {}", bundles::MINIMAL.join(", "));
+            println!(
+                "  academic   - Academic fonts: {}",
+                bundles::ACADEMIC.join(", ")
+            );
+            println!(
+                "  modern     - Modern fonts: {}",
+                bundles::MODERN.join(", ")
+            );
+            println!(
+                "  monospace  - Monospace fonts: {}",
+                bundles::MONOSPACE.join(", ")
+            );
+            println!(
+                "  classic    - Classic fonts: {}",
+                bundles::CLASSIC.join(", ")
+            );
+            println!(
+                "  minimal    - Minimal bundle: {}",
+                bundles::MINIMAL.join(", ")
+            );
             println!("\nUse 'nova font bundle <name>' to install a bundle.");
             Ok(())
         }
@@ -310,7 +331,11 @@ async fn bundle(args: BundleArgs) -> Result<()> {
             };
 
             let bundle_display = format!("{:?}", bundle_name).to_lowercase();
-            println!("Installing {} bundle ({} fonts)...\n", bundle_display, fonts.len());
+            println!(
+                "Installing {} bundle ({} fonts)...\n",
+                bundle_display,
+                fonts.len()
+            );
 
             let mut manager = FontManager::new().context("Failed to initialize font manager")?;
             let mut total_files = 0;
@@ -363,7 +388,7 @@ async fn cache(args: CacheArgs) -> Result<()> {
 
 /// Parse a category string.
 fn parse_category(s: &str) -> Result<FontCategory> {
-    FontCategory::from_str(s).ok_or_else(|| {
+    s.parse().map_err(|()| {
         anyhow::anyhow!(
             "Invalid category '{}'. Valid categories: serif, sans-serif, display, handwriting, monospace",
             s

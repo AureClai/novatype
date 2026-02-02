@@ -32,7 +32,7 @@ pub mod manager;
 
 pub use cache::FontCache;
 pub use error::{Error, Result};
-pub use google_fonts::{GoogleFontsClient, FontFamily, FontVariant};
+pub use google_fonts::{FontFamily, FontVariant, GoogleFontsClient};
 pub use manager::FontManager;
 
 /// Font categories from Google Fonts.
@@ -51,19 +51,6 @@ pub enum FontCategory {
 }
 
 impl FontCategory {
-    /// Convert from Google Fonts API category string.
-    #[must_use]
-    pub fn from_str(s: &str) -> Option<Self> {
-        match s.to_lowercase().as_str() {
-            "serif" => Some(Self::Serif),
-            "sans-serif" => Some(Self::SansSerif),
-            "display" => Some(Self::Display),
-            "handwriting" => Some(Self::Handwriting),
-            "monospace" => Some(Self::Monospace),
-            _ => None,
-        }
-    }
-
     /// Convert to Google Fonts API category string.
     #[must_use]
     pub fn as_str(&self) -> &'static str {
@@ -73,6 +60,21 @@ impl FontCategory {
             Self::Display => "display",
             Self::Handwriting => "handwriting",
             Self::Monospace => "monospace",
+        }
+    }
+}
+
+impl std::str::FromStr for FontCategory {
+    type Err = ();
+
+    fn from_str(s: &str) -> std::result::Result<Self, Self::Err> {
+        match s.to_lowercase().as_str() {
+            "serif" => Ok(Self::Serif),
+            "sans-serif" => Ok(Self::SansSerif),
+            "display" => Ok(Self::Display),
+            "handwriting" => Ok(Self::Handwriting),
+            "monospace" => Ok(Self::Monospace),
+            _ => Err(()),
         }
     }
 }

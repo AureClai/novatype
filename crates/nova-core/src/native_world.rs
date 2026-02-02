@@ -204,7 +204,9 @@ impl World for NativeWorld {
     fn font(&self, index: usize) -> Option<Font> {
         let fonts_lock = get_native_fonts();
         let guard = fonts_lock.read();
-        guard.as_ref().and_then(|fonts| fonts.fonts.get(index).cloned())
+        guard
+            .as_ref()
+            .and_then(|fonts| fonts.fonts.get(index).cloned())
     }
 
     fn today(&self, offset: Option<i64>) -> Option<Datetime> {
@@ -285,7 +287,10 @@ impl NativeFonts {
     /// Load a single font file.
     fn load_font_file(book: &mut FontBook, fonts: &mut Vec<Font>, path: &Path) {
         let ext = path.extension().and_then(|e| e.to_str()).unwrap_or("");
-        if !matches!(ext.to_lowercase().as_str(), "ttf" | "otf" | "ttc" | "woff" | "woff2") {
+        if !matches!(
+            ext.to_lowercase().as_str(),
+            "ttf" | "otf" | "ttc" | "woff" | "woff2"
+        ) {
             return;
         }
 
