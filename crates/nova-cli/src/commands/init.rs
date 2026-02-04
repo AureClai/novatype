@@ -20,7 +20,7 @@ pub struct InitArgs {
     #[arg(long)]
     pub no_git: bool,
 
-    /// Include Python figure support (creates figures/ directory and pyplot.typ).
+    /// Include Python figure support (creates figures/ directory with examples).
     #[arg(long)]
     pub python: bool,
 }
@@ -83,7 +83,6 @@ pub async fn init(args: InitArgs) -> Result<()> {
     println!("  - references.bib");
     println!("  - .gitignore");
     if args.python {
-        println!("  - pyplot.typ");
         println!("  - figures/");
         println!("    - __init__.py");
         println!("    - example.py");
@@ -101,7 +100,7 @@ pub async fn init(args: InitArgs) -> Result<()> {
 /// Generate the main document content based on template.
 fn generate_main_document(template: &str, with_python: bool) -> String {
     let python_import = if with_python {
-        "\n#import \"pyplot.typ\": pyplot\n"
+        "\n#import \".nova/pyplot.typ\": pyplot\n"
     } else {
         ""
     };
@@ -332,43 +331,8 @@ def plot_example():
     std::fs::write(&example_path, example_content)
         .with_context(|| format!("Failed to write {:?}", example_path))?;
 
-    // Create pyplot.typ (the Typst helper)
-    let pyplot_content = r#"// pyplot - Python figure integration for NovaType
-//
-// Usage:
-//   #import "pyplot.typ": pyplot
-//
-//   #figure(
-//     pyplot("my-figure", width: 80%),
-//     caption: [My Python figure]
-//   )
-
-/// Default cache directory for generated figures
-#let nova-cache-dir = ".nova/cache"
-
-/// Load a Python-generated plot by name.
-///
-/// Arguments:
-/// - name: The figure name (from @nova.figure decorator)
-/// - width: Optional width (default: auto)
-/// - height: Optional height (default: auto)
-/// - fit: How to fit the image (default: "contain")
-/// - alt: Alternative text for accessibility
-#let pyplot(
-  name,
-  width: auto,
-  height: auto,
-  fit: "contain",
-  alt: auto,
-) = {
-  let svg-path = nova-cache-dir + "/" + name + ".svg"
-  let alt-text = if alt == auto { "Python figure: " + name } else { alt }
-  image(svg-path, width: width, height: height, fit: fit, alt: alt-text)
-}
-"#;
-    let pyplot_path = project_dir.join("pyplot.typ");
-    std::fs::write(&pyplot_path, pyplot_content)
-        .with_context(|| format!("Failed to write {:?}", pyplot_path))?;
+    // Note: pyplot.typ is automatically provisioned by nova compile
+    // No need to create it here - it's managed by the build system
 
     Ok(())
 }
@@ -439,7 +403,7 @@ mod tests {
         let result = init(args).await;
         assert!(result.is_ok());
 
-        assert!(project_name.join("pyplot.typ").exists());
+        // pyplot.typ is now provisioned by nova compile, not init
         assert!(project_name.join("figures/__init__.py").exists());
         assert!(project_name.join("figures/example.py").exists());
     }
@@ -470,7 +434,7 @@ mod tests {
     #[test]
     fn generate_main_document_with_python() {
         let content = generate_main_document("article", true);
-        assert!(content.contains("pyplot.typ"));
+        assert!(content.contains(".nova/pyplot.typ"));
         assert!(content.contains("pyplot(\"example-plot\""));
     }
 

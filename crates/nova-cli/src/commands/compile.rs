@@ -84,6 +84,11 @@ pub async fn compile(args: CompileArgs) -> Result<()> {
 
     // Generate Python figures if configured
     if !args.no_python {
+        // Provision pyplot.typ helper
+        if let Err(e) = provision_pyplot(&root) {
+            warn!("Failed to provision pyplot.typ: {}", e);
+        }
+
         if let Err(e) = generate_python_figures(&root).await {
             // Don't fail compilation if Python is not configured
             debug!("Python figure generation skipped: {}", e);
@@ -187,6 +192,28 @@ fn preprocess_content(content: &str) -> Result<String> {
 
     // No frontmatter or parsing failed, use original content
     Ok(content.to_string())
+}
+
+/// Provision the pyplot.typ helper to .nova/ directory.
+///
+/// This ensures the pyplot function is available for importing Python figures.
+fn provision_pyplot(project_root: &Path) -> Result<()> {
+    let nova_dir = project_root.join(".nova");
+    let pyplot_path = nova_dir.join("pyplot.typ");
+
+    // Create .nova directory if it doesn't exist
+    if !nova_dir.exists() {
+        std::fs::create_dir_all(&nova_dir)
+            .with_context(|| format!("Failed to create {:?}", nova_dir))?;
+    }
+
+    // Write pyplot.typ (embedded content - single source of truth)
+    let pyplot_content = include_str!("../../../../typst-packages/nova/lib.typ");
+    std::fs::write(&pyplot_path, pyplot_content)
+        .with_context(|| format!("Failed to write {:?}", pyplot_path))?;
+
+    debug!("Provisioned pyplot.typ to {:?}", pyplot_path);
+    Ok(())
 }
 
 /// Generate Python figures if nova.toml configures Python integration.

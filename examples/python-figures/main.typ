@@ -8,7 +8,7 @@
 // 2. Generate SVG figures in .nova/cache/
 // 3. Compile the Typst document with embedded figures
 
-#import "pyplot.typ": pyplot
+#import ".nova/pyplot.typ": pyplot
 
 #set document(title: "Python Figures Example", author: "NovaType")
 #set page(margin: 2cm)
@@ -105,7 +105,7 @@ def plot_sine():
 Use the `pyplot()` function to embed figures:
 
 ```typst
-#import "@local/nova:0.1.0": pyplot
+#import ".nova/pyplot.typ": pyplot
 
 #figure(
   pyplot("sine-wave", width: 80%),
