@@ -3,10 +3,11 @@
 use crate::OutputFormat;
 use anyhow::{Context, Result};
 use clap::Args;
+use nova_python::PythonConfig;
 use nova_schema::FrontmatterParser;
 use novatype_core::{compile_pdf, compile_svg, NativeWorld};
 use std::path::{Path, PathBuf};
-use tracing::{debug, info};
+use tracing::{debug, info, warn};
 
 /// Arguments for the compile command.
 #[derive(Args, Debug)]
@@ -34,6 +35,10 @@ pub struct CompileArgs {
     /// Font paths to include.
     #[arg(long = "font-path")]
     pub font_paths: Vec<PathBuf>,
+
+    /// Skip Python figure generation.
+    #[arg(long)]
+    pub no_python: bool,
 }
 
 /// Execute the compile command.
@@ -72,9 +77,18 @@ pub async fn compile(args: CompileArgs) -> Result<()> {
     let root = args.root.unwrap_or_else(|| {
         args.input
             .parent()
+            .filter(|p| !p.as_os_str().is_empty())
             .map(|p| p.to_path_buf())
-            .unwrap_or_else(|| PathBuf::from("."))
+            .unwrap_or_else(|| std::env::current_dir().unwrap_or_else(|_| PathBuf::from(".")))
     });
+
+    // Generate Python figures if configured
+    if !args.no_python {
+        if let Err(e) = generate_python_figures(&root).await {
+            // Don't fail compilation if Python is not configured
+            debug!("Python figure generation skipped: {}", e);
+        }
+    }
 
     // Create the native world
     debug!("Creating native world with root: {:?}", root);
@@ -175,6 +189,45 @@ fn preprocess_content(content: &str) -> Result<String> {
     Ok(content.to_string())
 }
 
+/// Generate Python figures if nova.toml configures Python integration.
+async fn generate_python_figures(project_root: &Path) -> Result<()> {
+    // Check if nova.toml exists and has Python configuration
+    let config = match PythonConfig::from_project(project_root) {
+        Ok(config) => config,
+        Err(nova_python::Error::ConfigNotFound { .. }) => {
+            // No nova.toml, Python not configured
+            return Ok(());
+        }
+        Err(e) => {
+            warn!("Failed to load Python config: {}", e);
+            return Ok(());
+        }
+    };
+
+    // Check if figures directory exists
+    if !config.figures_dir.exists() {
+        debug!("No figures directory found at {:?}", config.figures_dir);
+        return Ok(());
+    }
+
+    info!("Generating Python figures...");
+
+    // Create Nova Python instance and generate figures
+    let nova = nova_python::NovaPython::new(config)?;
+    let registry = nova.generate_figures().await?;
+
+    if registry.is_empty() {
+        debug!("No Python figures found");
+    } else {
+        info!("Generated {} Python figure(s)", registry.len());
+        for (name, path) in registry.iter() {
+            debug!("  {} -> {:?}", name, path);
+        }
+    }
+
+    Ok(())
+}
+
 /// Open a file with the system's default application.
 fn open_file(path: &Path) -> Result<()> {
     #[cfg(target_os = "windows")]
@@ -218,6 +271,7 @@ mod tests {
             root: None,
             open: false,
             font_paths: vec![],
+            no_python: true,
         };
 
         let result = compile(args).await;
@@ -240,6 +294,7 @@ mod tests {
             root: None,
             open: false,
             font_paths: vec![],
+            no_python: true,
         };
 
         let result = compile(args).await;
@@ -286,6 +341,7 @@ Hello content"#;
             root: None,
             open: false,
             font_paths: vec![],
+            no_python: true,
         };
 
         let result = compile(args).await;
