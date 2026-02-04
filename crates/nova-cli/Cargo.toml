@@ -17,6 +17,7 @@ path = "src/main.rs"
 novatype-core.workspace = true
 nova-schema = { workspace = true, features = ["validation"] }
 nova-font.workspace = true
+nova-template.workspace = true
 
 clap.workspace = true
 serde.workspace = true

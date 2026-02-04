@@ -65,15 +65,23 @@ nova font cache info               # Show cache info
 ## Development
 
 ```bash
-# Build all NovaType crates
-cd typst
-cargo build --package nova-cli --release
+# Build in debug mode (faster, use during development)
+cargo build --package novatype-cli
+
+# Build in release mode (optimized, for final testing)
+cargo build --package novatype-cli --release
 
 # Run tests
-cargo test --package nova-core nova-schema nova-cite nova-plot nova-cli
+cargo test --package novatype-core nova-schema nova-cite nova-plot novatype-cli
 
-# 120 tests total across all crates
+# Debug binary location
+target/debug/nova.exe
+
+# Release binary location
+target/release/nova.exe
 ```
+
+**Note**: Prefer debug builds during development for faster iteration. Release builds take 4-6 minutes.
 
 ## Typst Syntax Quick Reference
 

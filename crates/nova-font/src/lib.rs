@@ -80,11 +80,12 @@ impl std::str::FromStr for FontCategory {
 }
 
 /// Font weight values.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 pub enum FontWeight {
     Thin = 100,
     ExtraLight = 200,
     Light = 300,
+    #[default]
     Regular = 400,
     Medium = 500,
     SemiBold = 600,
@@ -115,11 +116,5 @@ impl FontWeight {
     #[must_use]
     pub fn as_num(&self) -> u16 {
         *self as u16
-    }
-}
-
-impl Default for FontWeight {
-    fn default() -> Self {
-        Self::Regular
     }
 }
