@@ -343,7 +343,11 @@ mod tests {
         });
 
         let result = schema.validate(&doc_with_fonts);
-        assert!(result.is_valid(), "Simple fonts should be valid: {:?}", result.errors);
+        assert!(
+            result.is_valid(),
+            "Simple fonts should be valid: {:?}",
+            result.errors
+        );
     }
 
     #[test]
@@ -371,7 +375,11 @@ mod tests {
         });
 
         let result = schema.validate(&doc_with_fonts);
-        assert!(result.is_valid(), "Full fonts should be valid: {:?}", result.errors);
+        assert!(
+            result.is_valid(),
+            "Full fonts should be valid: {:?}",
+            result.errors
+        );
     }
 
     #[test]

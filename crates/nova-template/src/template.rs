@@ -272,7 +272,7 @@ impl Template {
             let mut margin_parts = Vec::new();
 
             if let Some(ref all) = margin.all {
-                margin_parts.push(format!("{}", all));
+                margin_parts.push(all.to_string());
             } else {
                 if let Some(ref top) = margin.top {
                     margin_parts.push(format!("top: {}", top));

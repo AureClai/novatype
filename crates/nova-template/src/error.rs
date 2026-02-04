@@ -35,7 +35,10 @@ pub enum Error {
 
     /// Source error (GitHub, marketplace, etc.).
     #[error("Source error: {source_name} - {message}")]
-    Source { source_name: String, message: String },
+    Source {
+        source_name: String,
+        message: String,
+    },
 
     /// Invalid source URL.
     #[error("Invalid source URL: {url}")]

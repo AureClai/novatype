@@ -145,7 +145,9 @@ impl TemplateCache {
         };
 
         // Update metadata
-        self.metadata.templates.insert(name.clone(), installed.clone());
+        self.metadata
+            .templates
+            .insert(name.clone(), installed.clone());
         self.save_metadata()?;
 
         info!(name = %name, "Template installed");

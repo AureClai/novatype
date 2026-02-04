@@ -222,18 +222,34 @@ impl TemplateInstaller {
                 if !response.status().is_success() {
                     return Err(Error::Source {
                         source_name: "GitHub".to_string(),
-                        message: format!("Failed to download {}/{}: {}", owner, repo, response.status()),
+                        message: format!(
+                            "Failed to download {}/{}: {}",
+                            owner,
+                            repo,
+                            response.status()
+                        ),
                     });
                 }
 
                 return self
-                    .extract_and_install(cache, response, &format!("{}-master", repo), subpath, &format!("github:{}/{}", owner, repo))
+                    .extract_and_install(
+                        cache,
+                        response,
+                        &format!("{}-master", repo),
+                        subpath,
+                        &format!("github:{}/{}", owner, repo),
+                    )
                     .await;
             }
 
             return Err(Error::Source {
                 source_name: "GitHub".to_string(),
-                message: format!("Failed to download {}/{}: {}", owner, repo, response.status()),
+                message: format!(
+                    "Failed to download {}/{}: {}",
+                    owner,
+                    repo,
+                    response.status()
+                ),
             });
         }
 
@@ -284,11 +300,7 @@ impl TemplateInstaller {
         let reader = std::io::Cursor::new(bytes);
         let mut archive = zip::ZipArchive::new(reader)?;
 
-        debug!(
-            files = archive.len(),
-            "Extracting {} files",
-            archive.len()
-        );
+        debug!(files = archive.len(), "Extracting {} files", archive.len());
 
         for i in 0..archive.len() {
             let mut file = archive.by_index(i)?;
@@ -359,7 +371,12 @@ mod tests {
     fn parse_github_shorthand() {
         let source = TemplateSource::parse("github:owner/repo").unwrap();
         match source {
-            TemplateSource::GitHub { owner, repo, branch, path } => {
+            TemplateSource::GitHub {
+                owner,
+                repo,
+                branch,
+                path,
+            } => {
                 assert_eq!(owner, "owner");
                 assert_eq!(repo, "repo");
                 assert!(branch.is_none());

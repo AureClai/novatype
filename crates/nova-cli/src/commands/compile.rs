@@ -30,6 +30,7 @@ pub enum FontSpec {
 
 impl FontSpec {
     /// Get the font family name.
+    #[allow(dead_code)]
     pub fn family(&self) -> &str {
         match self {
             FontSpec::Simple(f) => f,
@@ -41,7 +42,12 @@ impl FontSpec {
     pub fn to_typst_args(&self) -> String {
         match self {
             FontSpec::Simple(family) => format!("font: \"{}\"", family),
-            FontSpec::Full { family, size, weight, style } => {
+            FontSpec::Full {
+                family,
+                size,
+                weight,
+                style,
+            } => {
                 let mut args = vec![format!("font: \"{}\"", family)];
                 if let Some(s) = size {
                     args.push(format!("size: {}", s));
@@ -195,7 +201,10 @@ pub async fn compile(args: CompileArgs) -> Result<()> {
         Ok(cache) => {
             let cached_paths = cache.typst_font_paths();
             if !cached_paths.is_empty() {
-                debug!("Adding {} font paths from nova-font cache", cached_paths.len());
+                debug!(
+                    "Adding {} font paths from nova-font cache",
+                    cached_paths.len()
+                );
                 all_font_paths.extend(cached_paths);
             }
         }
@@ -324,9 +333,7 @@ fn preprocess_content(content: &str) -> Result<String> {
                 }
 
                 if let Some(fonts_value) = meta.get("fonts") {
-                    if let Ok(fonts) =
-                        serde_json::from_value::<FontConfig>(fonts_value.clone())
-                    {
+                    if let Ok(fonts) = serde_json::from_value::<FontConfig>(fonts_value.clone()) {
                         if fonts.has_fonts() {
                             debug!("Applying font configuration: {:?}", fonts);
                             output.push_str(&fonts.to_typst_code());
@@ -477,7 +484,9 @@ Hello content"#;
 
         assert!(!processed.contains("---"));
         assert!(processed.contains("#set text(font: \"Inter\", size: 11pt)"));
-        assert!(processed.contains("#show heading: set text(font: \"Open Sans\", size: 14pt, weight: \"bold\")"));
+        assert!(processed.contains(
+            "#show heading: set text(font: \"Open Sans\", size: 14pt, weight: \"bold\")"
+        ));
         assert!(processed.contains("Hello content"));
     }
 
@@ -519,7 +528,9 @@ Hello content"#;
         let code = config.to_typst_code();
 
         assert!(code.contains("#set text(font: \"Inter\", size: 11pt)"));
-        assert!(code.contains("#show heading: set text(font: \"Open Sans\", size: 14pt, weight: \"bold\")"));
+        assert!(code.contains(
+            "#show heading: set text(font: \"Open Sans\", size: 14pt, weight: \"bold\")"
+        ));
     }
 
     #[test]

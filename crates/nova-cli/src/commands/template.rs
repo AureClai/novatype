@@ -92,11 +92,7 @@ async fn list_templates() -> Result<()> {
     println!("Installed templates ({}):\n", templates.len());
 
     for template in templates {
-        println!(
-            "  {} ({})",
-            template.name,
-            template.version
-        );
+        println!("  {} ({})", template.name, template.version);
         if let Some(ref desc) = template.description {
             println!("    {}", desc);
         }
@@ -115,7 +111,10 @@ async fn show_template_info(name: &str) -> Result<()> {
     let cache = TemplateCache::new().context("Failed to open template cache")?;
 
     let installed = cache.get(name).ok_or_else(|| {
-        anyhow::anyhow!("Template not found: {}. Use 'nova template list' to see installed templates.", name)
+        anyhow::anyhow!(
+            "Template not found: {}. Use 'nova template list' to see installed templates.",
+            name
+        )
     })?;
 
     let template = cache
@@ -192,7 +191,10 @@ async fn install_template(source: &str) -> Result<()> {
     println!("  Category: {}", installed.category);
     println!("  Location: {}", installed.path.display());
     println!();
-    println!("Use with: nova init my-project --template {}", installed.name);
+    println!(
+        "Use with: nova init my-project --template {}",
+        installed.name
+    );
 
     Ok(())
 }
