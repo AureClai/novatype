@@ -210,6 +210,34 @@ pub fn article_schema() -> Value {
             "bibliography": {
                 "type": "array",
                 "items": { "type": "string" }
+            },
+            "fonts": {
+                "type": "object",
+                "description": "Font configuration for the document",
+                "properties": {
+                    "main": { "$ref": "#/$defs/fontSpec" },
+                    "heading": { "$ref": "#/$defs/fontSpec" },
+                    "mono": { "$ref": "#/$defs/fontSpec" },
+                    "math": { "$ref": "#/$defs/fontSpec" }
+                }
+            }
+        },
+        "$defs": {
+            "fontSpec": {
+                "oneOf": [
+                    { "type": "string", "description": "Font family name only" },
+                    {
+                        "type": "object",
+                        "description": "Full font specification",
+                        "properties": {
+                            "family": { "type": "string", "description": "Font family name" },
+                            "size": { "type": "string", "description": "Font size (e.g., 11pt, 1.2em)" },
+                            "weight": { "type": "string", "description": "Font weight (e.g., bold, 600)" },
+                            "style": { "type": "string", "enum": ["normal", "italic", "oblique"] }
+                        },
+                        "required": ["family"]
+                    }
+                ]
             }
         },
         "required": ["title"]
@@ -299,5 +327,73 @@ mod tests {
             keyword: "type".to_string(),
         };
         assert_eq!(error_no_path.to_string(), "invalid type");
+    }
+
+    #[test]
+    fn schema_validate_fonts_simple() {
+        let schema = Schema::new("test", article_schema()).unwrap();
+
+        let doc_with_fonts = serde_json::json!({
+            "title": "My Document",
+            "fonts": {
+                "main": "Inter",
+                "mono": "JetBrains Mono",
+                "heading": "Open Sans"
+            }
+        });
+
+        let result = schema.validate(&doc_with_fonts);
+        assert!(
+            result.is_valid(),
+            "Simple fonts should be valid: {:?}",
+            result.errors
+        );
+    }
+
+    #[test]
+    fn schema_validate_fonts_full() {
+        let schema = Schema::new("test", article_schema()).unwrap();
+
+        let doc_with_fonts = serde_json::json!({
+            "title": "My Document",
+            "fonts": {
+                "main": {
+                    "family": "Inter",
+                    "size": "11pt"
+                },
+                "heading": {
+                    "family": "Open Sans",
+                    "size": "14pt",
+                    "weight": "bold"
+                },
+                "mono": {
+                    "family": "JetBrains Mono",
+                    "size": "9pt",
+                    "style": "normal"
+                }
+            }
+        });
+
+        let result = schema.validate(&doc_with_fonts);
+        assert!(
+            result.is_valid(),
+            "Full fonts should be valid: {:?}",
+            result.errors
+        );
+    }
+
+    #[test]
+    fn schema_validate_fonts_invalid_type() {
+        let schema = Schema::new("test", article_schema()).unwrap();
+
+        let doc_with_invalid_fonts = serde_json::json!({
+            "title": "My Document",
+            "fonts": {
+                "main": 123  // Should be string or object
+            }
+        });
+
+        let result = schema.validate(&doc_with_invalid_fonts);
+        assert!(!result.is_valid(), "Fonts with invalid type should fail");
     }
 }
