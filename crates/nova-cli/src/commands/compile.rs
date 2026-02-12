@@ -223,6 +223,7 @@ pub async fn compile(args: CompileArgs) -> Result<()> {
     if !all_font_paths.is_empty() {
         debug!("Setting font paths: {:?}", all_font_paths);
         set_font_paths(all_font_paths);
+    }
     // Generate Python figures if configured
     if !args.no_python {
         // Provision pyplot.typ helper
