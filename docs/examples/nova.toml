@@ -1,0 +1,61 @@
+# Nova project configuration
+# This file configures NovaType behavior for your project.
+
+# Document metadata (optional, can also be in frontmatter)
+[document]
+title = "My Research Article"
+author = "John Doe"
+template = "ieee-article"
+
+# Python figure integration
+[python]
+# Python executable - use "python3" on Unix, "python" on Windows
+# Can also be a full path to a specific Python installation
+python = "python"
+
+# Directory containing Python figure scripts
+# All @nova.figure decorated functions will be discovered here
+figures_dir = "figures"
+
+# Directory for cached SVG outputs
+# Generated figures are stored here to avoid re-generation
+cache_dir = ".nova/cache"
+
+# Virtual environment path (optional)
+# If set, Nova will use Python from this venv
+# venv = ".venv"
+
+# Additional paths to add to PYTHONPATH
+# Useful for importing shared modules
+python_path = ["src", "lib"]
+
+# Execution timeout in seconds
+# Figures taking longer than this will fail
+timeout = 60
+
+# Environment variables for Python execution
+[python.env]
+MPLBACKEND = "Agg"
+# CUDA_VISIBLE_DEVICES = "0"
+
+# Citation management
+[citations]
+# BibTeX file path
+bibliography = "references.bib"
+
+# Citation style (apa, ieee, chicago, nature, acm, mla)
+style = "ieee"
+
+# Enable CrossRef API for DOI lookups
+crossref_enabled = true
+
+# Compilation options
+[compile]
+# Output format (pdf, svg, png)
+format = "pdf"
+
+# Open output after compilation
+open = false
+
+# Font paths (additional directories to search for fonts)
+font_paths = ["fonts"]

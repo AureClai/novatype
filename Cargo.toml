@@ -24,6 +24,7 @@ novatype-cli = { path = "crates/nova-cli", version = "0.1.0" }
 nova-wasm = { path = "crates/nova-wasm", version = "0.1.0" }
 nova-font = { path = "crates/nova-font", version = "0.1.0" }
 nova-template = { path = "crates/nova-template", version = "0.1.0" }
+nova-python = { path = "crates/nova-python", version = "0.1.0" }
 
 # Typst from crates.io
 typst = "0.13"
@@ -70,6 +71,10 @@ zip = "0.6"
 sha2 = "0.10"
 hex = "0.4"
 url = "2.5"
+
+# Python integration
+walkdir = "2"
+regex = "1"
 
 # WASM
 wasm-bindgen = "0.2"
