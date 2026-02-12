@@ -1,0 +1,36 @@
+[package]
+name = "nova-python"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+categories.workspace = true
+keywords.workspace = true
+description = "Python integration for NovaType - execute Python code and capture figures"
+
+[dependencies]
+# Workspace dependencies
+anyhow.workspace = true
+thiserror.workspace = true
+serde = { workspace = true, features = ["derive"] }
+serde_json.workspace = true
+toml.workspace = true
+tracing.workspace = true
+tokio = { workspace = true, features = ["process", "fs", "io-util"] }
+sha2.workspace = true
+hex.workspace = true
+
+# Local dependencies
+novatype-core = { workspace = true }
+
+# Additional dependencies
+walkdir = "2"
+tempfile.workspace = true
+regex = "1"
+
+[dev-dependencies]
+tempfile.workspace = true
+pretty_assertions.workspace = true
+tokio = { workspace = true, features = ["rt-multi-thread", "macros"] }

@@ -1,0 +1,10 @@
+[package]
+name = "nova"
+version = "0.1.0"
+entrypoint = "lib.typ"
+authors = ["NovaType Contributors"]
+license = "MIT"
+description = "Python figure integration for NovaType"
+repository = "https://github.com/AureClai/novatype"
+keywords = ["figures", "python", "matplotlib", "visualization"]
+categories = ["visualization", "utility"]
