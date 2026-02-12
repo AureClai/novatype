@@ -60,7 +60,7 @@ pub struct InstallArgs {
     pub name: String,
 
     /// Specific variants to install (e.g., "regular", "700", "700italic").
-    #[arg(short, long)]
+    #[arg(long)]
     pub variants: Option<Vec<String>>,
 }
 
