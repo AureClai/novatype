@@ -1,7 +1,7 @@
 //! Integration tests for citation workflows.
 
-use nova_cite::{CitationManager, CitationStyle, Formatter};
 use nova_cite::bibtex::Bibliography;
+use nova_cite::{CitationManager, CitationStyle, Formatter};
 
 const SAMPLE_BIBTEX: &str = r#"
 @article{einstein1905,
@@ -49,7 +49,10 @@ fn access_entry_fields() {
     let entry = bib.get("einstein1905").unwrap();
 
     assert_eq!(entry.entry_type, "article");
-    assert_eq!(entry.title(), Some("On the Electrodynamics of Moving Bodies"));
+    assert_eq!(
+        entry.title(),
+        Some("On the Electrodynamics of Moving Bodies")
+    );
     assert_eq!(entry.author(), Some("Albert Einstein"));
     assert_eq!(entry.year(), Some("1905"));
 }
@@ -89,7 +92,10 @@ async fn citation_manager_local_resolve() {
 
     let entry = manager.resolve("einstein1905").await.unwrap();
     assert_eq!(entry.key, "einstein1905");
-    assert_eq!(entry.title(), Some("On the Electrodynamics of Moving Bodies"));
+    assert_eq!(
+        entry.title(),
+        Some("On the Electrodynamics of Moving Bodies")
+    );
 }
 
 /// Test citation manager with missing key.
@@ -158,9 +164,15 @@ async fn citation_manager_format() {
 /// Test style parsing.
 #[test]
 fn citation_style_from_name() {
-    assert_eq!(CitationStyle::from_name("ieee").unwrap(), CitationStyle::Ieee);
+    assert_eq!(
+        CitationStyle::from_name("ieee").unwrap(),
+        CitationStyle::Ieee
+    );
     assert_eq!(CitationStyle::from_name("APA").unwrap(), CitationStyle::Apa);
-    assert_eq!(CitationStyle::from_name("chicago").unwrap(), CitationStyle::Chicago);
+    assert_eq!(
+        CitationStyle::from_name("chicago").unwrap(),
+        CitationStyle::Chicago
+    );
 
     assert!(CitationStyle::from_name("unknown_style").is_err());
 }

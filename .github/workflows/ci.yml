@@ -65,6 +65,16 @@ jobs:
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Python dependencies
+        run: |
+          pip install matplotlib numpy
+          pip install -e python/nova
+
       - name: Cache cargo registry
         uses: actions/cache@v4
         with:

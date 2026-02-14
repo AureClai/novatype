@@ -22,7 +22,11 @@ fn validate_valid_article_metadata() {
     });
 
     let result = schema.validate(&valid_metadata);
-    assert!(result.is_valid(), "Expected valid, got errors: {:?}", result.errors);
+    assert!(
+        result.is_valid(),
+        "Expected valid, got errors: {:?}",
+        result.errors
+    );
 }
 
 /// Test schema validation with missing required field.
