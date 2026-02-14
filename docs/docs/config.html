@@ -56,6 +56,8 @@
           <div class="docs-nav-title">Features</div>
           <a href="/novatype/docs/citations.html" class="docs-nav-link">Citations</a>
           <a href="/novatype/docs/plots.html" class="docs-nav-link">Charts</a>
+          <a href="/novatype/docs/python-figures.html" class="docs-nav-link">Python Figures</a>
+          <a href="/novatype/docs/fonts.html" class="docs-nav-link">Fonts</a>
           <a href="/novatype/docs/templates.html" class="docs-nav-link">Templates</a>
           <a href="/novatype/docs/schemas.html" class="docs-nav-link">Validation</a>
         </div>
@@ -104,7 +106,13 @@
 
 <span class="token-property">[watch]</span>
 <span class="token-property">debounce</span> = <span class="token-number">300</span>  <span class="token-comment"># ms</span>
-<span class="token-property">clear</span> = <span class="token-keyword">true</span>    <span class="token-comment"># Clear the terminal</span></code></pre>
+<span class="token-property">clear</span> = <span class="token-keyword">true</span>    <span class="token-comment"># Clear the terminal</span>
+
+<span class="token-property">[python]</span>
+<span class="token-property">python</span> = <span class="token-string">"python"</span>
+<span class="token-property">figures_dir</span> = <span class="token-string">"figures"</span>
+<span class="token-property">cache_dir</span> = <span class="token-string">".nova/cache"</span>
+<span class="token-property">timeout</span> = <span class="token-number">60</span></code></pre>
 
       <h2>Configuration Sections</h2>
 
@@ -193,6 +201,30 @@
           <tr><td><code>debounce</code></td><td>int</td><td><code>300</code></td><td>Delay in ms before recompilation</td></tr>
           <tr><td><code>clear</code></td><td>bool</td><td><code>false</code></td><td>Clear the terminal</td></tr>
           <tr><td><code>open</code></td><td>bool</td><td><code>false</code></td><td>Open PDF automatically</td></tr>
+        </tbody>
+      </table>
+
+      <h3>[python]</h3>
+
+      <p>Configure Python figure generation. See <a href="/novatype/docs/python-figures.html">Python Figures</a> for a full guide.</p>
+
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th>Option</th>
+            <th>Type</th>
+            <th>Default</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><code>python</code></td><td>string</td><td><code>"python"</code></td><td>Python executable name or path</td></tr>
+          <tr><td><code>figures_dir</code></td><td>string</td><td><code>"figures"</code></td><td>Directory containing figure scripts</td></tr>
+          <tr><td><code>cache_dir</code></td><td>string</td><td><code>".nova/cache"</code></td><td>Directory for cached SVGs</td></tr>
+          <tr><td><code>timeout</code></td><td>int</td><td><code>60</code></td><td>Timeout per figure (seconds)</td></tr>
+          <tr><td><code>venv</code></td><td>string</td><td>&mdash;</td><td>Path to virtual environment</td></tr>
+          <tr><td><code>python_path</code></td><td>array</td><td><code>[]</code></td><td>Additional PYTHONPATH entries</td></tr>
+          <tr><td><code>env</code></td><td>table</td><td><code>{}</code></td><td>Environment variables for Python execution</td></tr>
         </tbody>
       </table>
 

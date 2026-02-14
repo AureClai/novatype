@@ -1,0 +1,14 @@
+# Nova project configuration for Python figures example
+
+[python]
+# Python executable
+python = "python"
+
+# Directory containing figure scripts
+figures_dir = "figures"
+
+# Cache directory for generated SVGs
+cache_dir = ".nova/cache"
+
+# Timeout for figure generation (seconds)
+timeout = 60

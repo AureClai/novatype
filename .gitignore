@@ -12,6 +12,11 @@
 .DS_Store
 Thumbs.db
 
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
 # Rust
 **/*.rs.bk
 Cargo.lock

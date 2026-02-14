@@ -34,6 +34,10 @@ pub struct WatchArgs {
     /// Font paths to include.
     #[arg(long = "font-path")]
     pub font_paths: Vec<PathBuf>,
+
+    /// Skip Python figure generation.
+    #[arg(long)]
+    pub no_python: bool,
 }
 
 /// Execute the watch command.
@@ -98,6 +102,7 @@ async fn run_compile(args: &WatchArgs) -> Result<()> {
         root: None,
         open: false,
         font_paths: args.font_paths.clone(),
+        no_python: args.no_python,
     };
 
     compile(compile_args).await
@@ -139,6 +144,7 @@ mod tests {
             debounce: 300,
             clear: false,
             font_paths: vec![],
+            no_python: true,
         };
 
         let result = watch(args).await;

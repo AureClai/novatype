@@ -59,6 +59,8 @@
           <div class="docs-nav-title">Features</div>
           <a href="/novatype/docs/citations.html" class="docs-nav-link">Citations</a>
           <a href="/novatype/docs/plots.html" class="docs-nav-link">Charts</a>
+          <a href="/novatype/docs/python-figures.html" class="docs-nav-link">Python Figures</a>
+          <a href="/novatype/docs/fonts.html" class="docs-nav-link">Fonts</a>
           <a href="/novatype/docs/templates.html" class="docs-nav-link">Templates</a>
           <a href="/novatype/docs/schemas.html" class="docs-nav-link">Validation</a>
         </div>
@@ -93,6 +95,7 @@ Commands:
   watch     Watch files and recompile automatically
   validate  Validate document metadata
   template  Manage templates
+  font      Manage fonts (Google Fonts integration)
 
 Options:
   -h, --help     Show help
@@ -170,6 +173,11 @@ Options:
             <td>Suppress non-error messages</td>
             <td><code>false</code></td>
           </tr>
+          <tr>
+            <td><code>--no-python</code></td>
+            <td>Skip Python figure generation</td>
+            <td><code>false</code></td>
+          </tr>
         </tbody>
       </table>
 
@@ -188,7 +196,10 @@ Options:
 <span class="token-function">$</span> nova compile main.typ -f png -o figure.png
 
 <span class="token-comment"># With custom fonts</span>
-<span class="token-function">$</span> nova compile main.typ --font-path ./fonts/</code></pre>
+<span class="token-function">$</span> nova compile main.typ --font-path ./fonts/
+
+<span class="token-comment"># Skip Python figures (use cached)</span>
+<span class="token-function">$</span> nova compile main.typ --no-python</code></pre>
 
       <!-- nova init -->
       <h2 id="init">nova init</h2>
@@ -446,6 +457,83 @@ Optional fields: abstract, keywords, bibliography
 
 <span class="token-comment"># Create a custom template</span>
 <span class="token-function">$</span> nova template new mon-template</code></pre>
+
+      <!-- nova font -->
+      <h2 id="font">nova font</h2>
+
+      <p>Manage fonts with Google Fonts integration. See the <a href="/novatype/docs/fonts.html">Fonts</a> page for a full guide.</p>
+
+      <h3>Subcommands</h3>
+
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th>Command</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>nova font search &lt;QUERY&gt;</code></td>
+            <td>Search Google Fonts by name</td>
+          </tr>
+          <tr>
+            <td><code>nova font search --category &lt;CAT&gt;</code></td>
+            <td>Search by category (<code>serif</code>, <code>sans-serif</code>, <code>display</code>, <code>handwriting</code>, <code>monospace</code>)</td>
+          </tr>
+          <tr>
+            <td><code>nova font install &lt;NAME&gt;</code></td>
+            <td>Install a font (all variants)</td>
+          </tr>
+          <tr>
+            <td><code>nova font install --variants &lt;LIST&gt;</code></td>
+            <td>Install specific variants only</td>
+          </tr>
+          <tr>
+            <td><code>nova font uninstall &lt;NAME&gt;</code></td>
+            <td>Remove an installed font</td>
+          </tr>
+          <tr>
+            <td><code>nova font list</code></td>
+            <td>List installed fonts</td>
+          </tr>
+          <tr>
+            <td><code>nova font info &lt;NAME&gt;</code></td>
+            <td>Show detailed font information</td>
+          </tr>
+          <tr>
+            <td><code>nova font bundle &lt;NAME&gt;</code></td>
+            <td>Install a curated font bundle (<code>academic</code>, <code>modern</code>, <code>monospace</code>, <code>classic</code>, <code>minimal</code>)</td>
+          </tr>
+          <tr>
+            <td><code>nova font bundle list</code></td>
+            <td>Show available bundles</td>
+          </tr>
+          <tr>
+            <td><code>nova font cache info</code></td>
+            <td>Show cache size and location</td>
+          </tr>
+          <tr>
+            <td><code>nova font cache clear</code></td>
+            <td>Clear font cache</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Examples</h3>
+
+      <pre><code><span class="token-comment"># Search and install a font</span>
+<span class="token-function">$</span> nova font search inter
+<span class="token-function">$</span> nova font install <span class="token-string">"Inter"</span>
+
+<span class="token-comment"># Install only regular and bold</span>
+<span class="token-function">$</span> nova font install <span class="token-string">"EB Garamond"</span> --variants regular,bold,italic
+
+<span class="token-comment"># Install a bundle</span>
+<span class="token-function">$</span> nova font bundle academic
+
+<span class="token-comment"># List what's installed</span>
+<span class="token-function">$</span> nova font list</code></pre>
 
       <h2>Environment variables</h2>
 
