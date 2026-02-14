@@ -16,7 +16,10 @@
 //   The result is shown here: #pyplot("results", width: 50%)
 
 /// The default cache directory for generated figures.
-#let nova-cache-dir = ".nova/cache"
+/// This file is provisioned to `.nova/pyplot.typ`, so paths are resolved
+/// relative to `.nova/`. Use `"cache"` (not `".nova/cache"`) to avoid
+/// path doubling (`.nova/.nova/cache/...`).
+#let nova-cache-dir = "cache"
 
 /// Load a Python-generated plot by name.
 ///
