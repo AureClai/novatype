@@ -88,9 +88,7 @@ impl PythonConfig {
         let config_path = project_dir.join("nova.toml");
 
         if !config_path.exists() {
-            return Err(Error::ConfigNotFound {
-                path: config_path,
-            });
+            return Err(Error::ConfigNotFound { path: config_path });
         }
 
         let content = std::fs::read_to_string(&config_path)?;

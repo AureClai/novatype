@@ -30,7 +30,7 @@ impl FigureDiscovery {
         {
             let path = entry.path();
 
-            if path.extension().map_or(false, |ext| ext == "py") {
+            if path.extension().is_some_and(|ext| ext == "py") {
                 let discovered = Self::scan_file(path)?;
                 figures.extend(discovered);
             }
@@ -63,17 +63,17 @@ impl FigureDiscovery {
             r#"@nova\.figure\(\s*["']([^"']+)["'](?:\s*,\s*depends\s*=\s*\[([^\]]*)\])?\s*\)\s*\r?\ndef\s+(\w+)"#,
         )?;
 
+        let dep_pattern = Regex::new(r#"["']([^"']+)["']"#)?;
+
         for caps in decorator_pattern.captures_iter(content) {
             let name = caps.get(1).unwrap().as_str().to_string();
             let function_name = caps.get(3).unwrap().as_str().to_string();
 
-            let mut figure = Figure::new(&name, source_file, &function_name)
-                .with_hash(source_hash);
+            let mut figure = Figure::new(&name, source_file, &function_name).with_hash(source_hash);
 
             // Parse dependencies if present
             if let Some(deps_match) = caps.get(2) {
                 let deps_str = deps_match.as_str();
-                let dep_pattern = Regex::new(r#"["']([^"']+)["']"#)?;
 
                 for dep_cap in dep_pattern.captures_iter(deps_str) {
                     let dep_path = dep_cap.get(1).unwrap().as_str();
@@ -115,12 +115,8 @@ def plot_sine():
     plt.plot(x, np.sin(x))
 "#;
 
-        let figures = FigureDiscovery::parse_figures(
-            content,
-            Path::new("test.py"),
-            "hash123",
-        )
-        .unwrap();
+        let figures =
+            FigureDiscovery::parse_figures(content, Path::new("test.py"), "hash123").unwrap();
 
         assert_eq!(figures.len(), 1);
         assert_eq!(figures[0].name, "sine-wave");
@@ -137,12 +133,8 @@ def plot_results():
     pass
 "#;
 
-        let figures = FigureDiscovery::parse_figures(
-            content,
-            Path::new("test.py"),
-            "hash123",
-        )
-        .unwrap();
+        let figures =
+            FigureDiscovery::parse_figures(content, Path::new("test.py"), "hash123").unwrap();
 
         assert_eq!(figures.len(), 1);
         assert_eq!(figures[0].name, "results");
@@ -171,12 +163,8 @@ def plot_three():
     pass
 "#;
 
-        let figures = FigureDiscovery::parse_figures(
-            content,
-            Path::new("test.py"),
-            "hash123",
-        )
-        .unwrap();
+        let figures =
+            FigureDiscovery::parse_figures(content, Path::new("test.py"), "hash123").unwrap();
 
         assert_eq!(figures.len(), 3);
         assert_eq!(figures[0].name, "fig1");

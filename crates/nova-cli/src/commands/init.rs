@@ -2,7 +2,7 @@
 
 use anyhow::{Context, Result};
 use clap::Args;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use tracing::info;
 
 /// Arguments for the init command.
@@ -290,7 +290,7 @@ Thumbs.db
 }
 
 /// Create Python figure support files.
-fn create_python_support(project_dir: &PathBuf) -> Result<()> {
+fn create_python_support(project_dir: &Path) -> Result<()> {
     // Create figures directory
     let figures_dir = project_dir.join("figures");
     std::fs::create_dir_all(&figures_dir)

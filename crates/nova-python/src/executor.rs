@@ -139,7 +139,12 @@ impl PythonExecutor {
     fn generate_runner_script(&self, figure: &Figure) -> String {
         let module_path = self.figure_module_path(figure);
         // Escape backslashes for Windows paths in Python strings
-        let cache_dir = self.config.cache_dir.display().to_string().replace('\\', "\\\\");
+        let cache_dir = self
+            .config
+            .cache_dir
+            .display()
+            .to_string()
+            .replace('\\', "\\\\");
         let figure_name = &figure.name;
         let function_name = &figure.function_name;
 
@@ -273,11 +278,7 @@ mod tests {
         };
         let executor = PythonExecutor::new(&config).unwrap();
 
-        let figure = Figure::new(
-            "test",
-            "/project/figures/analysis/plots.py",
-            "make_plot",
-        );
+        let figure = Figure::new("test", "/project/figures/analysis/plots.py", "make_plot");
 
         let (import_stmt, module_ref) = executor.figure_module_path(&figure);
 

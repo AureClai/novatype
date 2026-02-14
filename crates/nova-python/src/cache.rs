@@ -127,7 +127,7 @@ impl FigureCache {
         if self.cache_dir.exists() {
             for entry in std::fs::read_dir(&self.cache_dir)? {
                 let entry = entry?;
-                if entry.path().extension().map_or(false, |ext| ext == "svg") {
+                if entry.path().extension().is_some_and(|ext| ext == "svg") {
                     std::fs::remove_file(entry.path())?;
                 }
             }
