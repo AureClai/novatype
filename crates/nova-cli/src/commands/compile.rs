@@ -1,12 +1,14 @@
 //! Compile command implementation.
 
+use crate::diagnostics;
 use crate::OutputFormat;
 use anyhow::{Context, Result};
 use clap::Args;
 use nova_font::FontCache;
 use nova_schema::FrontmatterParser;
 use novatype_core::{
-    compile_pdf, compile_svg, load_data_files, set_font_paths, FontConfig, NativeWorld, NovaConfig,
+    compile_pdf_rich, compile_svg_rich, load_data_files, set_font_paths, FontConfig, NativeWorld,
+    NovaConfig,
 };
 use serde::Deserialize;
 use std::path::{Path, PathBuf};
@@ -184,8 +186,14 @@ pub async fn compile(args: CompileArgs) -> Result<()> {
     info!("Compiling document...");
     match format {
         OutputFormat::Pdf => {
-            let pdf = compile_pdf(&world)
-                .map_err(|errors| anyhow::anyhow!("Compilation failed:\n{}", errors.join("\n")))?;
+            let result = compile_pdf_rich(&world);
+            for w in &result.warnings {
+                diagnostics::render_warning(w);
+            }
+            let pdf = match result.output {
+                Ok(pdf) => pdf,
+                Err(diags) => return diagnostics::render_errors(&diags),
+            };
 
             // Ensure output directory exists
             if let Some(parent) = output_path.parent() {
@@ -197,8 +205,14 @@ pub async fn compile(args: CompileArgs) -> Result<()> {
                 .with_context(|| format!("Failed to write {:?}", output_path))?;
         }
         OutputFormat::Svg => {
-            let pages = compile_svg(&world)
-                .map_err(|errors| anyhow::anyhow!("Compilation failed:\n{}", errors.join("\n")))?;
+            let result = compile_svg_rich(&world);
+            for w in &result.warnings {
+                diagnostics::render_warning(w);
+            }
+            let pages = match result.output {
+                Ok(pages) => pages,
+                Err(diags) => return diagnostics::render_errors(&diags),
+            };
 
             // Ensure output directory exists
             if let Some(parent) = output_path.parent() {
@@ -224,8 +238,14 @@ pub async fn compile(args: CompileArgs) -> Result<()> {
         }
         OutputFormat::Png => {
             // PNG: compile to SVG first (PNG not yet implemented)
-            let pages = compile_svg(&world)
-                .map_err(|errors| anyhow::anyhow!("Compilation failed:\n{}", errors.join("\n")))?;
+            let result = compile_svg_rich(&world);
+            for w in &result.warnings {
+                diagnostics::render_warning(w);
+            }
+            let pages = match result.output {
+                Ok(pages) => pages,
+                Err(diags) => return diagnostics::render_errors(&diags),
+            };
 
             let svg_path = output_path.with_extension("svg");
             if let Some(parent) = svg_path.parent() {

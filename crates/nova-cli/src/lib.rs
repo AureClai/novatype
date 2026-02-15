@@ -25,6 +25,7 @@
 //! ```
 
 pub mod commands;
+pub mod diagnostics;
 
 use anyhow::Result;
 use clap::{Parser, Subcommand};
