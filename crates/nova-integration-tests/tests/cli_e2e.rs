@@ -6,11 +6,26 @@
 use assert_cmd::Command;
 use predicates::prelude::*;
 use std::fs;
+use std::sync::Once;
 use tempfile::TempDir;
+
+/// Ensure the `nova` binary is built before tests run.
+static BUILD_NOVA: Once = Once::new();
+
+fn ensure_nova_built() {
+    BUILD_NOVA.call_once(|| {
+        let status = std::process::Command::new("cargo")
+            .args(["build", "-p", "novatype-cli"])
+            .status()
+            .expect("failed to run cargo build");
+        assert!(status.success(), "cargo build -p novatype-cli failed");
+    });
+}
 
 /// Helper to get a `nova` command.
 fn nova() -> Command {
-    #[allow(deprecated)] // cargo_bin_cmd! macro not yet stable across all platforms
+    ensure_nova_built();
+    #[allow(deprecated)]
     Command::cargo_bin("nova").expect("nova binary not found")
 }
 
