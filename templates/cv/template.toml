@@ -1,0 +1,42 @@
+[template]
+name = "cv"
+display_name = "Curriculum Vitae"
+description = "Clean, modern CV with sidebar layout for contact details and skills"
+version = "1.0.0"
+authors = ["NovaType Team"]
+category = "cv"
+
+[files]
+main = "main.typ"
+
+[metadata_schema]
+required = ["name"]
+
+[metadata_schema.properties.name]
+type = "string"
+description = "Full name"
+
+[metadata_schema.properties.title]
+type = "string"
+description = "Professional title or tagline"
+
+[metadata_schema.properties.email]
+type = "string"
+format = "email"
+description = "Contact email"
+
+[metadata_schema.properties.phone]
+type = "string"
+description = "Phone number"
+
+[metadata_schema.properties.location]
+type = "string"
+description = "City, Country"
+
+[metadata_schema.properties.website]
+type = "string"
+description = "Personal website URL"
+
+[metadata_schema.properties.linkedin]
+type = "string"
+description = "LinkedIn profile URL"
