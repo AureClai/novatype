@@ -12,13 +12,13 @@ path = "src/lib.rs"
 
 [dependencies]
 novatype-core = { workspace = true }
+novatype-cli = { workspace = true }  # Binary dep: ensures `nova` is built and CARGO_BIN_EXE_nova is set
 nova-schema = { workspace = true, features = ["validation"] }
 nova-cite = { workspace = true }
 nova-python = { workspace = true }
 nova-font = { workspace = true }
 
 [dev-dependencies]
-novatype-cli = { workspace = true }  # Needed so assert_cmd can find the `nova` binary
 assert_cmd = { workspace = true }
 predicates = { workspace = true }
 tempfile = { workspace = true }
