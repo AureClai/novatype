@@ -4,120 +4,13 @@ use crate::OutputFormat;
 use anyhow::{Context, Result};
 use clap::Args;
 use nova_font::FontCache;
-use nova_python::PythonConfig;
 use nova_schema::FrontmatterParser;
-use novatype_core::{compile_pdf, compile_svg, set_font_paths, NativeWorld};
+use novatype_core::{
+    compile_pdf, compile_svg, load_data_files, set_font_paths, FontConfig, NativeWorld, NovaConfig,
+};
 use serde::Deserialize;
 use std::path::{Path, PathBuf};
 use tracing::{debug, info, warn};
-
-/// Single font specification - can be a simple string or full spec.
-#[derive(Debug, Clone, Deserialize)]
-#[serde(untagged)]
-pub enum FontSpec {
-    /// Simple font family name.
-    Simple(String),
-    /// Full font specification with size, weight, etc.
-    Full {
-        family: String,
-        #[serde(default)]
-        size: Option<String>,
-        #[serde(default)]
-        weight: Option<String>,
-        #[serde(default)]
-        style: Option<String>,
-    },
-}
-
-impl FontSpec {
-    /// Get the font family name.
-    #[allow(dead_code)]
-    pub fn family(&self) -> &str {
-        match self {
-            FontSpec::Simple(f) => f,
-            FontSpec::Full { family, .. } => family,
-        }
-    }
-
-    /// Generate Typst arguments for this font spec.
-    pub fn to_typst_args(&self) -> String {
-        match self {
-            FontSpec::Simple(family) => format!("font: \"{}\"", family),
-            FontSpec::Full {
-                family,
-                size,
-                weight,
-                style,
-            } => {
-                let mut args = vec![format!("font: \"{}\"", family)];
-                if let Some(s) = size {
-                    args.push(format!("size: {}", s));
-                }
-                if let Some(w) = weight {
-                    args.push(format!("weight: \"{}\"", w));
-                }
-                if let Some(st) = style {
-                    args.push(format!("style: \"{}\"", st));
-                }
-                args.join(", ")
-            }
-        }
-    }
-}
-
-/// Font configuration from frontmatter.
-#[derive(Debug, Clone, Default, Deserialize)]
-pub struct FontConfig {
-    /// Main body font.
-    pub main: Option<FontSpec>,
-    /// Font for headings.
-    pub heading: Option<FontSpec>,
-    /// Monospace font for code.
-    pub mono: Option<FontSpec>,
-    /// Font for math expressions.
-    pub math: Option<FontSpec>,
-}
-
-impl FontConfig {
-    /// Check if any font is configured.
-    pub fn has_fonts(&self) -> bool {
-        self.main.is_some() || self.heading.is_some() || self.mono.is_some() || self.math.is_some()
-    }
-
-    /// Generate Typst code to set fonts.
-    pub fn to_typst_code(&self) -> String {
-        let mut code = String::new();
-
-        if let Some(ref main) = self.main {
-            code.push_str(&format!("#set text({})\n", main.to_typst_args()));
-        }
-
-        if let Some(ref mono) = self.mono {
-            code.push_str(&format!("#show raw: set text({})\n", mono.to_typst_args()));
-        }
-
-        if let Some(ref heading) = self.heading {
-            code.push_str(&format!(
-                "#show heading: set text({})\n",
-                heading.to_typst_args()
-            ));
-        }
-
-        // Math font
-        if let Some(ref math) = self.math {
-            code.push_str(&format!(
-                "#show math.equation: set text({})\n",
-                math.to_typst_args()
-            ));
-        }
-
-        if !code.is_empty() {
-            code.push('\n');
-        }
-
-        code
-    }
-}
 
 /// Document metadata from frontmatter (partial, for font extraction).
 #[derive(Debug, Clone, Default, Deserialize)]
@@ -130,16 +23,18 @@ struct DocumentMetadata {
 #[derive(Args, Debug)]
 pub struct CompileArgs {
     /// Input file to compile.
-    #[arg(required = true)]
-    pub input: PathBuf,
+    /// If omitted, uses [document].main from nova.toml.
+    #[arg()]
+    pub input: Option<PathBuf>,
 
     /// Output file path.
+    /// If omitted, uses [output] section from nova.toml or defaults to input stem + format.
     #[arg(short, long)]
     pub output: Option<PathBuf>,
 
-    /// Output format.
-    #[arg(short, long, value_enum, default_value = "pdf")]
-    pub format: OutputFormat,
+    /// Output format (overrides nova.toml [output].format).
+    #[arg(short, long, value_enum)]
+    pub format: Option<OutputFormat>,
 
     /// Root directory for resolving paths.
     #[arg(long)]
@@ -149,7 +44,7 @@ pub struct CompileArgs {
     #[arg(long)]
     pub open: bool,
 
-    /// Font paths to include.
+    /// Additional font paths (merged with nova.toml [fonts].paths).
     #[arg(long = "font-path")]
     pub font_paths: Vec<PathBuf>,
 
@@ -164,43 +59,86 @@ pub struct CompileArgs {
 ///
 /// Returns an error if compilation fails.
 pub async fn compile(args: CompileArgs) -> Result<()> {
-    info!("Compiling {:?}", args.input);
+    // Determine root directory (for config loading and path resolution)
+    let root = determine_root(&args)?;
+
+    // Load nova.toml configuration (defaults if not found)
+    let config = NovaConfig::from_project_or_default(&root).unwrap_or_else(|e| {
+        warn!("Could not load nova.toml: {}", e);
+        NovaConfig::default()
+    });
+
+    // Resolve the input file: CLI arg > config [document].main
+    let input = resolve_input(&args, &config)?;
+
+    info!("Compiling {:?}", input);
 
     // Validate input file exists
-    if !args.input.exists() {
-        anyhow::bail!("Input file not found: {:?}", args.input);
+    if !input.exists() {
+        anyhow::bail!("Input file not found: {:?}", input);
     }
 
-    // Determine output path
-    let output_path = args.output.unwrap_or_else(|| {
-        let stem = args.input.file_stem().unwrap_or_default();
-        let ext = match args.format {
-            OutputFormat::Pdf => "pdf",
-            OutputFormat::Svg => "svg",
-            OutputFormat::Png => "png",
-        };
-        args.input
-            .with_file_name(format!("{}.{}", stem.to_string_lossy(), ext))
+    // Resolve output format: CLI arg > config [output].format > pdf
+    let format = args.format.unwrap_or_else(|| {
+        config
+            .output_format_str()
+            .and_then(|s| match s {
+                "pdf" => Some(OutputFormat::Pdf),
+                "svg" => Some(OutputFormat::Svg),
+                "png" => Some(OutputFormat::Png),
+                _ => None,
+            })
+            .unwrap_or(OutputFormat::Pdf)
     });
+
+    // Resolve output path: CLI arg > derived from config [output].directory > input stem
+    let output_path = resolve_output(&args, &config, &input, format)?;
 
     // Read input file
-    let content = std::fs::read_to_string(&args.input)
-        .with_context(|| format!("Failed to read {:?}", args.input))?;
+    let content =
+        std::fs::read_to_string(&input).with_context(|| format!("Failed to read {:?}", input))?;
 
-    // Check for frontmatter and preprocess if needed
-    let processed_content = preprocess_content(&content)?;
+    // Build processed content: data injection + config fonts + frontmatter processing
+    let mut processed = String::new();
 
-    // Determine root directory
-    let root = args.root.unwrap_or_else(|| {
-        args.input
-            .parent()
-            .filter(|p| !p.as_os_str().is_empty())
-            .map(|p| p.to_path_buf())
-            .unwrap_or_else(|| std::env::current_dir().unwrap_or_else(|_| PathBuf::from(".")))
-    });
+    // 1. Inject data files from [data] section
+    if let Some(ref data) = config.data {
+        if !data.is_empty() {
+            match load_data_files(data, &root) {
+                Ok(data_code) => {
+                    debug!("Injected {} data variable(s)", data.len());
+                    processed.push_str(&data_code);
+                }
+                Err(e) => {
+                    warn!("Failed to load data files: {}", e);
+                }
+            }
+        }
+    }
 
-    // Collect font paths: user-provided + nova-font cache
+    // 2. Apply font config from nova.toml [fonts] section (frontmatter will override)
+    if let Some(ref fonts) = config.fonts {
+        if fonts.has_font_mappings() {
+            debug!("Applying font configuration from nova.toml");
+            processed.push_str(&fonts.to_typst_code());
+        }
+    }
+
+    // 3. Process frontmatter (strips it, applies font overrides from frontmatter)
+    let frontmatter_processed = preprocess_content(&content)?;
+    processed.push_str(&frontmatter_processed);
+
+    // Collect font paths: CLI args + config [fonts].paths + nova-font cache
     let mut all_font_paths = args.font_paths.clone();
+
+    // Add font paths from nova.toml [fonts].paths
+    if let Some(ref fonts) = config.fonts {
+        for path in &fonts.paths {
+            if !all_font_paths.contains(path) {
+                all_font_paths.push(path.clone());
+            }
+        }
+    }
 
     // Add fonts from nova-font cache
     match FontCache::new() {
@@ -224,6 +162,7 @@ pub async fn compile(args: CompileArgs) -> Result<()> {
         debug!("Setting font paths: {:?}", all_font_paths);
         set_font_paths(all_font_paths);
     }
+
     // Generate Python figures if configured
     if !args.no_python {
         // Provision pyplot.typ helper
@@ -231,7 +170,7 @@ pub async fn compile(args: CompileArgs) -> Result<()> {
             warn!("Failed to provision pyplot.typ: {}", e);
         }
 
-        if let Err(e) = generate_python_figures(&root).await {
+        if let Err(e) = generate_python_figures(&root, &config).await {
             // Don't fail compilation if Python is not configured
             debug!("Python figure generation skipped: {}", e);
         }
@@ -239,14 +178,20 @@ pub async fn compile(args: CompileArgs) -> Result<()> {
 
     // Create the native world
     debug!("Creating native world with root: {:?}", root);
-    let world = NativeWorld::from_source(&processed_content, &root);
+    let world = NativeWorld::from_source(&processed, &root);
 
     // Compile based on output format
     info!("Compiling document...");
-    match args.format {
+    match format {
         OutputFormat::Pdf => {
             let pdf = compile_pdf(&world)
                 .map_err(|errors| anyhow::anyhow!("Compilation failed:\n{}", errors.join("\n")))?;
+
+            // Ensure output directory exists
+            if let Some(parent) = output_path.parent() {
+                std::fs::create_dir_all(parent)
+                    .with_context(|| format!("Failed to create output directory {:?}", parent))?;
+            }
 
             std::fs::write(&output_path, &pdf)
                 .with_context(|| format!("Failed to write {:?}", output_path))?;
@@ -255,12 +200,16 @@ pub async fn compile(args: CompileArgs) -> Result<()> {
             let pages = compile_svg(&world)
                 .map_err(|errors| anyhow::anyhow!("Compilation failed:\n{}", errors.join("\n")))?;
 
+            // Ensure output directory exists
+            if let Some(parent) = output_path.parent() {
+                std::fs::create_dir_all(parent)
+                    .with_context(|| format!("Failed to create output directory {:?}", parent))?;
+            }
+
             if pages.len() == 1 {
-                // Single page, write directly
                 std::fs::write(&output_path, &pages[0])
                     .with_context(|| format!("Failed to write {:?}", output_path))?;
             } else {
-                // Multiple pages, write numbered files
                 let stem = output_path
                     .file_stem()
                     .unwrap_or_default()
@@ -274,12 +223,14 @@ pub async fn compile(args: CompileArgs) -> Result<()> {
             }
         }
         OutputFormat::Png => {
-            // PNG output: compile to SVG first, then convert
-            // For now, just produce SVG and warn
+            // PNG: compile to SVG first (PNG not yet implemented)
             let pages = compile_svg(&world)
                 .map_err(|errors| anyhow::anyhow!("Compilation failed:\n{}", errors.join("\n")))?;
 
             let svg_path = output_path.with_extension("svg");
+            if let Some(parent) = svg_path.parent() {
+                std::fs::create_dir_all(parent).ok();
+            }
             if pages.len() == 1 {
                 std::fs::write(&svg_path, &pages[0])
                     .with_context(|| format!("Failed to write {:?}", svg_path))?;
@@ -296,7 +247,7 @@ pub async fn compile(args: CompileArgs) -> Result<()> {
         }
     }
 
-    println!("Compiled: {:?} -> {:?}", args.input, output_path);
+    println!("Compiled: {:?} -> {:?}", input, output_path);
 
     // Open if requested
     if args.open {
@@ -304,6 +255,68 @@ pub async fn compile(args: CompileArgs) -> Result<()> {
     }
 
     Ok(())
+}
+
+/// Determine the root directory for the compilation.
+fn determine_root(args: &CompileArgs) -> Result<PathBuf> {
+    if let Some(ref root) = args.root {
+        return Ok(root.clone());
+    }
+
+    if let Some(ref input) = args.input {
+        return Ok(input
+            .parent()
+            .filter(|p| !p.as_os_str().is_empty())
+            .map(|p| p.to_path_buf())
+            .unwrap_or_else(|| std::env::current_dir().unwrap_or_else(|_| PathBuf::from("."))));
+    }
+
+    // No input specified — use current directory (config will provide input)
+    Ok(std::env::current_dir().unwrap_or_else(|_| PathBuf::from(".")))
+}
+
+/// Resolve the input file from CLI args or nova.toml config.
+fn resolve_input(args: &CompileArgs, config: &NovaConfig) -> Result<PathBuf> {
+    if let Some(ref input) = args.input {
+        return Ok(input.clone());
+    }
+
+    if let Some(main) = config.main_file() {
+        info!("Using main file from nova.toml: {:?}", main);
+        return Ok(main);
+    }
+
+    anyhow::bail!(
+        "No input file specified. Either pass a file argument or set [document].main in nova.toml"
+    )
+}
+
+/// Resolve the output path from CLI args, config, or defaults.
+fn resolve_output(
+    args: &CompileArgs,
+    config: &NovaConfig,
+    input: &Path,
+    format: OutputFormat,
+) -> Result<PathBuf> {
+    if let Some(ref output) = args.output {
+        return Ok(output.clone());
+    }
+
+    let ext = match format {
+        OutputFormat::Pdf => "pdf",
+        OutputFormat::Svg => "svg",
+        OutputFormat::Png => "png",
+    };
+    let stem = input.file_stem().unwrap_or_default();
+
+    // If config has an output directory, use it
+    if let Some(output_dir) = config.output_directory() {
+        let filename = format!("{}.{}", stem.to_string_lossy(), ext);
+        return Ok(output_dir.join(filename));
+    }
+
+    // Default: same directory as input
+    Ok(input.with_file_name(format!("{}.{}", stem.to_string_lossy(), ext)))
 }
 
 /// Preprocess content to handle NovaType frontmatter.
@@ -327,7 +340,7 @@ fn preprocess_content(content: &str) -> Result<String> {
             if let Some(ref meta) = metadata {
                 if let Some(ref fonts) = meta.fonts {
                     if fonts.has_fonts() {
-                        debug!("Applying font configuration: {:?}", fonts);
+                        debug!("Applying font configuration from frontmatter: {:?}", fonts);
                         output.push_str(&fonts.to_typst_code());
                     }
                 }
@@ -370,19 +383,15 @@ fn preprocess_content(content: &str) -> Result<String> {
 }
 
 /// Provision the pyplot.typ helper to .nova/ directory.
-///
-/// This ensures the pyplot function is available for importing Python figures.
 fn provision_pyplot(project_root: &Path) -> Result<()> {
     let nova_dir = project_root.join(".nova");
     let pyplot_path = nova_dir.join("pyplot.typ");
 
-    // Create .nova directory if it doesn't exist
     if !nova_dir.exists() {
         std::fs::create_dir_all(&nova_dir)
             .with_context(|| format!("Failed to create {:?}", nova_dir))?;
     }
 
-    // Write pyplot.typ (embedded content - single source of truth)
     let pyplot_content = include_str!("../../../../typst-packages/nova/lib.typ");
     std::fs::write(&pyplot_path, pyplot_content)
         .with_context(|| format!("Failed to write {:?}", pyplot_path))?;
@@ -392,30 +401,28 @@ fn provision_pyplot(project_root: &Path) -> Result<()> {
 }
 
 /// Generate Python figures if nova.toml configures Python integration.
-async fn generate_python_figures(project_root: &Path) -> Result<()> {
-    // Check if nova.toml exists and has Python configuration
-    let config = match PythonConfig::from_project(project_root) {
-        Ok(config) => config,
-        Err(nova_python::Error::ConfigNotFound { .. }) => {
-            // No nova.toml, Python not configured
-            return Ok(());
-        }
-        Err(e) => {
-            warn!("Failed to load Python config: {}", e);
+async fn generate_python_figures(project_root: &Path, config: &NovaConfig) -> Result<()> {
+    // Use python config from the already-loaded NovaConfig
+    let python_config = match config.python {
+        Some(ref py) => py.clone(),
+        None => {
+            debug!("No [python] section in nova.toml");
             return Ok(());
         }
     };
 
     // Check if figures directory exists
-    if !config.figures_dir.exists() {
-        debug!("No figures directory found at {:?}", config.figures_dir);
+    if !python_config.figures_dir.exists() {
+        debug!(
+            "No figures directory found at {:?}",
+            python_config.figures_dir
+        );
         return Ok(());
     }
 
     info!("Generating Python figures...");
 
-    // Create Nova Python instance and generate figures
-    let nova = nova_python::NovaPython::new(config)?;
+    let nova = nova_python::NovaPython::new(python_config)?;
     let registry = nova.generate_figures().await?;
 
     if registry.is_empty() {
@@ -426,6 +433,10 @@ async fn generate_python_figures(project_root: &Path) -> Result<()> {
             debug!("  {} -> {:?}", name, path);
         }
     }
+
+    // Also provision pyplot even if there's no nova.toml [python],
+    // the user might have it in their document
+    let _unused = project_root;
 
     Ok(())
 }
@@ -467,9 +478,9 @@ mod tests {
     #[tokio::test]
     async fn compile_missing_file_fails() {
         let args = CompileArgs {
-            input: PathBuf::from("/nonexistent/file.typ"),
+            input: Some(PathBuf::from("/nonexistent/file.typ")),
             output: None,
-            format: OutputFormat::Pdf,
+            format: None,
             root: None,
             open: false,
             font_paths: vec![],
@@ -486,13 +497,12 @@ mod tests {
         let input_path = temp_dir.path().join("test.typ");
         let output_path = temp_dir.path().join("test.pdf");
 
-        // Write valid Typst content
         std::fs::write(&input_path, "Hello, world!").unwrap();
 
         let args = CompileArgs {
-            input: input_path,
+            input: Some(input_path),
             output: Some(output_path.clone()),
-            format: OutputFormat::Pdf,
+            format: None,
             root: None,
             open: false,
             font_paths: vec![],
@@ -503,7 +513,6 @@ mod tests {
         assert!(result.is_ok(), "Compilation failed: {:?}", result);
         assert!(output_path.exists(), "Output file not created");
 
-        // Verify PDF magic bytes
         let content = std::fs::read(&output_path).unwrap();
         assert_eq!(&content[0..5], b"%PDF-", "Not a valid PDF");
     }
@@ -572,67 +581,10 @@ Hello content"#;
     }
 
     #[test]
-    fn font_config_simple_to_typst() {
-        let config = FontConfig {
-            main: Some(FontSpec::Simple("Inter".to_string())),
-            heading: Some(FontSpec::Simple("Open Sans".to_string())),
-            mono: Some(FontSpec::Simple("Fira Code".to_string())),
-            math: None,
-        };
-
-        let code = config.to_typst_code();
-
-        assert!(code.contains("#set text(font: \"Inter\")"));
-        assert!(code.contains("#show heading: set text(font: \"Open Sans\")"));
-        assert!(code.contains("#show raw: set text(font: \"Fira Code\")"));
-    }
-
-    #[test]
-    fn font_config_full_to_typst() {
-        let config = FontConfig {
-            main: Some(FontSpec::Full {
-                family: "Inter".to_string(),
-                size: Some("11pt".to_string()),
-                weight: None,
-                style: None,
-            }),
-            heading: Some(FontSpec::Full {
-                family: "Open Sans".to_string(),
-                size: Some("14pt".to_string()),
-                weight: Some("bold".to_string()),
-                style: None,
-            }),
-            mono: None,
-            math: None,
-        };
-
-        let code = config.to_typst_code();
-
-        assert!(code.contains("#set text(font: \"Inter\", size: 11pt)"));
-        assert!(code.contains(
-            "#show heading: set text(font: \"Open Sans\", size: 14pt, weight: \"bold\")"
-        ));
-    }
-
-    #[test]
     fn font_config_empty() {
         let config = FontConfig::default();
         assert!(!config.has_fonts());
         assert!(config.to_typst_code().is_empty());
-    }
-
-    #[test]
-    fn font_spec_family() {
-        let simple = FontSpec::Simple("Inter".to_string());
-        assert_eq!(simple.family(), "Inter");
-
-        let full = FontSpec::Full {
-            family: "Open Sans".to_string(),
-            size: Some("12pt".to_string()),
-            weight: None,
-            style: None,
-        };
-        assert_eq!(full.family(), "Open Sans");
     }
 
     #[tokio::test]
@@ -644,9 +596,9 @@ Hello content"#;
         std::fs::write(&input_path, "Hello SVG!").unwrap();
 
         let args = CompileArgs {
-            input: input_path,
+            input: Some(input_path),
             output: Some(output_path.clone()),
-            format: OutputFormat::Svg,
+            format: Some(OutputFormat::Svg),
             root: None,
             open: false,
             font_paths: vec![],
@@ -659,5 +611,112 @@ Hello content"#;
 
         let content = std::fs::read_to_string(&output_path).unwrap();
         assert!(content.contains("<svg"), "Not a valid SVG");
+    }
+
+    #[tokio::test]
+    async fn compile_uses_nova_toml_defaults() {
+        let temp_dir = TempDir::new().unwrap();
+
+        // Create nova.toml with document.main
+        std::fs::write(
+            temp_dir.path().join("nova.toml"),
+            r#"
+[document]
+main = "main.typ"
+
+[output]
+format = "pdf"
+directory = "build"
+"#,
+        )
+        .unwrap();
+
+        // Create main.typ
+        std::fs::write(temp_dir.path().join("main.typ"), "Hello from config!").unwrap();
+
+        // Create build directory
+        std::fs::create_dir_all(temp_dir.path().join("build")).unwrap();
+
+        let args = CompileArgs {
+            input: None, // Should use nova.toml [document].main
+            output: None,
+            format: None,
+            root: Some(temp_dir.path().to_path_buf()),
+            open: false,
+            font_paths: vec![],
+            no_python: true,
+        };
+
+        let result = compile(args).await;
+        assert!(result.is_ok(), "Compilation failed: {:?}", result);
+
+        let output = temp_dir.path().join("build/main.pdf");
+        assert!(output.exists(), "Output should be in build/ directory");
+    }
+
+    #[test]
+    fn resolve_input_from_config() {
+        let config = NovaConfig {
+            document: Some(novatype_core::config::DocumentConfig {
+                main: Some(PathBuf::from("/project/main.typ")),
+                template: None,
+            }),
+            ..Default::default()
+        };
+
+        let args = CompileArgs {
+            input: None,
+            output: None,
+            format: None,
+            root: None,
+            open: false,
+            font_paths: vec![],
+            no_python: true,
+        };
+
+        let result = resolve_input(&args, &config).unwrap();
+        assert_eq!(result, PathBuf::from("/project/main.typ"));
+    }
+
+    #[test]
+    fn resolve_input_cli_overrides_config() {
+        let config = NovaConfig {
+            document: Some(novatype_core::config::DocumentConfig {
+                main: Some(PathBuf::from("/project/main.typ")),
+                template: None,
+            }),
+            ..Default::default()
+        };
+
+        let args = CompileArgs {
+            input: Some(PathBuf::from("/other/file.typ")),
+            output: None,
+            format: None,
+            root: None,
+            open: false,
+            font_paths: vec![],
+            no_python: true,
+        };
+
+        let result = resolve_input(&args, &config).unwrap();
+        assert_eq!(result, PathBuf::from("/other/file.typ"));
+    }
+
+    #[test]
+    fn resolve_input_no_config_no_arg_fails() {
+        let config = NovaConfig::default();
+
+        let args = CompileArgs {
+            input: None,
+            output: None,
+            format: None,
+            root: None,
+            open: false,
+            font_paths: vec![],
+            no_python: true,
+        };
+
+        let result = resolve_input(&args, &config);
+        assert!(result.is_err());
     }
 }

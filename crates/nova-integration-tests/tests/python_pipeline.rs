@@ -3,7 +3,7 @@
 //! These tests require Python + matplotlib + nova to be installed.
 //! They skip gracefully if the environment is not available.
 
-use nova_python::{FigureDiscovery, NovaPython, PythonConfig};
+use nova_python::{load_python_config, FigureDiscovery, NovaPython};
 use std::path::PathBuf;
 use tempfile::TempDir;
 
@@ -96,7 +96,7 @@ async fn python_full_pipeline_generates_svg() {
     let temp_dir = TempDir::new().unwrap();
     let project_root = setup_python_project(&temp_dir);
 
-    let config = PythonConfig::from_project(&project_root).unwrap();
+    let config = load_python_config(&project_root).unwrap();
     let nova = NovaPython::new(config).unwrap();
     let registry = nova.generate_figures().await.unwrap();
 
@@ -131,7 +131,7 @@ async fn python_cache_avoids_regeneration() {
     let project_root = setup_python_project(&temp_dir);
 
     // First generation
-    let config = PythonConfig::from_project(&project_root).unwrap();
+    let config = load_python_config(&project_root).unwrap();
     let nova = NovaPython::new(config).unwrap();
     let _ = nova.generate_figures().await.unwrap();
 
@@ -145,7 +145,7 @@ async fn python_cache_avoids_regeneration() {
     std::thread::sleep(std::time::Duration::from_millis(100));
 
     // Second generation (should use cache)
-    let config2 = PythonConfig::from_project(&project_root).unwrap();
+    let config2 = load_python_config(&project_root).unwrap();
     let nova2 = NovaPython::new(config2).unwrap();
     let _ = nova2.generate_figures().await.unwrap();
 
@@ -164,7 +164,7 @@ async fn python_config_from_project_works() {
         return;
     }
 
-    let config = PythonConfig::from_project(&fixture);
+    let config = load_python_config(&fixture);
     assert!(config.is_ok(), "Should parse config: {:?}", config.err());
 
     let config = config.unwrap();
@@ -175,6 +175,6 @@ async fn python_config_from_project_works() {
 #[test]
 fn python_config_missing_toml_returns_error() {
     let temp_dir = TempDir::new().unwrap();
-    let result = PythonConfig::from_project(temp_dir.path());
+    let result = load_python_config(temp_dir.path());
     assert!(result.is_err(), "Should fail without nova.toml");
 }
