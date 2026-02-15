@@ -1,0 +1,54 @@
+[template]
+name = "letter"
+display_name = "Formal Letter"
+description = "Clean formal letter with sender, recipient, date, and signature block"
+version = "1.0.0"
+authors = ["NovaType Team"]
+category = "letter"
+
+[files]
+main = "main.typ"
+
+[metadata_schema]
+required = ["sender_name", "recipient_name"]
+
+[metadata_schema.properties.sender_name]
+type = "string"
+description = "Sender full name"
+
+[metadata_schema.properties.sender_address]
+type = "string"
+description = "Sender address (multi-line)"
+
+[metadata_schema.properties.sender_email]
+type = "string"
+format = "email"
+description = "Sender email"
+
+[metadata_schema.properties.sender_phone]
+type = "string"
+description = "Sender phone"
+
+[metadata_schema.properties.recipient_name]
+type = "string"
+description = "Recipient full name"
+
+[metadata_schema.properties.recipient_address]
+type = "string"
+description = "Recipient address (multi-line)"
+
+[metadata_schema.properties.date]
+type = "string"
+description = "Letter date"
+
+[metadata_schema.properties.subject]
+type = "string"
+description = "Letter subject line"
+
+[metadata_schema.properties.salutation]
+type = "string"
+description = "Opening salutation (e.g., Dear Mr. Smith)"
+
+[metadata_schema.properties.closing]
+type = "string"
+description = "Closing phrase (e.g., Sincerely)"

@@ -41,16 +41,20 @@ jobs:
       - name: Package binary (Unix)
         if: runner.os != 'Windows'
         run: |
-          cd target/${{ matrix.target }}/release
-          tar -czvf nova-${{ matrix.target }}.tar.gz ${{ matrix.artifact }}
-          mv nova-${{ matrix.target }}.tar.gz ../../../
+          mkdir -p staging
+          cp target/${{ matrix.target }}/release/${{ matrix.artifact }} staging/
+          cp -r templates staging/templates
+          cd staging
+          tar -czvf ../nova-${{ matrix.target }}.tar.gz ${{ matrix.artifact }} templates/
 
       - name: Package binary (Windows)
         if: runner.os == 'Windows'
         run: |
-          cd target/${{ matrix.target }}/release
-          7z a nova-${{ matrix.target }}.zip ${{ matrix.artifact }}
-          mv nova-${{ matrix.target }}.zip ../../../
+          mkdir staging
+          cp target/${{ matrix.target }}/release/${{ matrix.artifact }} staging/
+          cp -r templates staging/templates
+          cd staging
+          7z a ../nova-${{ matrix.target }}.zip ${{ matrix.artifact }} templates/
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4

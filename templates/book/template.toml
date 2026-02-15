@@ -1,0 +1,59 @@
+[template]
+name = "book"
+display_name = "Book / Thesis"
+description = "Book or thesis template with chapters, parts, and wider inner margins for binding"
+version = "1.0.0"
+authors = ["NovaType Team"]
+category = "book"
+
+[files]
+main = "main.typ"
+
+[metadata_schema]
+required = ["title"]
+
+[metadata_schema.properties.title]
+type = "string"
+minLength = 1
+description = "Book title"
+
+[metadata_schema.properties.subtitle]
+type = "string"
+description = "Book subtitle"
+
+[metadata_schema.properties.authors]
+type = "array"
+description = "List of authors"
+
+[metadata_schema.properties.authors.items]
+type = "object"
+required = ["name"]
+
+[metadata_schema.properties.authors.items.properties.name]
+type = "string"
+
+[metadata_schema.properties.publisher]
+type = "string"
+description = "Publisher name"
+
+[metadata_schema.properties.date]
+type = "string"
+description = "Publication date or year"
+
+[metadata_schema.properties.abstract]
+type = "string"
+description = "Book summary or preface text"
+
+[[options]]
+name = "paper"
+label = "Paper Size"
+description = "Page format"
+type = "string"
+default = "a4"
+
+[[options]]
+name = "toc"
+label = "Table of Contents"
+description = "Include a table of contents"
+type = "boolean"
+default = true
