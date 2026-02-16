@@ -1,0 +1,44 @@
+[template]
+name = "presentation"
+display_name = "Presentation Slides"
+description = "Minimal slide deck — each level-1 heading starts a new slide"
+version = "1.0.0"
+authors = ["NovaType Team"]
+category = "slides"
+
+[files]
+main = "main.typ"
+
+[metadata_schema]
+required = ["title"]
+
+[metadata_schema.properties.title]
+type = "string"
+minLength = 1
+description = "Presentation title"
+
+[metadata_schema.properties.subtitle]
+type = "string"
+description = "Presentation subtitle"
+
+[metadata_schema.properties.authors]
+type = "array"
+description = "Presenter(s)"
+
+[metadata_schema.properties.authors.items]
+type = "object"
+required = ["name"]
+
+[metadata_schema.properties.authors.items.properties.name]
+type = "string"
+
+[metadata_schema.properties.date]
+type = "string"
+description = "Presentation date"
+
+[[options]]
+name = "aspect"
+label = "Aspect Ratio"
+description = "Slide aspect ratio"
+type = "string"
+default = "16-9"

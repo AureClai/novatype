@@ -1,0 +1,67 @@
+[template]
+name = "report"
+display_name = "Professional Report"
+description = "Clean professional report with cover page, table of contents, and numbered sections"
+version = "1.0.0"
+authors = ["NovaType Team"]
+category = "report"
+
+[files]
+main = "main.typ"
+
+[metadata_schema]
+required = ["title"]
+
+[metadata_schema.properties.title]
+type = "string"
+minLength = 1
+description = "Report title"
+
+[metadata_schema.properties.subtitle]
+type = "string"
+description = "Report subtitle"
+
+[metadata_schema.properties.authors]
+type = "array"
+description = "List of authors"
+
+[metadata_schema.properties.authors.items]
+type = "object"
+required = ["name"]
+
+[metadata_schema.properties.authors.items.properties.name]
+type = "string"
+
+[metadata_schema.properties.authors.items.properties.role]
+type = "string"
+description = "Author role or department"
+
+[metadata_schema.properties.organization]
+type = "string"
+description = "Organization name"
+
+[metadata_schema.properties.date]
+type = "string"
+description = "Report date"
+
+[metadata_schema.properties.version]
+type = "string"
+description = "Document version"
+
+[metadata_schema.properties.abstract]
+type = "string"
+description = "Executive summary"
+
+[[options]]
+name = "toc"
+label = "Table of Contents"
+description = "Include a table of contents"
+type = "boolean"
+default = true
+
+[[options]]
+name = "cover"
+label = "Cover Page"
+description = "Include a cover page"
+type = "boolean"
+default = true

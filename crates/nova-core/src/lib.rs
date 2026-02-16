@@ -35,6 +35,10 @@ pub use compiler::{Compiler, CompilerConfig};
 pub use config::{ConfigError, FontConfig, FontSpec, FontsConfig, NovaConfig, PythonConfig};
 pub use data_loader::load_data_files;
 pub use document::Document;
-pub use error::{Error, Result};
-pub use native_world::{compile_pdf, compile_svg, set_font_paths, NativeWorld};
+pub use error::{
+    CompilationResult, DiagnosticLocation, DiagnosticSeverity, Error, NovaDiagnostic, Result,
+};
+pub use native_world::{
+    compile_pdf, compile_pdf_rich, compile_svg, compile_svg_rich, set_font_paths, NativeWorld,
+};
 pub use traits::*;

@@ -158,20 +158,19 @@ fn csv_to_typst(csv_str: &str) -> std::result::Result<String, String> {
     let mut rows = Vec::new();
     for result in reader.records() {
         let record = result.map_err(|e| format!("CSV row: {}", e))?;
-        let fields: Vec<_> = record
+        let fields: Vec<_> = headers
             .iter()
-            .map(|field| format!("\"{}\"", field.replace('\\', "\\\\").replace('"', "\\\"")))
+            .zip(record.iter())
+            .map(|(header, field)| {
+                let key = sanitize_typst_key(header);
+                let value = infer_typst_value(field);
+                format!("{}: {}", key, value)
+            })
             .collect();
         rows.push(format!("({})", fields.join(", ")));
     }
 
-    let header_strs: Vec<_> = headers.iter().map(|h| format!("\"{}\"", h)).collect();
-
-    Ok(format!(
-        "(headers: ({}), rows: ({}))",
-        header_strs.join(", "),
-        rows.join(", ")
-    ))
+    Ok(format!("({})", rows.join(", ")))
 }
 
 // ─── TOML ────────────────────────────────────────────────────────────
@@ -259,6 +258,31 @@ fn yaml_value_to_typst(value: &serde_yaml::Value) -> String {
 
 // ─── Helpers ─────────────────────────────────────────────────────────
 
+/// Infer the Typst type for a CSV field value.
+///
+/// Attempts to parse as integer, float, or boolean before falling back to string.
+fn infer_typst_value(field: &str) -> String {
+    let trimmed = field.trim();
+
+    if trimmed.eq_ignore_ascii_case("true") {
+        return "true".to_string();
+    }
+    if trimmed.eq_ignore_ascii_case("false") {
+        return "false".to_string();
+    }
+    if let Ok(_n) = trimmed.parse::<i64>() {
+        return trimmed.to_string();
+    }
+    if let Ok(_n) = trimmed.parse::<f64>() {
+        return trimmed.to_string();
+    }
+
+    format!(
+        "\"{}\"",
+        trimmed.replace('\\', "\\\\").replace('"', "\\\"")
+    )
+}
+
 /// Sanitize a key for use in Typst dict syntax.
 ///
 /// Typst dictionary keys with special characters need quoting.
@@ -305,10 +329,12 @@ mod tests {
     fn csv_basic() {
         let csv = "name,age\nAlice,30\nBob,25\n";
         let result = csv_to_typst(csv).unwrap();
-        assert!(result.contains("headers:"));
-        assert!(result.contains("\"name\""));
-        assert!(result.contains("\"Alice\""));
-        assert!(result.contains("rows:"));
+        // Should produce array of dicts with type inference
+        assert!(result.contains("name: \"Alice\""));
+        assert!(result.contains("age: 30")); // numeric inference
+        assert!(result.contains("name: \"Bob\""));
+        assert!(result.contains("age: 25"));
+        assert!(!result.contains("headers:"));
     }
 
     #[test]
@@ -366,7 +392,18 @@ active = true
 
         let result = load_data_files(&data, dir.path()).unwrap();
         assert!(result.contains("#let points ="));
-        assert!(result.contains("headers:"));
+        assert!(result.contains("x: 1"));
+        assert!(result.contains("y: 2"));
+    }
+
+    #[test]
+    fn csv_type_inference() {
+        let csv = "name,score,rate,active\nAlice,100,3.14,true\n";
+        let result = csv_to_typst(csv).unwrap();
+        assert!(result.contains("name: \"Alice\""));
+        assert!(result.contains("score: 100"));
+        assert!(result.contains("rate: 3.14"));
+        assert!(result.contains("active: true"));
     }
 
     #[test]

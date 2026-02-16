@@ -104,9 +104,11 @@ impl PythonExecutor {
         );
 
         if !output.status.success() {
+            let traceback = crate::error::PythonTraceback::parse(&stderr).map(Box::new);
             return Err(Error::ScriptError {
                 file: figure.source_file.clone(),
                 error: stderr.to_string(),
+                traceback,
             });
         }
 

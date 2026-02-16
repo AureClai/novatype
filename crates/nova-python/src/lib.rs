@@ -55,7 +55,7 @@ pub mod registry;
 pub use cache::FigureCache;
 pub use config::{load_python_config, PythonConfig};
 pub use discovery::FigureDiscovery;
-pub use error::{Error, Result};
+pub use error::{Error, PythonTraceback, Result};
 pub use executor::PythonExecutor;
 pub use registry::{Figure, FigureRegistry};
 
