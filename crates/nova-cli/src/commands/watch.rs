@@ -4,7 +4,8 @@ use crate::commands::compile::{compile, CompileArgs};
 use crate::OutputFormat;
 use anyhow::Result;
 use clap::Args;
-use std::path::PathBuf;
+use novatype_core::NovaConfig;
+use std::path::{Path, PathBuf};
 use std::time::Duration;
 use tracing::info;
 
@@ -12,26 +13,27 @@ use tracing::info;
 #[derive(Args, Debug)]
 pub struct WatchArgs {
     /// Input file to watch.
-    #[arg(required = true)]
-    pub input: PathBuf,
+    /// If omitted, uses [document].main from nova.toml.
+    #[arg()]
+    pub input: Option<PathBuf>,
 
     /// Output file path.
     #[arg(short, long)]
     pub output: Option<PathBuf>,
 
-    /// Output format.
-    #[arg(short, long, value_enum, default_value = "pdf")]
-    pub format: OutputFormat,
+    /// Output format (overrides nova.toml [output].format).
+    #[arg(short, long, value_enum)]
+    pub format: Option<OutputFormat>,
 
-    /// Debounce interval in milliseconds.
-    #[arg(long, default_value = "300")]
-    pub debounce: u64,
+    /// Debounce interval in milliseconds (overrides nova.toml [watch].debounce).
+    #[arg(long)]
+    pub debounce: Option<u64>,
 
-    /// Clear terminal before each build.
+    /// Clear terminal before each build (overrides nova.toml [watch].clear).
     #[arg(long)]
     pub clear: bool,
 
-    /// Font paths to include.
+    /// Additional font paths.
     #[arg(long = "font-path")]
     pub font_paths: Vec<PathBuf>,
 
@@ -46,33 +48,62 @@ pub struct WatchArgs {
 ///
 /// Returns an error if watching fails.
 pub async fn watch(args: WatchArgs) -> Result<()> {
-    info!("Watching {:?}", args.input);
+    // Determine root directory for config loading
+    let root = if let Some(ref input) = args.input {
+        input
+            .parent()
+            .filter(|p| !p.as_os_str().is_empty())
+            .map(|p| p.to_path_buf())
+            .unwrap_or_else(|| std::env::current_dir().unwrap_or_else(|_| PathBuf::from(".")))
+    } else {
+        std::env::current_dir().unwrap_or_else(|_| PathBuf::from("."))
+    };
 
-    // Validate input file exists
-    if !args.input.exists() {
-        anyhow::bail!("Input file not found: {:?}", args.input);
+    // Load nova.toml to get watch settings and input file
+    let config = NovaConfig::from_project_or_default(&root).unwrap_or_default();
+
+    // Resolve input file: CLI arg > config [document].main
+    let input = if let Some(ref input) = args.input {
+        input.clone()
+    } else if let Some(main) = config.main_file() {
+        info!("Using main file from nova.toml: {:?}", main);
+        main
+    } else {
+        anyhow::bail!(
+            "No input file specified. Either pass a file argument or set [document].main in nova.toml"
+        );
+    };
+
+    if !input.exists() {
+        anyhow::bail!("Input file not found: {:?}", input);
     }
 
-    println!("Watching {:?} for changes...", args.input);
+    // Merge watch config: CLI args > nova.toml [watch] > defaults
+    let debounce = args
+        .debounce
+        .unwrap_or_else(|| config.watch.as_ref().map(|w| w.debounce).unwrap_or(300));
+
+    let clear = args.clear || config.watch.as_ref().map(|w| w.clear).unwrap_or(false);
+
+    info!("Watching {:?}", input);
+    println!("Watching {:?} for changes...", input);
     println!("Press Ctrl+C to stop.\n");
 
     // Initial compile
-    run_compile(&args).await?;
+    run_compile(&args, &input).await?;
 
     // Watch for changes
-    let mut last_modified = std::fs::metadata(&args.input)?.modified()?;
+    let mut last_modified = std::fs::metadata(&input)?.modified()?;
 
     loop {
-        tokio::time::sleep(Duration::from_millis(args.debounce)).await;
+        tokio::time::sleep(Duration::from_millis(debounce)).await;
 
-        // Check if file was modified
-        let current_modified = std::fs::metadata(&args.input)?.modified()?;
+        let current_modified = std::fs::metadata(&input)?.modified()?;
 
         if current_modified != last_modified {
             last_modified = current_modified;
 
-            if args.clear {
-                // Clear terminal
+            if clear {
                 print!("\x1B[2J\x1B[1;1H");
             }
 
@@ -81,7 +112,7 @@ pub async fn watch(args: WatchArgs) -> Result<()> {
                 chrono_lite_timestamp()
             );
 
-            match run_compile(&args).await {
+            match run_compile(&args, &input).await {
                 Ok(()) => {
                     println!("[{}] Compilation successful.\n", chrono_lite_timestamp());
                 }
@@ -94,9 +125,9 @@ pub async fn watch(args: WatchArgs) -> Result<()> {
 }
 
 /// Run a single compilation.
-async fn run_compile(args: &WatchArgs) -> Result<()> {
+async fn run_compile(args: &WatchArgs, input: &Path) -> Result<()> {
     let compile_args = CompileArgs {
-        input: args.input.clone(),
+        input: Some(input.to_path_buf()),
         output: args.output.clone(),
         format: args.format,
         root: None,
@@ -138,10 +169,10 @@ mod tests {
     #[tokio::test]
     async fn watch_missing_file_fails() {
         let args = WatchArgs {
-            input: PathBuf::from("/nonexistent/file.typ"),
+            input: Some(PathBuf::from("/nonexistent/file.typ")),
             output: None,
-            format: OutputFormat::Pdf,
-            debounce: 300,
+            format: None,
+            debounce: None,
             clear: false,
             font_paths: vec![],
             no_python: true,

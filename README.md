@@ -27,7 +27,7 @@
 
 ---
 
-NovaType is a modern typesetting system built on [Typst](https://typst.app). It combines the quality of LaTeX with an intuitive syntax and instant compilation.
+NovaType is a modern typesetting system built on [Typst](https://typst.app). It combines the quality of LaTeX with an intuitive syntax, instant compilation, and a project-oriented workflow powered by `nova.toml`.
 
 ## Why NovaType?
 
@@ -37,15 +37,22 @@ NovaType is a modern typesetting system built on [Typst](https://typst.app). It 
 | Mathematical equations | ✅ | ✅ | ❌ |
 | Simple syntax | ✅ | ❌ | ✅ |
 | Professional typography | ✅ | ✅ | ❌ |
+| Project config (`nova.toml`) | ✅ | ❌ | ❌ |
+| Python figure generation | ✅ | ❌ | ❌ |
+| External data injection | ✅ | ❌ | ❌ |
 | Data visualization | ✅ | ❌ | ✅ |
 | Browser execution | ✅ | ❌ | ❌ |
 
 ## Features
 
+- **Project configuration** — `nova.toml` as the single source of truth for your project
+- **Zero-arg compile** — `nova init` then `nova compile` just works, no arguments needed
+- **Python figures** — Generate publication-quality figures from Python scripts (matplotlib, plotly, etc.)
+- **Data injection** — Load JSON, CSV, TOML, or YAML data files as Typst variables
+- **Font management** — Configure fonts per-project in `nova.toml`
 - **Instant compilation** — See your changes in real-time
 - **Intuitive syntax** — Markdown-like, without LaTeX boilerplate
 - **Smart citations** — BibTeX, CrossRef API, Zotero integration
-- **Data visualization** — Charts from CSV/JSON
 - **Professional templates** — IEEE, Nature, reports, CV...
 - **WebAssembly** — Compile in the browser
 
@@ -99,15 +106,57 @@ ext install aureclai.novatype
 # Create a new project
 nova init my-article
 
-# With a specific template
-nova init my-article --template ieee-article
+# Compile (uses [document].main from nova.toml)
+nova compile
 
-# Compile
+# Or specify a file explicitly
 nova compile main.typ --open
 
 # Watch mode (auto-recompilation)
-nova watch main.typ
+nova watch
 ```
+
+## nova.toml
+
+Every NovaType project is configured through `nova.toml`. After `nova init`, you get a ready-to-use config:
+
+```toml
+[project]
+name = "my-article"
+version = "0.1.0"
+authors = ["Your Name"]
+
+[document]
+main = "main.typ"
+
+[output]
+format = "pdf"          # pdf, svg, png
+directory = "build"
+
+[bibliography]
+style = "ieee"
+bibliography = ["references.bib"]
+
+[python]
+python = "python"
+figures_dir = "figures"
+timeout = 60
+
+[data]
+results = "data/results.json"
+params = "data/params.yaml"
+
+# [fonts]
+# main = "Inter"
+# mono = "Fira Code"
+# paths = ["./fonts"]
+
+# [watch]
+# debounce = 300
+# clear = true
+```
+
+All settings have sensible defaults. CLI arguments always override `nova.toml` values.
 
 ## Example
 
@@ -125,28 +174,23 @@ Welcome to *NovaType*! A _simple_ yet powerful syntax.
 = Equations
 
 Euler's formula: $ e^(i pi) + 1 = 0 $
-
-= Visualization
-
-#nova-plot(
-  data: "results.csv",
-  type: "bar",
-  title: "Results"
-)
 ```
 
 ## Architecture
 
 ```
 novatype/
-├── typst/crates/
-│   ├── nova-core/      # Compilation engine
-│   ├── nova-schema/    # Metadata validation
-│   ├── nova-cite/      # Citation management
-│   ├── nova-plot/      # Data visualization
-│   ├── nova-cli/       # Command-line interface
-│   └── nova-wasm/      # WebAssembly build
-└── docs/               # Documentation website
+├── crates/
+│   ├── nova-core/       # Compilation engine, config, data loading
+│   ├── nova-cli/        # Command-line interface
+│   ├── nova-python/     # Python figure integration
+│   ├── nova-font/       # Font management
+│   ├── nova-schema/     # Metadata validation
+│   ├── nova-cite/       # Citation management
+│   ├── nova-plot/       # Data visualization
+│   ├── nova-template/   # Template management
+│   └── nova-wasm/       # WebAssembly build
+└── docs/                # Documentation website
 ```
 
 ## Contributing

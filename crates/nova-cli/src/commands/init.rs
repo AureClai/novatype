@@ -92,7 +92,7 @@ pub async fn init(args: InitArgs) -> Result<()> {
     if args.python {
         println!("  pip install nova-typst  # Install Python package");
     }
-    println!("  nova compile main.typ");
+    println!("  nova compile  # uses [document].main from nova.toml");
 
     Ok(())
 }
@@ -233,6 +233,8 @@ fn generate_config(name: &str, template: &str, with_python: bool) -> String {
         r#"[project]
 name = "{name}"
 version = "0.1.0"
+# description = "Your project description"
+# authors = ["Your Name <you@example.com>"]
 
 [document]
 main = "main.typ"
@@ -242,9 +244,24 @@ template = "{template}"
 format = "pdf"
 directory = "build"
 
-[citations]
+[bibliography]
 style = "ieee"
 bibliography = ["references.bib"]
+
+# [fonts]
+# paths = []
+# main = "Inter"
+# heading = {{ family = "Open Sans", weight = "bold" }}
+# mono = "JetBrains Mono"
+
+# [watch]
+# debounce = 300
+# clear = false
+# ignore = ["*.tmp", "build/*"]
+
+# [data]
+# mydata = "data/data.json"
+# results = "data/results.csv"
 "#
     );
 
@@ -252,7 +269,7 @@ bibliography = ["references.bib"]
         config.push_str(
             r#"
 [python]
-# Python executable (use "python3" on Unix)
+# Python executable (use "python3" on Unix/macOS)
 python = "python"
 # Directory containing figure scripts
 figures_dir = "figures"
@@ -454,6 +471,7 @@ mod tests {
         let config = generate_config("my-project", "ieee-article", false);
         assert!(config.contains("my-project"));
         assert!(config.contains("ieee-article"));
+        assert!(config.contains("[bibliography]"));
     }
 
     #[test]
