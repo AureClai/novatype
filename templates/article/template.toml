@@ -1,0 +1,66 @@
+[template]
+name = "article"
+display_name = "Academic Article"
+description = "Clean, single-column academic article with title, authors, and abstract"
+version = "1.0.0"
+authors = ["NovaType Team"]
+category = "article"
+
+[files]
+main = "main.typ"
+
+[metadata_schema]
+required = ["title"]
+
+[metadata_schema.properties.title]
+type = "string"
+minLength = 1
+description = "Article title"
+
+[metadata_schema.properties.authors]
+type = "array"
+description = "List of authors"
+
+[metadata_schema.properties.authors.items]
+type = "object"
+required = ["name"]
+
+[metadata_schema.properties.authors.items.properties.name]
+type = "string"
+description = "Author name"
+
+[metadata_schema.properties.authors.items.properties.email]
+type = "string"
+format = "email"
+description = "Author email"
+
+[metadata_schema.properties.authors.items.properties.affiliation]
+type = "string"
+description = "Author affiliation"
+
+[metadata_schema.properties.abstract]
+type = "string"
+description = "Article abstract"
+
+[metadata_schema.properties.keywords]
+type = "array"
+items = { type = "string" }
+description = "Keywords for indexing"
+
+[metadata_schema.properties.date]
+type = "string"
+description = "Publication date"
+
+[[options]]
+name = "two_column"
+label = "Two Column Layout"
+description = "Use two-column layout"
+type = "boolean"
+default = false
+
+[[options]]
+name = "numbered"
+label = "Numbered Sections"
+description = "Number section headings"
+type = "boolean"
+default = true

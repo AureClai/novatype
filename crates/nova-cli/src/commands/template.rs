@@ -68,15 +68,28 @@ pub async fn template(args: TemplateArgs) -> Result<()> {
     }
 }
 
-/// List installed templates.
+/// List installed and built-in templates.
 async fn list_templates() -> Result<()> {
-    info!("Listing installed templates");
+    info!("Listing templates");
 
     let cache = TemplateCache::new().context("Failed to open template cache")?;
-    let templates = cache.list_installed();
+    let installed = cache.list_installed();
+    let bundled = TemplateCache::list_bundled();
 
-    if templates.is_empty() {
-        println!("No templates installed.");
+    // Collect installed template names to avoid showing duplicates
+    let installed_names: std::collections::HashSet<_> =
+        installed.iter().map(|t| t.name.as_str()).collect();
+
+    // Bundled templates that aren't also installed
+    let bundled_only: Vec<_> = bundled
+        .iter()
+        .filter(|t| !installed_names.contains(t.name.as_str()))
+        .collect();
+
+    let total = installed.len() + bundled_only.len();
+
+    if total == 0 {
+        println!("No templates available.");
         println!();
         println!("Install a template with:");
         println!("  nova template install <source>");
@@ -89,16 +102,29 @@ async fn list_templates() -> Result<()> {
         return Ok(());
     }
 
-    println!("Installed templates ({}):\n", templates.len());
-
-    for template in templates {
-        println!("  {} ({})", template.name, template.version);
-        if let Some(ref desc) = template.description {
-            println!("    {}", desc);
+    if !bundled_only.is_empty() {
+        println!("Built-in templates ({}):\n", bundled_only.len());
+        for template in &bundled_only {
+            println!("  {} ({})", template.name, template.version);
+            if let Some(ref desc) = template.description {
+                println!("    {}", desc);
+            }
+            println!("    Category: {}", template.category);
+            println!();
         }
-        println!("    Category: {}", template.category);
-        println!("    Source: {}", template.source);
-        println!();
+    }
+
+    if !installed.is_empty() {
+        println!("Installed templates ({}):\n", installed.len());
+        for template in &installed {
+            println!("  {} ({})", template.name, template.version);
+            if let Some(ref desc) = template.description {
+                println!("    {}", desc);
+            }
+            println!("    Category: {}", template.category);
+            println!("    Source: {}", template.source);
+            println!();
+        }
     }
 
     Ok(())
@@ -110,16 +136,20 @@ async fn show_template_info(name: &str) -> Result<()> {
 
     let cache = TemplateCache::new().context("Failed to open template cache")?;
 
-    let installed = cache.get(name).ok_or_else(|| {
-        anyhow::anyhow!(
-            "Template not found: {}. Use 'nova template list' to see installed templates.",
+    // Try installed first, then bundled
+    let (template, installed) = if let Some(inst) = cache.get(name) {
+        let tmpl = cache
+            .load_template(name)
+            .context("Failed to load template")?;
+        (tmpl, inst.clone())
+    } else if let Some((tmpl, inst)) = TemplateCache::load_bundled(name) {
+        (tmpl, inst)
+    } else {
+        anyhow::bail!(
+            "Template not found: {}. Use 'nova template list' to see available templates.",
             name
-        )
-    })?;
-
-    let template = cache
-        .load_template(name)
-        .context("Failed to load template")?;
+        );
+    };
 
     println!("Template: {}", template.display_name());
     println!("Name:     {}", template.name());
@@ -162,9 +192,11 @@ async fn show_template_info(name: &str) -> Result<()> {
         println!();
     }
 
-    println!("Installed from: {}", installed.source);
-    println!("Installed at:   {}", installed.installed_at);
-    println!("Location:       {}", installed.path.display());
+    println!("Source:   {}", installed.source);
+    if !installed.installed_at.is_empty() {
+        println!("Installed at: {}", installed.installed_at);
+    }
+    println!("Location: {}", installed.path.display());
 
     Ok(())
 }

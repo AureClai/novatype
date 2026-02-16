@@ -74,12 +74,12 @@
             <span class="dot"></span>
             <span class="dot"></span>
           </div>
-          <pre><code><span class="token-comment">// Quick installation</span>
+          <pre><code><span class="token-comment">// Quick start</span>
 <span class="token-function">$</span> nova init my-article
-<span class="token-function">$</span> nova compile main.typ --open
+<span class="token-function">$</span> cd my-article
+<span class="token-function">$</span> nova compile  <span class="token-comment">// uses nova.toml config</span>
 
 <span class="token-comment">// Your first document</span>
-<span class="token-keyword">#set</span> document(title: <span class="token-string">"My Article"</span>)
 <span class="token-keyword">=</span> Introduction
 Welcome to <span class="token-property">*NovaType*</span>!</code></pre>
         </div>
@@ -126,12 +126,22 @@ Welcome to <span class="token-property">*NovaType*</span>!</code></pre>
         <div class="feature-card">
           <div class="feature-icon">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+              <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/>
+            </svg>
+          </div>
+          <h3>Project Config</h3>
+          <p><code>nova.toml</code> as single source of truth. Zero-arg compile, font mappings, data injection.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M3 3v18h18"/>
               <path d="M18 17l-5-5-4 4-3-3"/>
             </svg>
           </div>
-          <h3>Data Visualization</h3>
-          <p>Create charts directly from CSV/JSON. Line, Bar, Scatter, Pie and more.</p>
+          <h3>Python Figures</h3>
+          <p>Generate publication-quality figures from Python scripts (matplotlib, plotly, seaborn).</p>
         </div>
         <div class="feature-card">
           <div class="feature-icon">
@@ -266,17 +276,31 @@ Welcome to <span class="token-property">*NovaType*</span>!</code></pre>
             <td><span class="check-icon">&#10003;</span></td>
           </tr>
           <tr>
+            <td>Project config (nova.toml)</td>
+            <td><span class="check-icon">&#10003;</span></td>
+            <td><span class="cross-icon">&#10007;</span></td>
+            <td><span class="cross-icon">&#10007;</span></td>
+            <td><span class="cross-icon">&#10007;</span></td>
+          </tr>
+          <tr>
+            <td>Python figure generation</td>
+            <td><span class="check-icon">&#10003;</span></td>
+            <td><span class="cross-icon">&#10007;</span></td>
+            <td><span class="cross-icon">&#10007;</span></td>
+            <td><span class="cross-icon">&#10007;</span></td>
+          </tr>
+          <tr>
+            <td>External data injection</td>
+            <td><span class="check-icon">&#10003;</span></td>
+            <td><span class="cross-icon">&#10007;</span></td>
+            <td><span class="cross-icon">&#10007;</span></td>
+            <td><span class="cross-icon">&#10007;</span></td>
+          </tr>
+          <tr>
             <td>Integrated data visualization</td>
             <td><span class="check-icon">&#10003;</span></td>
             <td><span class="cross-icon">&#10007;</span></td>
             <td><span class="check-icon">&#10003;</span></td>
-            <td><span class="cross-icon">&#10007;</span></td>
-          </tr>
-          <tr>
-            <td>Schema validation</td>
-            <td><span class="check-icon">&#10003;</span></td>
-            <td><span class="cross-icon">&#10007;</span></td>
-            <td><span class="cross-icon">&#10007;</span></td>
             <td><span class="cross-icon">&#10007;</span></td>
           </tr>
           <tr>
@@ -372,30 +396,23 @@ Several studies <span class="token-operator">@smith2020</span> <span class="toke
 
 <span class="token-comment">// Automatic bibliography</span>
 <span class="token-keyword">#bibliography</span>(<span class="token-string">"references.bib"</span>, style: <span class="token-string">"ieee"</span>)</code></pre>
-          <pre id="code-plots" class="hidden"><code><span class="token-comment">// Chart from CSV</span>
-<span class="token-keyword">#nova-plot</span>(
-  data: <span class="token-string">"data.csv"</span>,
-  type: <span class="token-string">"line"</span>,
-  title: <span class="token-string">"Time Evolution"</span>,
-  x-label: <span class="token-string">"Time (s)"</span>,
-  y-label: <span class="token-string">"Value"</span>
-)
+          <pre id="code-plots" class="hidden"><code><span class="token-comment">// nova.toml — inject external data</span>
+<span class="token-comment">// [data]</span>
+<span class="token-comment">// results = "data/results.json"</span>
+<span class="token-comment">// measurements = "data/data.csv"</span>
 
-<span class="token-comment">// Bar chart</span>
-<span class="token-keyword">#nova-plot</span>(
-  data: <span class="token-string">"results.json"</span>,
-  type: <span class="token-string">"bar"</span>,
-  title: <span class="token-string">"Method Comparison"</span>,
-  colors: (<span class="token-string">"#2563eb"</span>, <span class="token-string">"#10b981"</span>, <span class="token-string">"#f59e0b"</span>)
-)
+<span class="token-comment">// Use data directly in your document</span>
+The score was <span class="token-keyword">#</span>results.score.
+Method: <span class="token-keyword">#</span>results.method
 
-<span class="token-comment">// Scatter plot</span>
-<span class="token-keyword">#nova-plot</span>(
-  data: <span class="token-string">"correlation.csv"</span>,
-  type: <span class="token-string">"scatter"</span>,
-  title: <span class="token-string">"X-Y Correlation"</span>,
-  trend-line: <span class="token-keyword">true</span>
-)</code></pre>
+<span class="token-comment">// Python figure (figures/plot.py)</span>
+<span class="token-comment">// Just create a Python script that saves SVG:</span>
+<span class="token-comment">//   import matplotlib.pyplot as plt</span>
+<span class="token-comment">//   plt.plot([1,2,3], [4,5,6])</span>
+<span class="token-comment">//   plt.savefig(sys.argv[1])</span>
+
+<span class="token-comment">// Include generated figure</span>
+<span class="token-keyword">#image</span>(<span class="token-string">"figures/plot.svg"</span>)</code></pre>
         </div>
       </div>
     </div>

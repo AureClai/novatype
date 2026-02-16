@@ -92,7 +92,7 @@ pub async fn init(args: InitArgs) -> Result<()> {
     if args.python {
         println!("  pip install nova-typst  # Install Python package");
     }
-    println!("  nova compile main.typ");
+    println!("  nova compile  # uses [document].main from nova.toml");
 
     Ok(())
 }
@@ -233,6 +233,8 @@ fn generate_config(name: &str, template: &str, with_python: bool) -> String {
         r#"[project]
 name = "{name}"
 version = "0.1.0"
+# description = "Your project description"
+# authors = ["Your Name <you@example.com>"]
 
 [document]
 main = "main.typ"
@@ -242,9 +244,24 @@ template = "{template}"
 format = "pdf"
 directory = "build"
 
-[citations]
+[bibliography]
 style = "ieee"
 bibliography = ["references.bib"]
+
+# [fonts]
+# paths = []
+# main = "Inter"
+# heading = {{ family = "Open Sans", weight = "bold" }}
+# mono = "JetBrains Mono"
+
+# [watch]
+# debounce = 300
+# clear = false
+# ignore = ["*.tmp", "build/*"]
+
+# [data]
+# mydata = "data/data.json"
+# results = "data/results.csv"
 "#
     );
 
@@ -252,7 +269,7 @@ bibliography = ["references.bib"]
         config.push_str(
             r#"
 [python]
-# Python executable (use "python3" on Unix)
+# Python executable (use "python3" on Unix/macOS)
 python = "python"
 # Directory containing figure scripts
 figures_dir = "figures"
@@ -273,6 +290,15 @@ fn generate_gitignore() -> String {
 /build/
 *.pdf
 
+# NovaType cache
+.nova/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+
 # Editor files
 .vscode/
 .idea/
@@ -282,9 +308,6 @@ fn generate_gitignore() -> String {
 # OS files
 .DS_Store
 Thumbs.db
-
-# NovaType cache
-.nova/
 "#
     .to_string()
 }
@@ -306,26 +329,31 @@ fn create_python_support(project_dir: &Path) -> Result<()> {
 Example Python figures for NovaType.
 
 Run: nova compile main.typ
+
+Only requires matplotlib (no numpy needed for this example).
+For more complex figures, install numpy: pip install numpy
 """
+
+import math
 
 import nova
 import matplotlib.pyplot as plt
-import numpy as np
 
 
 @nova.figure("example-plot")
 def plot_example():
-    """Generate an example plot."""
-    x = np.linspace(0, 2 * np.pi, 100)
-    y = np.sin(x)
+    """Generate an example sine wave plot."""
+    x = [i * 0.05 for i in range(126)]  # 0 to 2*pi
+    y = [math.sin(v) for v in x]
 
-    plt.figure(figsize=(8, 4))
-    plt.plot(x, y, "b-", linewidth=2, label=r"$\sin(x)$")
-    plt.xlabel("x")
-    plt.ylabel("y")
-    plt.title("Example Plot")
-    plt.legend()
-    plt.grid(True, alpha=0.3)
+    fig, ax = plt.subplots(figsize=(8, 4))
+    ax.plot(x, y, "b-", linewidth=2, label=r"$\sin(x)$")
+    ax.set_xlabel("x")
+    ax.set_ylabel("y")
+    ax.set_title("Example Plot")
+    ax.legend()
+    ax.grid(True, alpha=0.3)
+    fig.tight_layout()
 "#;
     let example_path = figures_dir.join("example.py");
     std::fs::write(&example_path, example_content)
@@ -443,6 +471,7 @@ mod tests {
         let config = generate_config("my-project", "ieee-article", false);
         assert!(config.contains("my-project"));
         assert!(config.contains("ieee-article"));
+        assert!(config.contains("[bibliography]"));
     }
 
     #[test]
@@ -450,5 +479,14 @@ mod tests {
         let config = generate_config("my-project", "article", true);
         assert!(config.contains("[python]"));
         assert!(config.contains("figures_dir"));
+    }
+
+    #[test]
+    fn gitignore_includes_python_patterns() {
+        let gitignore = generate_gitignore();
+        assert!(gitignore.contains("__pycache__/"));
+        assert!(gitignore.contains("*.pyc"));
+        assert!(gitignore.contains(".venv/"));
+        assert!(gitignore.contains(".nova/"));
     }
 }

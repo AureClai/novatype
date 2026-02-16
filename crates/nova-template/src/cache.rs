@@ -16,6 +16,9 @@ const CACHE_DIR_NAME: &str = "nova-templates";
 /// Cache metadata file name.
 const METADATA_FILE: &str = "templates.json";
 
+/// Built-in templates directory name (relative to executable).
+const BUNDLED_DIR_NAME: &str = "templates";
+
 /// Template cache manager.
 #[derive(Debug)]
 pub struct TemplateCache {
@@ -198,6 +201,75 @@ impl TemplateCache {
         let content = serde_json::to_string_pretty(&self.metadata)?;
         fs::write(metadata_path, content)?;
         Ok(())
+    }
+
+    /// Get the directory containing built-in templates shipped with the binary.
+    ///
+    /// Looks for a `templates/` directory next to the executable.
+    pub fn bundled_templates_dir() -> Option<PathBuf> {
+        let exe = std::env::current_exe().ok()?;
+        let exe_dir = exe.parent()?;
+        let bundled = exe_dir.join(BUNDLED_DIR_NAME);
+        if bundled.is_dir() {
+            Some(bundled)
+        } else {
+            None
+        }
+    }
+
+    /// List built-in templates shipped with the binary.
+    ///
+    /// Returns a list of `InstalledTemplate` entries with source "built-in".
+    pub fn list_bundled() -> Vec<InstalledTemplate> {
+        let Some(dir) = Self::bundled_templates_dir() else {
+            return Vec::new();
+        };
+
+        let Ok(entries) = fs::read_dir(&dir) else {
+            return Vec::new();
+        };
+
+        let mut templates = Vec::new();
+        for entry in entries.flatten() {
+            let path = entry.path();
+            if !path.is_dir() {
+                continue;
+            }
+            if let Ok(template) = Template::from_directory(&path) {
+                templates.push(InstalledTemplate {
+                    name: template.template.name.clone(),
+                    version: template.template.version.clone(),
+                    source: "built-in".to_string(),
+                    path,
+                    installed_at: String::new(),
+                    category: template.template.category,
+                    description: template.template.description.clone(),
+                });
+            }
+        }
+
+        templates.sort_by(|a, b| a.name.cmp(&b.name));
+        templates
+    }
+
+    /// Load a built-in template by name.
+    pub fn load_bundled(name: &str) -> Option<(Template, InstalledTemplate)> {
+        let dir = Self::bundled_templates_dir()?;
+        let template_dir = dir.join(sanitize_name(name));
+        if !template_dir.is_dir() {
+            return None;
+        }
+        let template = Template::from_directory(&template_dir).ok()?;
+        let installed = InstalledTemplate {
+            name: template.template.name.clone(),
+            version: template.template.version.clone(),
+            source: "built-in".to_string(),
+            path: template_dir,
+            installed_at: String::new(),
+            category: template.template.category,
+            description: template.template.description.clone(),
+        };
+        Some((template, installed))
     }
 
     /// Get cache statistics.

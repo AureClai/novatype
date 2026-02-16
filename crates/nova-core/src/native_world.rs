@@ -7,6 +7,7 @@ use std::collections::HashMap;
 use std::path::{Path, PathBuf};
 use std::sync::OnceLock;
 
+use crate::error::{CompilationResult, DiagnosticLocation, DiagnosticSeverity, NovaDiagnostic};
 use chrono::{Datelike, Local, Utc};
 use parking_lot::RwLock;
 use typst::diag::{FileError, FileResult};
@@ -355,6 +356,116 @@ pub fn compile_svg(world: &NativeWorld) -> Result<Vec<String>, Vec<String>> {
     }
 }
 
+// ─── Rich diagnostic compilation ────────────────────────────────────
+
+/// Convert a Typst `SourceDiagnostic` into a [`NovaDiagnostic`] by resolving
+/// span information against the World.
+fn resolve_diagnostic(diag: &typst::diag::SourceDiagnostic, world: &NativeWorld) -> NovaDiagnostic {
+    let severity = match diag.severity {
+        typst::diag::Severity::Error => DiagnosticSeverity::Error,
+        typst::diag::Severity::Warning => DiagnosticSeverity::Warning,
+    };
+
+    let location = diag.span.id().and_then(|file_id| {
+        let source = world.source(file_id).ok()?;
+        let range = source.range(diag.span)?;
+        let line = source.byte_to_line(range.start)? + 1; // 1-indexed
+        let column = source.byte_to_column(range.start)? + 1;
+        let file = file_id.vpath().as_rootless_path().display().to_string();
+        Some(DiagnosticLocation {
+            file,
+            source_text: source.text().to_string(),
+            span_offset: range.start,
+            span_length: range.len(),
+            line,
+            column,
+        })
+    });
+
+    let hints: Vec<String> = diag.hints.iter().map(|h| h.to_string()).collect();
+
+    NovaDiagnostic {
+        severity,
+        message: diag.message.to_string(),
+        location,
+        hints,
+    }
+}
+
+/// Compile a document to PDF, returning structured diagnostics.
+pub fn compile_pdf_rich(world: &NativeWorld) -> CompilationResult<Vec<u8>> {
+    let result = typst::compile::<typst::layout::PagedDocument>(world);
+
+    let warnings: Vec<NovaDiagnostic> = result
+        .warnings
+        .iter()
+        .map(|w| resolve_diagnostic(w, world))
+        .collect();
+
+    match result.output {
+        Ok(document) => {
+            let options = typst_pdf::PdfOptions::default();
+            match typst_pdf::pdf(&document, &options) {
+                Ok(pdf) => CompilationResult {
+                    output: Ok(pdf),
+                    warnings,
+                },
+                Err(errors) => {
+                    let diags = errors
+                        .iter()
+                        .map(|e| resolve_diagnostic(e, world))
+                        .collect();
+                    CompilationResult {
+                        output: Err(diags),
+                        warnings,
+                    }
+                }
+            }
+        }
+        Err(errors) => {
+            let diags = errors
+                .iter()
+                .map(|e| resolve_diagnostic(e, world))
+                .collect();
+            CompilationResult {
+                output: Err(diags),
+                warnings,
+            }
+        }
+    }
+}
+
+/// Compile a document to SVG pages, returning structured diagnostics.
+pub fn compile_svg_rich(world: &NativeWorld) -> CompilationResult<Vec<String>> {
+    let result = typst::compile::<typst::layout::PagedDocument>(world);
+
+    let warnings: Vec<NovaDiagnostic> = result
+        .warnings
+        .iter()
+        .map(|w| resolve_diagnostic(w, world))
+        .collect();
+
+    match result.output {
+        Ok(document) => {
+            let svg_pages: Vec<String> = document.pages.iter().map(typst_svg::svg).collect();
+            CompilationResult {
+                output: Ok(svg_pages),
+                warnings,
+            }
+        }
+        Err(errors) => {
+            let diags = errors
+                .iter()
+                .map(|e| resolve_diagnostic(e, world))
+                .collect();
+            CompilationResult {
+                output: Err(diags),
+                warnings,
+            }
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -408,5 +519,63 @@ mod tests {
         let world = NativeWorld::new(&file_path).unwrap();
         let source = world.source(world.main()).unwrap();
         assert_eq!(source.text(), "Test content");
+    }
+
+    #[test]
+    fn rich_compile_returns_diagnostics_on_error() {
+        // Use invalid Typst that produces an error with a span
+        let world = NativeWorld::from_source("#unknown-func()", ".");
+        let result = compile_pdf_rich(&world);
+
+        assert!(result.output.is_err());
+        let diags = result.output.unwrap_err();
+        assert!(!diags.is_empty(), "Should have at least one diagnostic");
+
+        let first = &diags[0];
+        assert!(!first.message.is_empty());
+        assert_eq!(first.severity, crate::error::DiagnosticSeverity::Error);
+    }
+
+    #[test]
+    fn rich_compile_preserves_location() {
+        // This should produce an error with a known location
+        let world = NativeWorld::from_source("#let x = 1 + \"hello\"", ".");
+        let result = compile_pdf_rich(&world);
+
+        assert!(result.output.is_err());
+        let diags = result.output.unwrap_err();
+        assert!(!diags.is_empty());
+
+        // At least one diagnostic should have a resolved location
+        let has_location = diags.iter().any(|d| d.location.is_some());
+        assert!(
+            has_location,
+            "At least one diagnostic should have a source location"
+        );
+
+        if let Some(ref loc) = diags[0].location {
+            assert_eq!(loc.line, 1);
+            assert!(loc.column > 0);
+            assert!(loc.file.contains("main.typ"));
+        }
+    }
+
+    #[test]
+    fn rich_compile_success_has_no_errors() {
+        let world = NativeWorld::from_source("Hello!", ".");
+        let result = compile_pdf_rich(&world);
+
+        assert!(result.output.is_ok());
+    }
+
+    #[test]
+    fn rich_compile_svg_works() {
+        let world = NativeWorld::from_source("Hello SVG!", ".");
+        let result = compile_svg_rich(&world);
+
+        assert!(result.output.is_ok());
+        let pages = result.output.unwrap();
+        assert!(!pages.is_empty());
+        assert!(pages[0].contains("<svg"));
     }
 }

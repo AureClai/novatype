@@ -64,6 +64,72 @@ pub struct SourceLocation {
     pub file: Option<String>,
 }
 
+// ─── Rich diagnostic types ──────────────────────────────────────────
+
+/// Severity level for a diagnostic.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum DiagnosticSeverity {
+    Error,
+    Warning,
+}
+
+/// A resolved source location with text context for rendering.
+#[derive(Debug, Clone)]
+pub struct DiagnosticLocation {
+    /// File path (relative to project root).
+    pub file: String,
+    /// Full source text of the file (needed for snippet rendering).
+    pub source_text: String,
+    /// Byte offset of the error span start within source_text.
+    pub span_offset: usize,
+    /// Byte length of the error span.
+    pub span_length: usize,
+    /// Line number (1-indexed).
+    pub line: usize,
+    /// Column number (1-indexed).
+    pub column: usize,
+}
+
+/// A fully resolved diagnostic with source context.
+///
+/// Unlike Typst's `SourceDiagnostic` which uses opaque `Span` types,
+/// this carries all the resolved information needed for rendering.
+#[derive(Debug, Clone)]
+pub struct NovaDiagnostic {
+    /// Error or warning.
+    pub severity: DiagnosticSeverity,
+    /// The diagnostic message.
+    pub message: String,
+    /// Source location (file, line, column, byte range, source text).
+    /// None if the span was detached.
+    pub location: Option<DiagnosticLocation>,
+    /// Hints from Typst (e.g., "did you mean...").
+    pub hints: Vec<String>,
+}
+
+impl std::fmt::Display for NovaDiagnostic {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        if let Some(ref loc) = self.location {
+            write!(
+                f,
+                "{}:{}:{}: {}",
+                loc.file, loc.line, loc.column, self.message
+            )
+        } else {
+            write!(f, "{}", self.message)
+        }
+    }
+}
+
+/// Result of a compilation, carrying both output and warnings.
+#[derive(Debug)]
+pub struct CompilationResult<T> {
+    /// The compilation output (if successful) or structured errors.
+    pub output: std::result::Result<T, Vec<NovaDiagnostic>>,
+    /// Warnings produced during compilation (always present, even on success).
+    pub warnings: Vec<NovaDiagnostic>,
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

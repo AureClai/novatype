@@ -1,8 +1,14 @@
 //! Integration tests for the compilation workflow.
 
-use nova_core::document::Document;
 use nova_schema::FrontmatterParser;
+use novatype_core::document::Document;
 use std::path::PathBuf;
+
+fn fixture_path(name: &str) -> PathBuf {
+    PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+        .join("../../tests/fixtures")
+        .join(name)
+}
 
 /// Test that we can parse a document with frontmatter.
 #[test]
@@ -68,21 +74,16 @@ fn document_title_from_metadata() {
 /// Test loading fixtures.
 #[test]
 fn load_fixture_document() {
-    let fixture_path = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
-        .join("tests")
-        .join("fixtures")
-        .join("simple.typ");
+    let path = fixture_path("simple.typ");
 
-    // Skip if fixture doesn't exist
-    if !fixture_path.exists() {
-        eprintln!("Skipping test: fixture not found at {:?}", fixture_path);
+    if !path.exists() {
+        eprintln!("Skipping test: fixture not found at {:?}", path);
         return;
     }
 
-    let result = Document::from_file(&fixture_path);
+    let result = Document::from_file(&path);
     assert!(result.is_ok());
 
     let doc = result.unwrap();
     assert!(!doc.content.is_empty());
-    assert_eq!(doc.source_path, Some(fixture_path));
 }

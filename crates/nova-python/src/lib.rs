@@ -53,9 +53,9 @@ pub mod executor;
 pub mod registry;
 
 pub use cache::FigureCache;
-pub use config::PythonConfig;
+pub use config::{load_python_config, PythonConfig};
 pub use discovery::FigureDiscovery;
-pub use error::{Error, Result};
+pub use error::{Error, PythonTraceback, Result};
 pub use executor::PythonExecutor;
 pub use registry::{Figure, FigureRegistry};
 
@@ -88,7 +88,7 @@ impl NovaPython {
 
     /// Load NovaPython from a project directory containing nova.toml.
     pub fn from_project(project_dir: impl AsRef<std::path::Path>) -> Result<Self> {
-        let config = PythonConfig::from_project(project_dir)?;
+        let config = load_python_config(project_dir)?;
         Self::new(config)
     }
 
