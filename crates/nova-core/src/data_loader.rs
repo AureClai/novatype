@@ -277,10 +277,7 @@ fn infer_typst_value(field: &str) -> String {
         return trimmed.to_string();
     }
 
-    format!(
-        "\"{}\"",
-        trimmed.replace('\\', "\\\\").replace('"', "\\\"")
-    )
+    format!("\"{}\"", trimmed.replace('\\', "\\\\").replace('"', "\\\""))
 }
 
 /// Sanitize a key for use in Typst dict syntax.

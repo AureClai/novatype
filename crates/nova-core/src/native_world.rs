@@ -7,9 +7,9 @@ use std::collections::HashMap;
 use std::path::{Path, PathBuf};
 use std::sync::OnceLock;
 
+use crate::error::{CompilationResult, DiagnosticLocation, DiagnosticSeverity, NovaDiagnostic};
 use chrono::{Datelike, Local, Utc};
 use parking_lot::RwLock;
-use crate::error::{CompilationResult, DiagnosticLocation, DiagnosticSeverity, NovaDiagnostic};
 use typst::diag::{FileError, FileResult};
 use typst::foundations::{Bytes, Datetime};
 use typst::syntax::{FileId, Source, VirtualPath};
@@ -360,10 +360,7 @@ pub fn compile_svg(world: &NativeWorld) -> Result<Vec<String>, Vec<String>> {
 
 /// Convert a Typst `SourceDiagnostic` into a [`NovaDiagnostic`] by resolving
 /// span information against the World.
-fn resolve_diagnostic(
-    diag: &typst::diag::SourceDiagnostic,
-    world: &NativeWorld,
-) -> NovaDiagnostic {
+fn resolve_diagnostic(diag: &typst::diag::SourceDiagnostic, world: &NativeWorld) -> NovaDiagnostic {
     let severity = match diag.severity {
         typst::diag::Severity::Error => DiagnosticSeverity::Error,
         typst::diag::Severity::Warning => DiagnosticSeverity::Warning,
@@ -536,10 +533,7 @@ mod tests {
 
         let first = &diags[0];
         assert!(!first.message.is_empty());
-        assert_eq!(
-            first.severity,
-            crate::error::DiagnosticSeverity::Error
-        );
+        assert_eq!(first.severity, crate::error::DiagnosticSeverity::Error);
     }
 
     #[test]
@@ -554,7 +548,10 @@ mod tests {
 
         // At least one diagnostic should have a resolved location
         let has_location = diags.iter().any(|d| d.location.is_some());
-        assert!(has_location, "At least one diagnostic should have a source location");
+        assert!(
+            has_location,
+            "At least one diagnostic should have a source location"
+        );
 
         if let Some(ref loc) = diags[0].location {
             assert_eq!(loc.line, 1);

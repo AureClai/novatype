@@ -106,7 +106,10 @@ impl PythonTraceback {
 
         // Skip to the "Traceback" line
         for line in lines.by_ref() {
-            if line.trim_start().starts_with("Traceback (most recent call last):") {
+            if line
+                .trim_start()
+                .starts_with("Traceback (most recent call last):")
+            {
                 break;
             }
         }

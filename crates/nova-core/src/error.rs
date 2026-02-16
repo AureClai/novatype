@@ -110,7 +110,11 @@ pub struct NovaDiagnostic {
 impl std::fmt::Display for NovaDiagnostic {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         if let Some(ref loc) = self.location {
-            write!(f, "{}:{}:{}: {}", loc.file, loc.line, loc.column, self.message)
+            write!(
+                f,
+                "{}:{}:{}: {}",
+                loc.file, loc.line, loc.column, self.message
+            )
         } else {
             write!(f, "{}", self.message)
         }

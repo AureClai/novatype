@@ -35,7 +35,11 @@ Label: #budget.label
 
     let world = NativeWorld::from_source(&source, ".");
     let result = compile_pdf(&world);
-    assert!(result.is_ok(), "JSON data injection failed: {:?}", result.err());
+    assert!(
+        result.is_ok(),
+        "JSON data injection failed: {:?}",
+        result.err()
+    );
 }
 
 // ─── CSV injection ──────────────────────────────────────────────────
